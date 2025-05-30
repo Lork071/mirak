@@ -1,0 +1,49 @@
+:root {
+    --primary-color: var(--p-primary-color);
+    --primary-color-50:var(--p-primary-50);
+    --primary-color-100:var(--p-primary-100);
+    --primary-color-200:var(--p-primary-200);
+    --primary-color-300:var(--p-primary-300);
+    --primary-color-400:var(--p-primary-400);
+    --primary-color-500:var(--p-primary-500);
+    --primary-color-600:var(--p-primary-600);
+    --primary-color-700:var(--p-primary-700);
+    --primary-color-800:var(--p-primary-800);
+    --primary-color-900:var(--p-primary-900);
+    --primary-color-950:var(--p-primary-950);
+    --primary-contrast-color:var(--p-primary-200);
+    --text-color: var(--p-text-color);
+    --text-color-black: #000000;
+    --text-color-secondary: var(--p-text-muted-color);
+    --surface-border: var(--p-content-border-color);
+    --surface-card: var(--p-content-background);
+    --surface-bg-dark: #0c0c0c;
+    --surface-hover: var(--p-content-hover-background);
+    --surface-overlay: var(--p-overlay-popover-background);
+    --transition-duration: var(--p-transition-duration);
+    --maskbg: var(--p-mask-background);
+    --content-border-radius: var(--p-content-border-radius);
+    --layout-section-transition-duration: 0.2s;
+    --element-transition-duration: var(--p-transition-duration);
+    --focus-ring-width: var(--p-focus-ring-width);
+    --focus-ring-style: var(--p-focus-ring-style);
+    --focus-ring-color: var(--p-focus-ring-color);
+    --focus-ring-offset: var(--p-focus-ring-offset);
+    --focus-ring-shadow: var(--p-focus-ring-shadow);
+    --font-secondary: 'Montserrat';
+    --font-primary-bold: 'MirakFontPrimaryBold'  !important;
+}
+
+@mixin hex-to-rgb($hex-color) {
+    $red: red($hex-color);
+    $green: green($hex-color);
+    $blue: blue($hex-color);
+    content: "#{$red}, #{$green}, #{$blue}";
+  }
+
+@font-face {
+    font-family: 'MirakFontPrimaryBold'; /* fontName*/
+    src: url('@/assets/font/UnisonPro/UnisonProBold.otf') format('opentype'); /* path to font */
+    font-weight: normal; 
+    font-style: normal; 
+}

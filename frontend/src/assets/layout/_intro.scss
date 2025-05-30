@@ -1,0 +1,558 @@
+.intro-page-titles
+{
+  padding-top: 65px;
+}
+/*************************************************
+  NAVBAR 
+**************************************************/
+.intro-page-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 0.5rem 1rem;
+
+  &-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &-left {
+    display: flex;
+    align-items: center;
+
+    &-logo {
+      width: 54px;
+      height: 54px;
+      margin-right: 1rem;
+    }
+
+    &-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      font-family: var(--font-primary-bold), sans-serif;
+    }
+  }
+
+  &-menu {
+    display: flex;
+    align-items: center;
+    
+
+    ul {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        margin: 0 1rem;
+
+        a {
+          text-decoration: none;
+          color: var(--text-color);
+          font-weight: bold;
+        }
+      }
+    }
+
+    &-button {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
+
+  &-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    .close-icon {
+      font-size: 1.5rem;
+      color: #333;
+      line-height: 1;
+    }
+  }
+
+  &-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    z-index: 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  &-lang{
+    position: relative;
+    width: 100px;
+  }
+
+  @media (max-width: 1200px) {
+    &-menu {
+      position: fixed;
+      display: none;
+      top: 68px;
+      right: 0;
+      height: 100%;
+      height: 100vh;
+      width: 300px;
+      background: rgba(0, 0, 0, 1);
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 1rem;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      overflow-y: auto;
+      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+
+      &.open {
+        transform: translateX(0);
+        display: block;
+      }
+
+      ul {
+        flex-direction: column;
+        width: 100%;
+
+        li {
+          margin: 0.5rem 0;
+          width: 100%;
+        }
+      }
+
+      &-button {
+        margin-top: 1rem;
+        width: 100%;
+      }
+    }
+
+    &-hamburger {
+      display: flex;
+      z-index: 1002;
+    }
+    &-lang{
+      position: right;
+      width: 100%;
+      margin-right: 25px;
+    }
+  }
+}
+
+.intro-page-ahref-live
+{
+  animation: beat 1.5s infinite;
+  background-color: red;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-radius: 5px;
+  height: 22px;
+  @media (max-width: 1200px) {
+    animation: beat-color 1.5s infinite;  
+    background-color: rgba(0, 0, 0, 0.0);
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+
+#intro-page-live-content{
+
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 50px;
+  
+  &-video{
+    background-color: rgba(255, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 10px;
+    animation: beat-opacity 3s infinite;
+  }
+
+  iframe{
+    width: 1160px;
+    height: 661px;
+  }
+
+  @media (max-width: 1200px) {
+    iframe{
+      width: 100%; // Na menších obrazovkách bude mít šířku 100%
+      height: 30%;
+  }
+}
+}
+
+.intro-page-wraper{
+  width: 1200px;
+  margin: 0 auto;
+  @media (max-width: 1200px) {
+    width: 100%; // Na menších obrazovkách bude mít šířku 100%
+    padding: 0 20px; // Přidání vnitřního odsazení pro lepší čitelnost
+  }
+}
+
+
+
+/* Intro slider */
+.intro-page-first-part {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+  background-image: url('/public/demo/images/intro/Background.jpg');
+  background-size: cover;
+
+  &-line {
+      position: absolute; 
+      top: 50%; 
+      left: 39%; 
+      transform: translate(-50%, -50%); 
+      z-index: 1; 
+
+      svg {
+          width: 100vw;
+          height: 100vh;
+      }
+
+      path {
+          stroke-dasharray: 3096;
+          stroke-dashoffset: 3096;
+          animation: line-animation 1s ease-in-out 1 forwards;
+          animation-delay: 1s;
+      }
+  }
+
+  &-text,
+  &-date,
+  &-scroll-icon {
+      z-index: 2; 
+  }
+
+  &-text {
+      font-size: 150px;
+      text-align: center;
+      font-family: var(--font-primary-bold), sans-serif;
+      animation: zoom-in-mirak-text 1s ease-in-out forwards;
+      animation-delay: 0s;
+      text-shadow: 1px 1px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  &-date {
+      font-size: 30px;
+      opacity: 0;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+      animation: fade-in 0.5s ease-in-out forwards;
+      animation-delay: 1s;
+      text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+  }
+
+  &-scroll-icon {
+      margin-top: 50px;
+  }
+
+  @media (max-width: 1200px) {
+    &-text {
+      font-size: 60px;
+    }
+
+    &-line {
+      top: 45%;
+      left: 50%; 
+    }
+  
+    &-date {
+      font-size: 15px;
+    }
+
+  }
+  @media (max-width: 1340px) {
+    &-line {
+      left: 50%; 
+    }
+  }
+  
+}
+
+.intro-page-scroll-icon {
+  position: absolute;
+  bottom: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  opacity:0;
+  color: var(--primary-color);
+  animation: fade-in 0.5s ease-in-out forwards, bounce 2s infinite;
+  animation-delay: 2s;
+
+  span {
+    cursor: pointer;
+  }
+  @media (max-width: 1200px) {
+    bottom: 74px;
+  }
+}
+
+
+.intro_page_about{
+  position: relative;
+  text-align: center;
+  width: 1200px;
+  p{
+    font-size: 20px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    text-align: center;
+    width: 700px;
+  }
+}
+
+.intro-page-video {
+  position: relative;
+  margin-top: 30px;
+  width: 100%;
+  height: 675px;
+  overflow: hidden; /* Zajištění, že nebude žádný posuvník */
+  background: black;
+
+  video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Oříznutí videa na střed */
+  }
+
+  &-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Tmavý překryv (50% opacity) */
+    z-index: 5;
+    backdrop-filter: blur(8px); /* Rozmazání obsahu za overlayem */
+    -webkit-backdrop-filter: blur(8px); /* Pro starší verze WebKitu */
+    display: block; /* Skrýt překryv */
+  }
+
+  &.paused .overlay {
+    display: block; /* Zobrazit překryv při pauze */
+  }
+
+  &-play-button {
+    position: absolute;
+    top: 45%;
+    left: 46%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 75px;
+    height: 60px;
+    background-color: var(--primary-color);
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 10px;
+    cursor: pointer;
+    animation: beat 1.5s infinite;
+    z-index: 10;
+  }
+
+@media (max-width: 1200px) {
+  width:100%;
+  padding-top: 177.78%; /* Poměr stran 9:16 */
+
+  &-play-button{
+    top: 42%;
+    left:40%;
+    width: 75px;
+    height: 55px;
+  }
+}
+}
+
+
+#intro-page-place-content{
+  margin-bottom: 40px;
+
+  p{
+    text-align: center;
+    color: var(--text-color-secondary);
+  }
+}
+
+
+/***************************
+         Contact
+***************************/
+.intro-page-soc-page-circle{
+  position: relative;
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--surface-card);
+  
+  a{
+    cursor: pointer;
+
+  }
+
+  i{
+    margin-top: 21px;
+    transition: all 0.5s ease; 
+  }
+  i:hover{
+    color: var(--primary-color);
+    transform: scale(1.1); 
+  }
+}
+
+
+.intro-page-volunteer-content-all
+{
+  background-color: color-mix(in srgb, var(--primary-color-200), transparent calc((1 - 0.15) * 100%));
+  border-radius: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  Button{
+    padding: 20px;
+  }
+
+}
+
+
+/***************************
+         Animation
+***************************/
+@keyframes fade-in {
+  from {
+    opacity: 0; // Start animace: neviditelný
+  }
+  to {
+    opacity: 1; // Konec animace: plně viditelný
+  }
+}
+
+@keyframes beat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+@keyframes beat-small {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes beat-color {
+  0%, 100% {
+    color: red;
+  }
+  50% {
+    color: var(--text-color)
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1; // Start animace: neviditelný
+  }
+  to {
+    opacity: 0; // Konec animace: plně viditelný
+  }
+}
+
+@keyframes line-animation {
+  to{
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes zoom-in-mirak-text{
+  0%{
+    font-size: 0px;
+  }
+  60%
+  {
+    font-size: 180px;
+  }
+  100%{
+    font-size: 150px;
+  }
+}
+
+
+@keyframes beat-opacity {
+  0%, 100% {
+    background-color: rgba(255, 0, 0, 0.2);
+  }
+  50% {
+    background-color: rgba(255, 0, 0, 0.07);
+  }
+}
+/* Animace pro ikonu */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@media (max-width: 1200px) {
+  @keyframes zoom-in-mirak-text{
+    0%{
+      font-size: 0px;
+    }
+    60%
+    {
+      font-size: 80px;
+    }
+    100%{
+      font-size: 60px;
+    }
+  }
+}

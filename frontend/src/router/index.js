@@ -1,0 +1,119 @@
+import AppLayout from '@/layout/AppLayout.vue';
+import { useUserStore } from '@/service/user';
+import { createRouter, createWebHistory } from 'vue-router';
+
+const baseURL = import.meta.env.VITE_BASE_URL || '/';
+
+const pages_without_login = ['/auth/login', '/', '/auth/register', '/ticket_food', '/draft_intro', '/ticket', '/not_found'];
+
+const router = createRouter({
+    history: createWebHistory(baseURL),
+    routes: [
+        {
+            path: '/',
+            name: 'intro',
+            component: () => import('@/views/Intro.vue')
+        },
+        {
+            path: '/draft_intro',
+            name: 'draft_intro',
+            component: () => import('@/views/draft_intro.vue')
+        },
+        {
+            path: '/app',
+            component: AppLayout,
+            children: [
+                {
+                    path: '/app',
+                    name: 'dashboard',
+                    component: () => import('@/views/app/Dashboard.vue')
+                },
+                {
+                    path: '/app/admin_user',
+                    name: 'adminUser',
+                    component: () => import('@/views/app/admin/admin_user.vue')
+                },
+                {
+                    path: '/app/user_all',
+                    name: 'allUser',
+                    component: () => import('@/views/app/admin/user_all.vue')
+                },
+                {
+                    path: '/app/errors',
+                    name: 'errors',
+                    component: () => import('@/views/app/admin/errors.vue')
+                },
+                {
+                    path: '/app/permissions',
+                    name: 'permissions',
+                    component: () => import('@/views/app/admin/permissions.vue')
+                },
+                {
+                    path: '/app/qrscanner',
+                    name: 'qr_scanner',
+                    component: () => import('@/views/app/admin/qrscanner.vue')
+                },
+                {
+                    path: '/app/all_participant',
+                    name: 'all_participant',
+                    component: () => import('@/views/app/admin/all_participant.vue')
+                },
+                {
+                    path: '/app/participant',
+                    name: 'participant',
+                    component: () => import('@/views/app/admin/participant.vue')
+                }
+            ]
+        },
+        {
+            path: '/',
+            name: 'intro',
+            component: () => import('@/views/Intro.vue')
+        },
+        {
+            path: '/auth/login',
+            name: 'login',
+            component: () => import('@/views/pages/auth/Login.vue')
+        },
+        {
+            path: '/auth/register',
+            name: 'register',
+            component: () => import('@/views/pages/auth/Register.vue')
+        },
+        {
+            path: '/auth/access',
+            name: 'accessDenied',
+            component: () => import('@/views/pages/auth/Access.vue')
+        },
+        {
+            path: '/auth/error',
+            name: 'error',
+            component: () => import('@/views/pages/auth/Error.vue')
+        },
+        {
+            path: '/ticket_food',
+            name: 'ticket_food',
+            component: () => import('@/views/pages/ticket_food.vue')
+        },
+        {
+            path: '/ticket',
+            name: 'ticket',
+            component: () => import('@/views/pages/ticket.vue')
+        },
+        {
+            path: '/not_found',
+            name: 'not_found',
+            component: () => import('@/views/pages/NotFound.vue')
+        }
+    ]
+});
+
+router.beforeEach(async (to, from, next) => {
+    if (!pages_without_login.includes(to.path)) {
+        const userStore = useUserStore();
+        await userStore.fetchUserData(to.path);
+    }
+    next();
+});
+
+export default router;

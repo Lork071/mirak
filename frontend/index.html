@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" class="app-dark">
+
+<head>
+      <meta charset="UTF-8">
+      <link rel="icon" href="/favicon.ico">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>MÍRÁK</title>
+      <!--<link href="https://fonts.cdnfonts.com/css/lato" rel="stylesheet">-->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      <script src="https://kit.fontawesome.com/6b8b5c9f92.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+      <div id="app"></div>
+      <script type="module" src="/src/main.js"></script>
+</body>
+
+<script>
+      $(document).ready(function(){
+        // Add smooth scrolling to all links
+        $("a").on('click', function(event) {
+      
+          // Make sure this.hash has a value before overriding default behavior
+          if (this.hash !== "") {
+            // Prevent default anchor click behavior
+            event.preventDefault();
+      
+            // Store hash
+            var hash = this.hash;
+      
+            // Using jQuery's animate() method to add smooth page scroll
+            // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+            $('html, body').animate({
+              scrollTop: $(hash).offset().top
+            }, 800, function(){
+      
+              // Add hash (#) to URL when done scrolling (default click behavior)
+              window.location.hash = hash;
+            });
+          } // End if
+        });
+      });
+      </script>
+</html>
