@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-mail od Mírák</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/6b8b5c9f92.js" crossorigin="anonymous"></script>
+    <style>
+        :root{
+            --primary-color:#fb923c;
+        }
+        @font-face {
+            font-family: 'MirakFontPrimaryBold';
+            src: url('https://mirak.casd.cz/font/UnisonProBold.otf') format('opentype'); /* path to font */
+            font-weight: normal; 
+            font-style: normal; 
+        }
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            color: #e0e0e0;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-height: 50px;
+            margin-right: 10px;
+        }
+        .content {
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            color: #e0e0e0;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
+        .footer a {
+            color: #888;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        .footer i{
+            margin-top: 20px;
+        }
+        .logo-text{
+            font-size: 1.5rem;
+            font-family: 'Montserrat';
+        }
+        .mt-20{
+            margin-top: 20px;
+        }
+        .mt-50{
+            margin-top: 50px;
+        }
+        .mt-10{
+            margin-top: 10px;
+        }
+        .mt-5{
+            margin-top: 5px;
+        }
+        .mr-10{
+            margin-right: 10px;
+        }
+        .text-center{
+            text-align: center;
+        }
+        .text-right{
+            text-align: right;
+        }
+        .title{
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .logo_text{
+            height: 25px;
+        }
+        .copyright{
+            font-size: 12px;
+            color: #888;
+        }
+        .otp{
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .font-color{
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <svg  class="mt-5 mr-10" width="60" height="54" id="mirak_logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+                <rect style="fill: var(--primary-color)" class="cls-1" x="190.92" y="146.85" width="126.25" height="306.29" rx="63.13" ry="63.13" transform="translate(-115.96 167.22) rotate(-30)"/>
+                <rect style="fill: var(--primary-color)" class="cls-1" x="373.29" y="146.85" width="126.25" height="306.29" rx="63.13" ry="63.13" transform="translate(-91.53 258.4) rotate(-30)"/>
+                <circle style="fill: var(--primary-color)" class="cls-1" cx="117.98" cy="378.56" r="62.54"/>
+            </svg>
+            <img class="logo_text"  src="http://mirak.casd.cz/share/mirak_text.png">
+        </div>
+        <div class="content">
+            <p class="title text-center font-color">{email_title}</p>
+            <p class="font-color">{email_description}</p>
+            <p class="text-center otp font-color">{verify_code}</p>
+            
+            <p class="text-right font-color">{best_regards}</p>
+            <p class="text-right font-color">{mirak_team}</p>
+        </div>
+        <div class="footer">
+            <a class="mt-10" href="https://www.facebook.com/mirakcz"><i class="fa-brands fa-facebook fa-2xl"></i></a>
+            <a class="mt-10" href="https://www.instagram.com/mirakcz/"><i class="fa-brands fa-instagram fa-2xl"></i></a>
+            <a class="mt-10" href="https://www.youtube.com/@mirakCZ"><i class="fa-brands fa-youtube fa-2xl"></i></a>
+        </div>
+        <div class="text-center mt-20 copyright">
+            &copy; 2025 MÍRÁK
+        </div>
+    </div>
+</body>
+</html>
