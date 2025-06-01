@@ -30,18 +30,13 @@ const registration_options = ref(['participant_registred', 'participant_not_regi
 const food_value = ref('');
 const food_options = ref(['delivered', 'not_delivered']);
 
-const value = ref('');
 const level = ref('M');
 const renderAs = ref('svg');
 const gradient = ref(true);
 const gradientStartColor = ref('var(--primary-color-800)');
-const gradientEndColor = ref('#000'); // Modrá
+const gradientEndColor = ref('#000');
 const margin = ref(1);
 const gradientType = ref('radius');
-const displayConfirmation = ref(false);
-const displayOtp = ref(false);
-const VerifyBtnLoading = ref(false);
-const displaySuccess = ref(false);
 
 const fast_data_update = ref([]);
 
@@ -115,81 +110,16 @@ async function fast_update_participant(ref, field) {
     }
 }
 
-function recal_price() {
-    if (participant.value.part_fri && !(participant.value.part_sat1 || participant.value.part_sat2 || participant.value.part_sat3)) {
-        participant.value.pay = prices_ticket.value['price_ticket_only_friday'];
+async function price_recal() {
+    const api = await api_post(config.endpoint_ticket, { method: 'check_money_items', parameters: participant.value });
+    if (config.debug) {
+        console.log('API [check_money_items]: ');
+        console.log(api);
+    }
+    if (api.result) {
+        participant.value.pay = api.money;
     } else {
-        /* fixme */
-        if (participant.value.meal == null) {
-            participant.value.pay = prices_ticket.value['price_ticket_no_meal'];
-        } else {
-            participant.value.pay = prices_ticket.value['ticket_meal'];
-        }
-    }
-
-    if (participant.value.fri_to_sat) {
-        participant.value.pay = participant.value.pay + prices_ticket.value['price_one_night'];
-    }
-    if (participant.value.sat_to_sun) {
-        participant.value.pay = participant.value.pay + prices_ticket.value['price_one_night'];
-    }
-    if (participant.value.no_pii) {
-        participant.value.pay = participant.value.pay + prices_ticket.value['price_ticket_no_pii'];
-    }
-    toast.add({ severity: 'info', summary: i18n.global.t('price_update_title'), detail: i18n.global.t('price_update_text') + participant.value.pay + ' ' + i18n.global.t('currency_shortcut'), life: config.toast_lifetime });
-}
-
-function dialogOpen(workshop) {
-    OpenWorkshop.value = workshop;
-    OpenWorkshopTitle = workshop.title;
-    dialogWorkshop.value = true;
-}
-
-function accommodation_money_update(type) {
-    if (participant.value.role != role_not_pay.value) {
-        if (type == 'fri_sat') {
-            if (participant.value.fri_to_sat) {
-                participant.value.pay = participant.value.pay + prices_ticket.value['price_one_night'];
-            } else {
-                participant.value.pay = participant.value.pay - prices_ticket.value['price_one_night'];
-            }
-        } else if (type == 'sat_sun') {
-            if (participant.value.sat_to_sun) {
-                participant.value.pay = participant.value.pay + prices_ticket.value['price_one_night'];
-            } else {
-                participant.value.pay = participant.value.pay - prices_ticket.value['price_one_night'];
-            }
-        }
-
-        toast.add({ severity: 'info', summary: i18n.global.t('price_update_title'), detail: i18n.global.t('price_update_text') + participant.value.pay + ' ' + i18n.global.t('currency_shortcut'), life: config.toast_lifetime });
-    }
-}
-
-function accommodation_switch() {
-    if (!participant.value.want_accommodation) {
-        if (participant.value.fri_to_sat == true) {
-            participant.value.fri_to_sat = false;
-            accommodation_money_update('fri_sat');
-        }
-        if (participant.value.sat_to_sun == true) {
-            participant.value.sat_to_sun = false;
-            accommodation_money_update('sat_sun');
-        }
-    }
-}
-
-function gender_change() {
-    participant.value.want_accommodation = false;
-    participant.value.fri_to_sat = false;
-    participant.value.sat_to_sun = false;
-    recal_price();
-}
-
-function role_change() {
-    if (participant.value.role == 'organizer') {
-        participant.value.pay = 0;
-    } else {
-        recal_price();
+        toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t('error_comm_database'), life: config.toast_lifetime });
     }
 }
 
@@ -197,6 +127,7 @@ watch(
     participant,
     (newVal) => {
         isChanged.value = JSON.stringify(participant.value) !== participant_default.value;
+        price_recal();
     },
     { deep: true }
 );
@@ -279,14 +210,6 @@ onMounted(() => {
                     <InputGroup>
                         <InputGroupAddon>{{ $t('currency_shortcut') }}</InputGroupAddon>
                         <InputNumber v-model="participant.pay" placeholder="Price" />
-                        <InputGroupAddon>/{{ participant.pay }}</InputGroupAddon>
-                    </InputGroup>
-                </div>
-                <div id="ticket_last_name" class="flex flex-wrap gap-2 w-full">
-                    <label for="lastname2">{{ $t('participant_paid') }}</label>
-                    <InputGroup>
-                        <InputGroupAddon>{{ $t('currency_shortcut') }}</InputGroupAddon>
-                        <InputNumber v-model="participant.paid" placeholder="Price" />
                         <InputGroupAddon>/{{ participant.pay }}</InputGroupAddon>
                     </InputGroup>
                 </div>

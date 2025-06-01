@@ -8,6 +8,39 @@ class config{
         $this->database_user_name = $UserName;
         $this->database_password = $Password;
         $this->database_name = $DBName;
+
+        $this->ticket_items= array(
+            "money" => array(
+                "meal"=> array(
+                    "price" => $this->price_ticket_meal - $this->price_ticket_no_meal,
+                    "sat_required" => true,
+                    "enable_condition" => "check_meal_availability",
+                    "error_message" => "meal_not_available",
+                    "no_money" => "Bez jídla",
+                ),
+                "workshop"=> array(
+                    "price" => 0,
+                    "sat_required" => true,
+                    "enable_condition" => "check_workshop_availability",
+                    "error_message" => "workshop_not_available",
+                    "no_money" => "NA",
+                ),
+                "fri_to_sat"=> array(
+                    "price" => $this->price_one_night,
+                    "sat_required" => true,
+                    "enable_condition" => "check_accormondation_availability",
+                    "error_message" => "accormodation_not_available_fri_to_sat",
+                    "no_money" => 0,
+                ),
+                "sat_to_sun"=> array(
+                    "price" => $this->price_one_night,
+                    "sat_required" => true,
+                    "enable_condition" => "check_accormondation_availability",
+                    "error_message" => "accormodation_not_available_sat_to_sun",
+                    "no_money" => 0,
+                ),
+            ),
+        );
     }
     /*
     public $database_server_name = "md84.wedos.net";
@@ -52,10 +85,7 @@ class config{
     );
 
     public $scanner_options = array("scanner_registration","scanner_meal","scanner_admin");
-    /*************************************
-     * Ticket
-     ************************************/
-    public $url_ticket='/ticket';
+
     /*************************************
      * Price
      ************************************/
@@ -65,6 +95,13 @@ class config{
     public $price_ticket_no_pii = 200;
     public $price_one_night = 50;
 
+
+    /*************************************
+     * Ticket
+     ************************************/
+    public $url_ticket='/ticket';
+
+    public $ticket_items;
     /*************************************
      * accormodation
      ************************************/

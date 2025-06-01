@@ -15,7 +15,7 @@ const filters = ref({
 });
 
 async function load_all_participant() {
-    const api = await api_post(config.endpoint_participant, { method: 'read_all_participant' });
+    const api = await api_post(config.endpoint_ticket, { method: 'read_all_participant' });
     if (config.debug) {
         console.log('API [read_all_participant]: ');
         console.log(api);

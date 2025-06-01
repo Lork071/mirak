@@ -33,6 +33,120 @@ class ticket_controler{
         return $result;
     }
 
+    public function check_money_items($parameters)
+    {
+        $result = array(
+            "result" => true,
+            "response" => '',
+            "errors" => array(),
+            "money" => 0
+        );
+        if($parameters["role"] != "organizer")
+        {
+            $only_friday = false;
+            if($parameters["part_sat1"] == false && $parameters["part_sat2"] == false && $parameters["part_sat3"] == false)
+            {
+                /* only friday */
+                $result["money"] += $this->master_handler["config_handler"]->price_ticket_only_friday;
+                $only_friday = true;
+            }
+            else
+            {
+                /* saturday and friday */
+                $result["money"] += $this->master_handler["config_handler"]->price_ticket_no_meal;
+            }
+            /* ticket items */
+            foreach($this->master_handler["config_handler"]->ticket_items["money"] as $key_item => $item_value)
+            {
+                if($parameters[$key_item] == $item_value["no_money"])
+                {
+                    /* no money */;
+                    continue;
+                }
+                $method_name = $item_value["enable_condition"];
+                if($this->$method_name($key_item, $parameters) == true)
+                {
+                    if($only_friday == true && $item_value["sat_required"] == true)
+                    {
+                        $result["errors"][] = $item_value["error_message"] . "_saturday_required";
+                        $result["result"] = false;
+                        continue;
+                    }
+                    $result["money"] += $item_value["price"];
+                }
+                else
+                {
+                    $result["errors"][] = $item_value["error_message"];
+                    $result["result"] = false;
+                }
+            }
+            /* no pii */
+            if($parameters["no_pii"] == true)
+            {
+                $result["money"] += $this->master_handler["config_handler"]->price_ticket_no_pii;
+            }
+        }
+        else
+        {
+            /* organizer */
+            $result["money"] = 0;
+        }
+
+        return $result;
+    }
+
+    public function save_participant($parameters)
+    {
+        /*
+         parameters.new = true if new participant
+         parameters.data = array with participant data
+        */
+
+        $result = array(
+            "result" => false,
+            "response" => '',
+            "errors" => array()
+        );
+
+        $check = $this->check_money_items($parameters["data"]);
+
+        if($check["result"] == false)
+        {
+            $result["errors"] = $check["errors"];
+            return $result;
+        }
+
+        /* check if other parameters as name etc. is ok  */
+
+        if($parameters["new"] == true)
+        {
+            /* new participant */
+            $parameters["data"]["id"] = $this->toolbox->cmac_sha256($parameters["data"]["email"].$parameters["data"]["first_name"].$parameters["data"]["last_name"].date("Y"));
+            if($this->master_handler["database_handler"]->insert_row($this->master_handler["config_handler"]->database_name_event, $parameters["data"]))
+            {
+                $result["result"] = true;
+                $result["response"] = "participant_added";
+            }
+            else
+            {
+                $result["response"] = "error_comm_database";
+            }
+        }
+        else
+        {
+            /* update participant */
+            if($this->master_handler["database_handler"]->update_row($this->master_handler["config_handler"]->database_name_event, $parameters["data"], "`id`='".$parameters["data"]["id"]."'"))
+            {
+                $result["result"] = true;
+                $result["response"] = "participant_updated";
+            }
+            else
+            {
+                $result["response"] = "error_comm_database";
+            }
+        }
+    }
+
     public function get_ticket($parameters)
     {
         $result = array(
@@ -181,7 +295,7 @@ class ticket_controler{
         if($this->toolbox->verify_hmac($parameters["id"],$parameters["sign"]))
         {
             
-            $ticket_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("email","want_accommodation","fri_to_sat","sat_to_sun","meal","food_delivered", "pay", "paid", "workshop"), "`id`='".$parameters["id"]."'")[0];
+            $ticket_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("email","want_accommodation","fri_to_sat","sat_to_sun","meal","food_delivered", "pay", "workshop"), "`id`='".$parameters["id"]."'")[0];
             if($ticket_data != null)
             {
                 $result["response"] = array();
@@ -189,7 +303,7 @@ class ticket_controler{
                 $result["response"]["food_delivered"]= $ticket_data["food_delivered"];
                 $result["response"]["meal"]= $this->master_handler["config_handler"]->meals[$ticket_data["meal"]]["title"];
                 $result["response"]["pay"]= $ticket_data["pay"];
-                if($ticket_data["pay"] <= $ticket_data["paid"])
+                if($ticket_data["register"] == 1)
                 {
                     $result["response"]["paid"]= true;
                 }
@@ -266,7 +380,7 @@ class ticket_controler{
         return $result;
     }
 
-       public function read_all_participant()
+    public function read_all_participant()
     {
         $result = array(
             "result" => false,
@@ -281,6 +395,11 @@ class ticket_controler{
         return $result;
     }
 
+    public function check_participant_data($parameters)
+    {
+
+    }
+
     public function read_one_participant($parameters)
     {
         $result = array(
@@ -288,7 +407,7 @@ class ticket_controler{
             "response" => array()
         );
 
-        $result["response"]["participant"] = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("id","email","birthday","gender","address","zip","meal","state","first_name","last_name","role", "part_fri", "part_sat1", "part_sat2","part_sat3","register","register_time","register_person","want_accommodation","fri_to_sat", "sat_to_sun","food_delivered","food_delivered_time","food_delivered_person","email_notify","pay","paid","workshop","no_pii"),"`id`='".$parameters["id"]."'")[0];
+        $result["response"]["participant"] = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("id","email","birthday","gender","address","zip","meal","state","first_name","last_name","role", "part_fri", "part_sat1", "part_sat2","part_sat3","register","register_time","register_person","want_accommodation","fri_to_sat", "sat_to_sun","food_delivered","food_delivered_time","food_delivered_person","email_notify","pay","workshop","no_pii"),"`id`='".$parameters["id"]."'")[0];
         $result["response"]["workshops"] = $this->get_workshop_info_admin();
         $result["response"]["food"] = $this->get_food_info_admin();
         $result["response"]["accommodation"] = $this->get_accormondation_info();
@@ -609,6 +728,79 @@ class ticket_controler{
    
         return $config_workshops;
     }
+
+
+    private function check_meal_availability($key_meal, $parameters)
+    {
+        $result = false;
+        $meal = $parameters[$key_meal];
+        if($meal == null)
+        {
+            return true; // no meal selected
+        }
+        $database = $this->master_handler["config_handler"]->database_name_event;
+
+        $ordered_meals = $this->master_handler["database_handler"]->sql_cmd_fetchAll("SELECT COUNT(*) AS count FROM `".$database."` WHERE `meal` = '".$meal."'")[0]["count"];
+
+        if($ordered_meals <= $this->master_handler["config_handler"]->meals[$meal]["max_count"])
+        {
+            $result = true;
+        }
+        else
+        {
+            $result = false;
+        }
+
+        return $result;
+    }
+    private function check_workshop_availability($key_workshop, $parameters)
+    {
+        $result = false;
+        $workshop = $parameters[$key_workshop];
+        if($workshop == null)
+        {
+            return true; // no workshop selected
+        }
+        $database = $this->master_handler["config_handler"]->database_name_event;
+
+        $ordered_workshops = $this->master_handler["database_handler"]->sql_cmd_fetchAll("SELECT COUNT(*) AS count FROM `".$database."` WHERE `workshop` = '".$workshop."'")[0]["count"];
+
+        if($ordered_workshops <= $this->master_handler["config_handler"]->workshops[$workshop]["max_count"])
+        {
+            $result = true;
+        }
+        else
+        {
+            $result = false;
+        }
+
+        return $result;
+    }
+    private function check_accormondation_availability($key_accormondation, $parameters)
+    {
+        $result = false;
+        if($key_accormondation == "fri_to_sat")
+        {
+            $key_accormondationcfg = "friday_saturday";
+        }
+        else if($key_accormondation == "sat_to_sun")
+        {
+            $key_accormondationcfg = "saturday_sunday";
+        }
+        $database = $this->master_handler["config_handler"]->database_name_event;
+        $ordered_accormondations = $this->master_handler["database_handler"]->sql_cmd_fetchAll("SELECT COUNT(*) AS count FROM `".$database."` WHERE `".$key_accormondation."` = 1 AND `gender` = '".$parameters["gender"]."'")[0]["count"];
+        if($ordered_accormondations <= $this->master_handler["config_handler"]->accormodation_info[$parameters["gender"]][$key_accormondationcfg]["max_count"])
+        {
+            $result = true;
+        }
+        else
+        {
+            $result = false;
+        }
+
+        return $result;
+    }
+    
 
 }
 $toolbox = new toolbox($master_handler);
