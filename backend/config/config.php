@@ -100,6 +100,7 @@ class config{
      * Ticket
      ************************************/
     public $url_ticket='/ticket';
+    public $url_participant_data = "/app/participant";
 
     public $ticket_items;
     /*************************************

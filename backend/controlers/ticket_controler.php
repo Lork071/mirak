@@ -2,6 +2,7 @@
 require_once '../main_core.php';
 require_once '../tools/toolbox.php';
 require_once '../tools/email_sender.php';
+require_once '../tools/permissions.php';
 
 class ticket_controler{
 
@@ -20,7 +21,7 @@ class ticket_controler{
             "response" => array()
         );
 
-        $result['response']['meal'] = $this->get_mean_info();
+        $result['response']['meal'] = $this->get_meal_info();
         $result['response']['prices'] = array();
         $result['response']['prices']['ticket_meal'] = $this->master_handler["config_handler"]->price_ticket_meal;
         $result['response']['prices']['price_ticket_no_meal'] = $this->master_handler["config_handler"]->price_ticket_no_meal;
@@ -33,6 +34,39 @@ class ticket_controler{
         return $result;
     }
 
+    public function qr_scanned($parameters)
+    {
+        $result = array(
+            "result" => false,
+            "response" => array()
+        );
+        /* Get from database which scanner shall be used */
+    
+        $scanner_type = $this->master_handler["database_handler"]->read_row(
+            $this->master_handler["config_handler"]->database_name_users,
+            array("scanner"),
+            "`email`='".$parameters["user_info"]["email"]."'"
+        )[0]["scanner"];
+        switch($scanner_type)
+        {
+            case "scanner_registration":
+                /* registration scanner */
+                $result = $this->scanner_registration($parameters["id"], $parameters["user_info"]["email"]);
+                break;
+            case "scanner_meal":
+                /* food scanner */
+                $result = $this->scanner_meal($parameters["id"],  $parameters["user_info"]["email"]);
+                break;
+            case "scanner_admin":
+                /* admin scanner */
+                $result["result"] = true;
+                $result["link"] = $this->master_handler["config_handler"]->url_participant_data."?id=".$parameters["id"];
+                break;
+        }
+
+        $result["scanner_type"] = $scanner_type;
+        return $result;
+    }
     public function check_money_items($parameters)
     {
         $result = array(
@@ -652,7 +686,7 @@ class ticket_controler{
         return $array;
     }
 
-     private function get_mean_info(){
+     private function get_meal_info(){
 
         $config_meals = $this->master_handler["config_handler"]->meals;
              
@@ -796,6 +830,59 @@ class ticket_controler{
         else
         {
             $result = false;
+        }
+
+        return $result;
+    }
+
+    private function scanner_meal($id,$email)
+    {
+        $result = array(
+            "result" => false,
+            "response" => array()
+        );
+        $permissions = new permissions($this->master_handler, $email);
+        $participant_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("meal", "food_delivered"), "`id`='".$id."'")[0];
+        $result["meal"] = $this->master_handler["config_handler"]->meals[$participant_data["meal"]]["title"];
+        if($participant_data["food_delivered"] == 1)
+        {
+            $result["result"] = false;
+            $result["response"] = 'meal_already_delivered';
+        }
+        else
+        {
+            $scanner_meal_permissions = $permissions->get_meal_scanner_permissions();
+            if($scanner_meal_permissions == $participant_data["meal"])
+            {
+                $this->update_status_field($id, "food_delivered", 1, $email);
+                $result["result"] = true;
+                $result["response"] = 'meal_delivered';
+            }
+            else
+            {
+                $result["result"] = false;
+                $result["response"] = 'meal_different_location';
+            }
+        }
+        return $result;
+    }
+    private function scanner_registration($id,$email)
+    {
+        $result = array(
+            "result" => false,
+            "response" => 'participant_not_found'
+        );
+        $participant_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("register", "meal", "pay"), "`id`='".$id."'")[0];
+        if($participant_data["register"] == 1)
+        {
+            $result["result"] = false;
+            $result["response"] = 'participant_already_registered';
+        }
+        else
+        {
+           $this->update_status_field($id, "register", 1, $email);
+           $result["result"] = true;
+           $result["response"] = 'participant_registered';
         }
 
         return $result;
