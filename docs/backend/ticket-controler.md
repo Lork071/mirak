@@ -12,7 +12,7 @@ flowchart TB
     ReturnRegInvalid --> RegMerge["Merge"]
     PerformReg --> RegMerge
 
-    QScanType -- meal --> QmealDeliver["Meal was delivered?"]
+    QScanType -- meal --> QmealDeliver{"Meal was delivered?"}
     QmealDeliver -- true --> ReturnMealInvalid["Return false with reason that meal was delivered"]
     QmealDeliver -- false --> QRightMealType{"Meal type is right?"}
     QRightMealType -- true --> PerformDelivery["Result true, set flag name and time"]
@@ -27,5 +27,5 @@ flowchart TB
     MealMerge --> ScanMerge
     ReturnAdmin --> ScanMerge
     ScanMerge --> SetTypeScan["Set type of scanner"]
-    SetType
+    SetTypeScan --> End("end")
 ```
