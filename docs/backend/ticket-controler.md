@@ -1,4 +1,4 @@
-#Scannibg of the ticket diagram
+#Scanning of the ticket diagram
 
 ```mermaid
 flowchart TB
