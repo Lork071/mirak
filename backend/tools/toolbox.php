@@ -39,6 +39,10 @@ class toolbox {
         return null; // Pokud cookie není nalezena
     }
 
+    public function is_sha256($str) {
+    return (bool)preg_match('/^[a-f0-9]{64}$/i', $str);
+    }
+
     public static function generateUuid() {
         // Use random_bytes to generate random bytes
         $data = random_bytes(16);

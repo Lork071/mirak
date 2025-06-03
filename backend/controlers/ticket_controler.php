@@ -41,30 +41,42 @@ class ticket_controler{
             "response" => array()
         );
         /* Get from database which scanner shall be used */
-    
-        $scanner_type = $this->master_handler["database_handler"]->read_row(
-            $this->master_handler["config_handler"]->database_name_users,
-            array("scanner"),
-            "`email`='".$parameters["user_info"]["email"]."'"
-        )[0]["scanner"];
-        switch($scanner_type)
+        if($this->toolbox->is_sha256($parameters["id"])) 
         {
-            case "scanner_registration":
-                /* registration scanner */
-                $result = $this->scanner_registration($parameters["id"], $parameters["user_info"]["email"]);
-                break;
-            case "scanner_meal":
-                /* food scanner */
-                $result = $this->scanner_meal($parameters["id"],  $parameters["user_info"]["email"]);
-                break;
-            case "scanner_admin":
-                /* admin scanner */
-                $result["result"] = true;
-                $result["link"] = $this->master_handler["config_handler"]->url_participant_data."?id=".$parameters["id"];
-                break;
-        }
+            $scanner_type = $this->master_handler["database_handler"]->read_row(
+                $this->master_handler["config_handler"]->database_name_users,
+                array("scanner"),
+                "`email`='".$parameters["user_info"]["email"]."'"
+            )[0]["scanner"];
+            switch($scanner_type)
+            {
+                case "scanner_registration":
+                    /* registration scanner */
+                    $result = $this->scanner_registration($parameters["id"], $parameters["user_info"]["email"]);
+                    break;
+                case "scanner_meal":
+                    /* food scanner */
+                    $result = $this->scanner_meal($parameters["id"],  $parameters["user_info"]["email"]);
+                    break;
+                case "scanner_admin":
+                    /* admin scanner */
+                    $result["result"] = true;
+                    $result["link"] = $this->master_handler["config_handler"]->url_participant_data."?id=".$parameters["id"];
+                    break;
+                default:
+                    /* no scanner */
+                    $result["response"] = "scanner_type_of_scanner_not_found";
+                    $result["result"] = false;
+                    break;
+            }
 
-        $result["scanner_type"] = $scanner_type;
+            $result["scanner_type"] = $scanner_type;
+        }
+        else
+        {
+            $result["response"] = "participant_id_not_valid";
+            $result["result"] = false;
+        }
         return $result;
     }
     public function check_money_items($parameters)
@@ -844,6 +856,8 @@ class ticket_controler{
         $permissions = new permissions($this->master_handler, $email);
         $participant_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("meal", "food_delivered"), "`id`='".$id."'")[0];
         $result["meal"] = $this->master_handler["config_handler"]->meals[$participant_data["meal"]]["title"];
+        $result["pay"] = $participant_data["pay"];
+        $result["email"] = $participant_data["email"];
         if($participant_data["food_delivered"] == 1)
         {
             $result["result"] = false;
@@ -872,7 +886,10 @@ class ticket_controler{
             "result" => false,
             "response" => 'participant_not_found'
         );
-        $participant_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("register", "meal", "pay"), "`id`='".$id."'")[0];
+        $participant_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("register", "meal", "pay", "email"), "`id`='".$id."'")[0];
+        $result["meal"] = $this->master_handler["config_handler"]->meals[$participant_data["meal"]]["title"];
+        $result["pay"] = $participant_data["pay"];
+        $result["email"] = $participant_data["email"];
         if($participant_data["register"] == 1)
         {
             $result["result"] = false;

@@ -6,46 +6,70 @@ import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
 import { useToast } from 'primevue/usetoast';
 import { computed, onMounted, ref } from 'vue';
 import { QrcodeStream } from 'vue-qrcode-reader';
+import { useRouter } from 'vue-router';
+
 const { api_post } = useApi();
 const tOptionScannerTranslate = (option) => i18n.global.t(option);
 
 const toast = useToast();
+const router = useRouter();
 /*** detection handling ***/
 
 const scanner_options_select = ref([]);
 const scanner_options_selected = ref();
 const result = ref('');
-const scannerDialog = ref(false);
-const registerDialog = ref(false);
-const participant_registration_data = ref([]);
+const ticketDiaglog = ref(false);
+
+const ticketData = ref({
+    result: false,
+    email: '',
+    price: '',
+    meal: '',
+    desc: ''
+});
 
 function onDetect(detectedCodes) {
     console.log(detectedCodes);
     result.value = JSON.stringify(detectedCodes.map((code) => code.rawValue));
     scanner_read(detectedCodes[0].rawValue);
-    scannerDialog.value = true;
 }
 
 async function scanner_read(id) {
+    ticketData.value = {
+        result: false,
+        email: '',
+        price: '',
+        meal: '',
+        desc: ''
+    };
     const api = await api_post(config.endpoint_ticket, { method: 'qr_scanned', parameters: { id: id } });
     if (config.debug) {
         console.log('API [qr_scanned]: ');
         console.log(api);
     }
     if (api.result) {
-        toast.add({ severity: 'success', summary: i18n.global.t('sucessfull'), detail: i18n.global.t('sucessfull_admin_participant_registered'), life: config.toast_lifetime });
+        if (api.scanner_type == 'scanner_admin') {
+            router.push(api.link);
+        } else {
+            ticketData.value.result = api.result;
+            ticketData.value.email = api.email;
+            ticketData.value.price = api.pay;
+            ticketData.value.meal = api.meal;
+            ticketData.value.desc = api.response;
+            ticketDiaglog.value = true;
+        }
     } else {
-        toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t('error_comm_database'), life: config.toast_lifetime });
+        ticketData.value.result = api.result;
+        ticketData.value.email = api.email;
+        ticketData.value.price = api.pay;
+        ticketData.value.meal = api.meal;
+        ticketData.value.desc = api.response;
+        ticketDiaglog.value = true;
     }
 }
 
-function onDialogClose() {
-    scannerDialog.value = false;
-    result.value = '';
-}
-
-function onRegisterDialogClose() {
-    registerDialog.value = false;
+function onticketDiaglogClose() {
+    ticketDiaglog.value = false;
     result.value = '';
 }
 
@@ -162,24 +186,8 @@ async function update_scanner_options() {
     load_scan_info();
 }
 
-async function detected_qr_registration() {
-    const api = await api_post(config.endpoint_admin, { method: 'scan_registration_get_info', parameters: { id: 'fe9919a2d77c7d0bbabb8261a193fdd23cd1bdb1a61cf6f6928a9c3a7dcd220b' } });
-    if (config.debug) {
-        console.log('API [scan_registration_get_info]: ');
-        console.log(api);
-    }
-    if (api.result) {
-        participant_registration_data.value = api.response;
-        registerDialog.value = true;
-    } else {
-        registerDialog.value = true;
-        toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t('error_comm_database'), life: config.toast_lifetime });
-    }
-}
-
 onMounted(() => {
     load_scan_info();
-    detected_qr_registration();
 });
 
 /*** barcode formats ***/
@@ -286,16 +294,14 @@ function onError(err) {
 
         <p class="error">{{ error }}</p>
     </div>
-    <Dialog v-model:visible="scannerDialog" :style="{ width: '90%' }" @hide="onDialogClose" header="Data" :modal="true">
-        <div class="flex items-center gap-4">{{ result }}</div>
-    </Dialog>
 
-    <Dialog v-model:visible="registerDialog" :style="{ width: '90%' }" @hide="onRegisterDialogClose" :header="participant_registration_data.email" :modal="true">
+    <Dialog v-model:visible="ticketDiaglog" :style="{ width: '90%' }" @hide="onticketDiaglogClose" :header="ticketData.email" :modal="true">
         <div class="flex flex-col items-center justify-center">
-            <DotLottieVue v-if="participant_registration_data.is_registrated" style="height: 250px; width: 250px" :speed="1.5" autoplay src="https://lottie.host/656da98f-81da-429c-a167-06b4f81191bf/6ht3bLPKkk.json" />
+            <DotLottieVue v-if="!ticketData.result" style="height: 250px; width: 250px" :speed="1.5" autoplay src="https://lottie.host/656da98f-81da-429c-a167-06b4f81191bf/6ht3bLPKkk.json" />
             <DotLottieVue v-else style="height: 250px; width: 250px" :speed="1.7" autoplay src="https://lottie.host/75ef43fd-dcdd-409b-82bc-823226c80005/EEKEtUtjLY.json" />
-            <label class="text-2xl font-bold text-center mb-8">{{ participant_registration_data.is_registrated ? $t('error_participant_registration') : $t('sucessfull_participant_registration') }}</label>
-            <label class="text-xl text-center mt-4">{{ $t('total_price') }}: {{ participant_registration_data.pay }} {{ $t('currency_shortcut') }}</label>
+            <label class="text-2xl font-bold text-center mb-8">{{ $t(ticketData.desc) }}</label>
+            <label class="text-xl text-center mt-4">{{ $t('total_price') }}: {{ ticketData.price }} {{ $t('currency_shortcut') }}</label>
+            <label class="text-xl text-center mt-4">{{ $t('meal') }}: {{ $t(ticketData.meal) }}</label>
         </div>
     </Dialog>
 </template>
