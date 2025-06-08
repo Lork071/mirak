@@ -1,0 +1,17 @@
+{
+    "name": "vendor/mirak",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Mirak\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lork071",
+            "email": "120242653+Lork071@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "2.14"
+    }
+}

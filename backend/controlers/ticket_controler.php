@@ -854,9 +854,9 @@ class ticket_controler{
             "response" => array()
         );
         $permissions = new permissions($this->master_handler, $email);
-        $participant_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("meal", "food_delivered"), "`id`='".$id."'")[0];
+        $participant_data = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("meal", "food_delivered", "email"), "`id`='".$id."'")[0];
         $result["meal"] = $this->master_handler["config_handler"]->meals[$participant_data["meal"]]["title"];
-        $result["pay"] = $participant_data["pay"];
+        $result["pay"] = "";
         $result["email"] = $participant_data["email"];
         if($participant_data["food_delivered"] == 1)
         {

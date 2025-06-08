@@ -300,7 +300,7 @@ function onError(err) {
             <DotLottieVue v-if="!ticketData.result" style="height: 250px; width: 250px" :speed="1.5" autoplay src="https://lottie.host/656da98f-81da-429c-a167-06b4f81191bf/6ht3bLPKkk.json" />
             <DotLottieVue v-else style="height: 250px; width: 250px" :speed="1.7" autoplay src="https://lottie.host/75ef43fd-dcdd-409b-82bc-823226c80005/EEKEtUtjLY.json" />
             <label class="text-2xl font-bold text-center mb-8">{{ $t(ticketData.desc) }}</label>
-            <label class="text-xl text-center mt-4">{{ $t('total_price') }}: {{ ticketData.price }} {{ $t('currency_shortcut') }}</label>
+            <label v-if="ticketData.price != ''" class="text-xl text-center mt-4 font-bold">{{ ticketData.price }} {{ $t('currency_shortcut') }}</label>
             <label class="text-xl text-center mt-4">{{ $t('meal') }}: {{ $t(ticketData.meal) }}</label>
         </div>
     </Dialog>

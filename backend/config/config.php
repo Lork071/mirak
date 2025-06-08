@@ -1,13 +1,17 @@
 <?php
 require_once 'database_config.php';
+require_once 'web_config.php';
 class config{
 
     public function __construct() {
-        global $ServerName, $UserName, $Password, $DBName;
+        global $ServerName, $UserName, $Password, $DBName, $web_backend_url, $web_google_auth_callback;
         $this->database_server_name = $ServerName;
         $this->database_user_name = $UserName;
         $this->database_password = $Password;
         $this->database_name = $DBName;
+
+        $this->backend_url = $web_backend_url;
+        $this->google_auth_callback = $web_google_auth_callback;
 
         $this->ticket_items= array(
             "money" => array(
@@ -42,12 +46,10 @@ class config{
             ),
         );
     }
-    /*
-    public $database_server_name = "md84.wedos.net";
-    public $database_user_name = "a250867_wp";
-    public $database_password = "8q89^HPa";
-    public $database_name = "d250867_wp";
-*/
+
+
+    public $backend_url;
+    public $google_auth_callback;
     public $database_server_name;
     public $database_user_name;
     public $database_password;
@@ -60,13 +62,18 @@ class config{
     public $database_name_permissions = "permissions";
     public $database_name_event = "mirak_test";
     public $database_name_emails = "emails";
-
+    /*************************************
+     * google auth
+     ************************************/
+    public $google_client_id = '875122042732-ch41ldiq5a19i9ves64lhqq7bfdkkmac.apps.googleusercontent.com';
+    public $google_client_secret = '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';
 
     /*************************************
      * Global
      ************************************/
     public $debug = true;
     public $default_role = "participant";
+    public $default_permission = "normal_user";
     public $ticket_key = "e4e189e5-5737-47fb-8efc-1162ab126459";
 
     /*************************************

@@ -3,6 +3,7 @@
         "source.fixAll.eslint": "explicit",
         "source.organizeImports": "explicit"
     },
+    "git.externalDiff": "C:\\Program Files\\Meld\\Meld.exe",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",

@@ -3,6 +3,7 @@ require_once '../main_core.php';
 require_once '../tools/toolbox.php';
 require_once '../tools/permissions.php';
 require_once '../tools/email_sender.php';
+require_once '../vendor/autoload.php';
 
 class login_controler{
 
@@ -191,6 +192,44 @@ class login_controler{
         return $result;
     }
 
+    public function login_google_check($parameters)
+    {
+        $result = array(
+            "result" => false,
+            "response" => ""
+        );
+
+        $client = $this->google_client();
+
+        if(isset($parameters["code"]))
+        {
+            $token = $client->fetchAccessTokenWithAuthCode($parameters["code"]);
+            if(isset($token["error"]))
+            {
+                $this->master_handler["error_handler"]->log_error("google_login", "Google login error: ".$token["error"]. ". With description: ".$token["error_description"]);
+                $result["result"] = false;
+                $result["response"] = 'token_error';
+            }
+            else
+            {
+                $client->setAccessToken($token);
+                $oauth = new Google_Service_Oauth2($client);
+                $userinfo = $oauth->userinfo->get();
+                $user_data = array(
+                    "email" => $userinfo->email,
+                    "FirstName" => $userinfo->givenName,
+                    "LastName" => $userinfo->familyName,
+                    "picture" => $userinfo->picture,
+                    "source" => 'google',
+                    "permission" => $this->master_handler["config_handler"]->default_permission
+                );
+                $result = $this->set_user_third($user_data);
+            }
+        }
+
+        return $result;
+    }
+
     public function email_verify($parameters)
     {
         $result = array(
@@ -282,12 +321,108 @@ class login_controler{
         return $result;
     }
 
+    public function google_link()
+    {
+        $result = array(
+            "result" => false,
+            "response" => ""
+        );
+
+        $client = $this->google_client();
+
+        $login_url = $client->createAuthUrl();
+
+        $result["result"] = true;
+        $result["google_link"] = $login_url;
+        return $result;
+    }
+
+    public function google_client()
+    {
+        $client = new Google_Client();
+        $client->setClientId($this->master_handler["config_handler"]->google_client_id);
+        $client->setClientSecret($this->master_handler["config_handler"]->google_client_secret);
+        $client->setRedirectUri($this->master_handler["config_handler"]->google_auth_callback);
+        $client->setAccessType('offline');
+        $client->setPrompt('consent');
+        $client->addScope("email");
+        $client->addScope("profile");
+
+        return $client;
+    }
+
     /*************************************
      * Set global handlers and exception
      ************************************/
+    private function set_user_third($user_data)
+    {
+        
+        $result = array(
+            "result" => false,
+            "response" => ""
+        );
+        
+        $user_data_database = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_users, array('email','FirstName','LastName', 'source', 'picture'), "email = '" . $user_data["email"] . "'");
 
-     
-    
+        if($user_data_database != null)
+        {
+            /* Email exists */
+            $user_data_database = $user_data_database[0];
+            if($user_data_database["source"] == $user_data["source"])
+            {
+                /* User already exists with the same source */
+                $result["result"] = true;
+                $result["response"] = "user_exists_logged_in";
+            }
+            else
+            {
+                /* User exists but with different source */
+                if($user_data_database["source"] == "app")
+                {
+                    $result["response"] = "user_merge_with_app";
+                    $result["result"] = $result["result"] = $this->master_handler["database_handler"]->update_row($this->master_handler["config_handler"]->database_name_users, array('source' => $user_data["source"]), "email = '" . $user_data["email"] . "'");
+                }
+                else
+                {
+                    $result["response"] = "user_already_exists_different_source";
+                    $result["result"] = false;
+                }
+            }
+        }
+        else
+        {
+            /* Email not exist so create the new user */
+            $result["result"] = $this->master_handler["database_handler"]->insert_row($this->master_handler["config_handler"]->database_name_users, $user_data);
+            if(!$result["result"])
+            {
+                $result["response"] = "error_comm_database";
+                return $result;
+            }
+            else
+            {
+                $result["response"] = "user_account_created"; 
+            }
+
+        }
+
+        if($result["result"] == true)
+        {
+            if(session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $_SESSION["email"] = $user_data["email"];
+            $_SESSION["first_name"] = $user_data["FirstName"];
+            $_SESSION["last_name"] = $user_data["LastName"];
+            $_SESSION["picture"] = $user_data["picture"];
+            $_SESSION["permission"] = $user_data["permission"];
+        }
+
+
+        return $result;
+
+    }
+
 }
 
 $toolbox = new toolbox($master_handler);

@@ -1,54 +1,42 @@
 <script setup>
 import config from '@/config';
 import { useApi } from '@/service/api';
-import i18n from '@/service/i18n';
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
-const email = ref('');
-const password = ref('');
-const checked = ref(false);
+const auth_code = ref('');
 
 const toast = useToast();
 const { api_post } = useApi();
 const router = useRouter();
-const google_link = ref('');
+const route = useRoute();
+const status_result = ref(false);
+const load = ref(false);
+const status_message = ref('');
 
-async function login() {
-    const response = await api_post(config.endpoint_login, { method: 'login', parameters: { email: email.value, password: password.value, remember: checked.value } });
-    console.log(response);
-    if (response.result) {
-        console.log(response.response);
-        router.push('/app');
+async function login_google_check() {
+    const api = await api_post(config.endpoint_login, { method: 'login_google_check', parameters: { code: auth_code.value } });
+    if (config.debug) {
+        console.log('API [login_google_check]: ');
+        console.log(api);
+    }
+    if (api.result) {
+        status_result.value = api.result;
+        status_message.value = api.response;
+        load.value = true;
     } else {
-        showError(i18n.global.t(response.response.title), i18n.global.t(response.response.desc));
+        status_result.value = api.result;
+        status_message.value = api.response;
+        load.value = true;
     }
 }
 
-async function google_link_load() {
-    const response = await api_post(config.endpoint_login, { method: 'google_link' });
-    console.log(response);
-    if (response.result) {
-        google_link.value = response.google_link;
-    } else {
-        showError(i18n.global.t(response.response.title), i18n.global.t(response.response.desc));
-    }
-}
 onMounted(() => {
-    google_link_load();
-    if (!window.google) {
-        const script = document.createElement('script');
-        script.src = 'https://accounts.google.com/gsi/client';
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-    }
+    auth_code.value = route.query.code;
+    login_google_check();
 });
-
-function showError(title, detail) {
-    toast.add({ severity: 'error', summary: title, detail: detail, life: 3000 });
-}
 </script>
 
 <template>
@@ -87,56 +75,20 @@ function showError(title, detail) {
                                 />
                             </g>
                         </svg>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">{{ $t('welcome_in_mirak_account') }}</div>
-                        <span class="text-muted-color font-medium">{{ $t('sign_in_to_continue') }}</span>
+                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">{{ $t('mirak_plus_registrace') }}</div>
+                        <span class="text-muted-color font-medium">{{ $t('status_registration') }}</span>
                     </div>
 
-                    <div>
-                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">{{ $t('sign_in_email') }}</label>
-                        <InputText id="email1" type="text" class="w-full md:w-[30rem] mb-8" v-model="email" />
+                    <div v-if="load" class="flex flex-col items-center justify-center">
+                        <DotLottieVue v-if="!status_result" style="height: 250px; width: 250px" :speed="1.5" autoplay src="https://lottie.host/656da98f-81da-429c-a167-06b4f81191bf/6ht3bLPKkk.json" />
+                        <DotLottieVue v-else style="height: 250px; width: 250px" :speed="1.7" autoplay src="https://lottie.host/75ef43fd-dcdd-409b-82bc-823226c80005/EEKEtUtjLY.json" />
+                        <label class="texttext-center mb-8">{{ $t(status_message) }}</label>
 
-                        <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">{{ $t('sign_in_password') }}</label>
-                        <Password id="password1" v-model="password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
-
-                        <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                            <div class="flex items-center">
-                                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">{{ $t('sign_in_remeber_me') }}</label>
-                            </div>
-                            <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">{{ $t('sign_in_forgot_pass') }}</span>
-                        </div>
-                        <Button :label="$t('sign_in_log_in')" class="w-full" @click="login"></Button>
-                        <div class="w-full flex items-center justify-center py-5">
-                            <a
-                                :href="google_link"
-                                style="
-                                    display: inline-flex;
-                                    align-items: center;
-                                    padding: 10px 20px;
-                                    border: 1px solid var(--primary-color);
-                                    border-radius: var(--content-border-radius);
-                                    background: var(--surface-card);
-                                    color: var(--text-color);
-                                    font-size: 13px;
-                                    text-decoration: none;
-                                    transition: background 0.2s;
-                                "
-                                onmouseover="this.style.background='var(--surface-hover)';"
-                                onmouseout="this.style.background='var(--surface-bg-dark)';"
-                            >
-                                <i class="fa-brands fa-google mr-4 fa-xl"></i>
-                                {{ $t('login_with_google') }}
-                            </a>
-                        </div>
-                        <div class="w-full">
-                            <Divider layout="horizontal" class="!hidden md:!flex" align="center"
-                                ><b>{{ $t('sig_in_or') }}</b></Divider
-                            >
-                        </div>
-
-                        <div class="w-full flex items-center justify-center py-5">
-                            <Button :label="$t('sign_in_register')" icon="pi pi-user-plus" severity="success" class="w-full max-w-[17.35rem] mx-auto"></Button>
-                        </div>
+                        <Button v-if="status_result" :label="$t('go_to_mirak_plus')" class="w-full mt-2 mb-2" @click="() => router.push('/app')"></Button>
+                        <Button v-else :label="$t('back_to_login')" class="w-full mt-2 mb-2" @click="() => router.push('/auth/login')"></Button>
+                    </div>
+                    <div v-else class="flex flex-col items-center justify-center">
+                        <i class="fa-solid fa-spinner fa-spin-pulse fa-2xl mt-8"></i>
                     </div>
                 </div>
             </div>

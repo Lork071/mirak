@@ -245,5 +245,20 @@
     "user_id": "ID uživatele",
     "new_key_example": "Nová hodnota příkladu",
     "operation_was_successful": "Operace byla úspěšná",
-    "operation_was_not_successful": "Operace nebyla úspěšná"
+    "operation_was_not_successful": "Operace nebyla úspěšná",
+    "meal_already_delivered": "Jídlo již bylo vydáno",
+    "meal_different_location": "Špatné výdejní místo",
+    "participant_already_registered": "Účastník již byl registrován",
+    "participant_registered": "Účastník úspěšně registrován",
+    "participant_id_not_valid": "ID účastníka není platné",
+    "scanner_type_of_scanner_not_found": "Typ skeneru nebyl nalezen",
+    "login_with_google": "Pomocí Google",
+    "mirak_plus_registrace": "Mírák+ registrace",
+    "status_registration": "Stav registrace",
+    "user_account_created": "Uživatelský účet byl úspěšně vytvořen",
+    "user_exists_logged_in": "Uživatel byl úspěšně přihlášen",
+    "go_to_mirak_plus": "Přejít na Mírák+",
+    "back_to_login": "Zpět na přihlášení",
+    "user_merge_with_app": "Účet byl spojen již s existujícím účtem v aplikaci",
+    "user_already_exists_different_source": "Uživatel již existuje, ale z jiného zdroje. Zkus se přihlásit pomocí jiného účtu."
 }
