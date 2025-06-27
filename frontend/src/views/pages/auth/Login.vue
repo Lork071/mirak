@@ -14,6 +14,7 @@ const toast = useToast();
 const { api_post } = useApi();
 const router = useRouter();
 const google_link = ref('');
+const facebook_link = ref('');
 
 async function login() {
     const response = await api_post(config.endpoint_login, { method: 'login', parameters: { email: email.value, password: password.value, remember: checked.value } });
@@ -22,7 +23,7 @@ async function login() {
         console.log(response.response);
         router.push('/app');
     } else {
-        showError(i18n.global.t(response.response.title), i18n.global.t(response.response.desc));
+        toast.add({ severity: 'error', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
     }
 }
 
@@ -31,8 +32,9 @@ async function google_link_load() {
     console.log(response);
     if (response.result) {
         google_link.value = response.google_link;
+        facebook_link.value = response.facebook_link;
     } else {
-        showError(i18n.global.t(response.response.title), i18n.global.t(response.response.desc));
+        toast.add({ severity: 'error', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
     }
 }
 onMounted(() => {
@@ -45,10 +47,6 @@ onMounted(() => {
         document.head.appendChild(script);
     }
 });
-
-function showError(title, detail) {
-    toast.add({ severity: 'error', summary: title, detail: detail, life: 3000 });
-}
 </script>
 
 <template>
@@ -106,9 +104,10 @@ function showError(title, detail) {
                             <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">{{ $t('sign_in_forgot_pass') }}</span>
                         </div>
                         <Button :label="$t('sign_in_log_in')" class="w-full" @click="login"></Button>
-                        <div class="w-full flex items-center justify-center py-5">
+                        <div class="w-full flex flex-col items-center justify-center py-5">
                             <a
                                 :href="google_link"
+                                class="mb-4"
                                 style="
                                     display: inline-flex;
                                     align-items: center;
@@ -135,7 +134,7 @@ function showError(title, detail) {
                         </div>
 
                         <div class="w-full flex items-center justify-center py-5">
-                            <Button :label="$t('sign_in_register')" icon="pi pi-user-plus" severity="success" class="w-full max-w-[17.35rem] mx-auto"></Button>
+                            <Button :label="$t('sign_in_register')" icon="pi pi-user-plus" severity="success" class="w-full max-w-[17.35rem] mx-auto" @click="router.push('/auth/register')" />
                         </div>
                     </div>
                 </div>

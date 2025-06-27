@@ -125,6 +125,53 @@ class login_controler{
         return $result;
     }
 
+    public function sign_up($parameters)
+    {
+        $result = array(
+            "result" => false,
+            "response" => ""
+        );
+
+        $parameters["email"] = strtolower($parameters["email"]);
+
+        /* check if email already exists */
+        $database_result = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_users, array("email","source"), "`email` = '".$parameters["email"]."'");
+
+        if($database_result != null)
+        {
+            /* email already exists */
+            $result["result"] = false;
+            $result["response"] = array(
+                "title" => "sig_up_email_exists_title",
+                "desc" => "sig_up_email_exists_desc"
+            );
+        }
+        else
+        {
+            /* email does not exist, so create new user */
+            $hash_password = hash('sha256', $parameters["password"]);
+            $data = array(
+                "email" => $parameters["email"],
+                "FirstName" => $parameters["first_name"],
+                "LastName" => $parameters["last_name"],
+                "hash_password" => $hash_password,
+                "permission" => $this->master_handler["config_handler"]->default_permission,
+                "source" => "app"
+            );
+
+            if($this->master_handler["database_handler"]->insert_row($this->master_handler["config_handler"]->database_name_users, $data) == true)
+            {
+                $result["result"] = true;
+                $result["response"] = array(
+                    "title" => "sig_up_success_title",
+                    "desc" => "sig_up_success_desc"
+                );
+            }
+        }
+
+        return $result;
+    }
+
     public function login($parameters)
     {
         $result = array(
@@ -330,10 +377,10 @@ class login_controler{
 
         $client = $this->google_client();
 
-        $login_url = $client->createAuthUrl();
+        $google_login_url = $client->createAuthUrl();
 
         $result["result"] = true;
-        $result["google_link"] = $login_url;
+        $result["google_link"] = $google_login_url;
         return $result;
     }
 

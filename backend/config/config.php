@@ -4,7 +4,7 @@ require_once 'web_config.php';
 class config{
 
     public function __construct() {
-        global $ServerName, $UserName, $Password, $DBName, $web_backend_url, $web_google_auth_callback;
+        global $ServerName, $UserName, $Password, $DBName, $web_backend_url, $web_google_auth_callback, $web_facebook_auth_callback;
         $this->database_server_name = $ServerName;
         $this->database_user_name = $UserName;
         $this->database_password = $Password;
@@ -12,6 +12,7 @@ class config{
 
         $this->backend_url = $web_backend_url;
         $this->google_auth_callback = $web_google_auth_callback;
+        $this->facebook_auth_callback = $web_facebook_auth_callback;
 
         $this->ticket_items= array(
             "money" => array(
@@ -54,6 +55,7 @@ class config{
     public $database_user_name;
     public $database_password;
     public $database_name;
+    public $facebook_auth_callback;
 
     /* Database name */
     public $database_name_error = "errors";
@@ -67,6 +69,12 @@ class config{
      ************************************/
     public $google_client_id = '875122042732-ch41ldiq5a19i9ves64lhqq7bfdkkmac.apps.googleusercontent.com';
     public $google_client_secret = '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';
+
+    /*************************************
+     * Facebook auth
+     ************************************/
+    public $facebook_app_id = '694858110206929';
+    public $facebook_app_secret = 'f458a84f78b0b85751b1a4054ea23b7f';
 
     /*************************************
      * Global

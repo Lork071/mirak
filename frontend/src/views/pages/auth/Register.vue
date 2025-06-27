@@ -1,45 +1,59 @@
-<script>
+<script setup>
+import EmailVerify from '@/components/EmailVerify.vue';
+import LanguageConfigurator from '@/components/LanguageConfigurator.vue';
 import config from '@/config';
 import { useApi } from '@/service/api';
 import i18n from '@/service/i18n';
 import { useToast } from 'primevue/usetoast';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-export default {
-    name: 'LanguageConfigurator',
-    setup() {
-        const email = ref('');
-        const password = ref('');
-        const checked = ref(false);
 
-        const toast = useToast();
-        const { api_post } = useApi();
-        const router = useRouter();
+const email = ref('');
+const password = ref('');
+const checked = ref(false);
 
-        async function login() {
-            const response = await api_post(config.endpoint_login, { method: 'login', parameters: { email: email.value, password: password.value, remember: checked.value } });
-            console.log(response);
-            if (response.result) {
-                console.log(response.response);
-                router.push('/app');
-            } else {
-                toast.add({ severity: 'error', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
-            }
-        }
-        return {
-            email,
-            password,
-            checked,
-            toast,
-            login
-        };
-    },
-    methods: {
-        showError(title, detail) {
-            this.toast.add({ severity: 'error', summary: title, detail: detail, life: 3000 });
-        }
+const email_verified = ref(false);
+
+const first_name = ref('');
+const last_name = ref('');
+
+const toast = useToast();
+const { api_post } = useApi();
+const router = useRouter();
+
+function setEmail(val) {
+    email.value = val;
+}
+function setEmailVerified(val) {
+    email_verified.value = val;
+}
+
+const passwordValid = computed(() => ({
+    length: password.value.length >= 8,
+    number: /\d/.test(password.value),
+    lowercase: /[a-z]/.test(password.value),
+    uppercase: /[A-Z]/.test(password.value)
+}));
+
+async function sign_up() {
+    const response = await api_post(config.endpoint_login, { method: 'sign_up', parameters: { email: email.value, password: password.value, first_name: first_name.value, last_name: last_name.value } });
+    if (response.result) {
+        toast.add({ severity: 'success', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        router.push('/app');
+    } else {
+        toast.add({ severity: 'error', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
     }
-};
+}
+
+const isPasswordStrong = computed(() => passwordValid.value.length && passwordValid.value.number && passwordValid.value.lowercase && passwordValid.value.uppercase);
+
+// Validace: jméno a příjmení musí mít aspoň 2 znaky a obsahovat jen písmena
+const firstNameValid = computed(() => /^[A-Za-zÁ-Žá-žěščřžýáíéúůóďťň ]{2,}$/.test(first_name.value));
+const lastNameValid = computed(() => /^[A-Za-zÁ-Žá-žěščřžýáíéúůóďťň ]{2,}$/.test(last_name.value));
+
+// Celková validita formuláře
+const canRegister = computed(() => isPasswordStrong.value && firstNameValid.value && lastNameValid.value);
 </script>
 
 <template>
@@ -82,41 +96,51 @@ export default {
                         <span class="text-muted-color font-medium">{{ $t('sign_in_to_continue') }}</span>
                     </div>
 
-                    <div>
-                        <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">{{ $t('sign_in_email') }}</label>
-                        <InputText id="email1" type="text" class="w-full md:w-[30rem] mb-8" v-model="email" />
+                    <Fluid class="flex flex-col">
+                        <EmailVerify @email="setEmail" @verified="setEmailVerified" />
+                        <div v-if="email_verified" class="flex flex-col gap-4">
+                            <FloatLabel variant="on" class="w-full mt-8">
+                                <label for="first_name">{{ $t('first_name') }}</label>
+                                <InputText v-model="first_name" type="text" />
+                            </FloatLabel>
+                            <FloatLabel variant="on" class="w-full mt-4">
+                                <label for="last_name">{{ $t('last_name') }}</label>
+                                <InputText v-model="last_name" type="text" />
+                            </FloatLabel>
+                            <FloatLabel variant="on" class="w-full mt-4">
+                                <label for="password">{{ $t('sign_in_password') }}</label>
+                                <InputText v-model="password" type="password" />
+                            </FloatLabel>
 
-                        <div class="flex flex-wrap items-start gap-4">
-                            <div class="field">
-                                <label for="firstname1" class="sr-only">Firstname</label>
-                                <InputText id="firstname1" type="text" placeholder="Firstname" />
+                            <ul class="password-checklist mt-2 mb-2 text-sm">
+                                <li :class="{ ok: passwordValid.length }">
+                                    <span v-if="passwordValid.length"><i class="fa-solid fa-check success"></i></span>
+                                    <span v-else><i class="fa-solid fa-xmark danger" style="color: var(--primary-color)"></i></span>
+                                    {{ $t('password_min_length', { min: 8 }) }}
+                                </li>
+                                <li :class="{ ok: passwordValid.number }">
+                                    <span v-if="passwordValid.number"><i class="fa-solid fa-check success"></i></span>
+                                    <span v-else><i class="fa-solid fa-xmark" style="color: var(--primary-color)"></i></span>
+                                    {{ $t('password_number') }}
+                                </li>
+                                <li :class="{ ok: passwordValid.lowercase }">
+                                    <span v-if="passwordValid.lowercase"><i class="fa-solid fa-check success"></i></span>
+                                    <span v-else><i class="fa-solid fa-xmark" style="color: var(--primary-color)"></i></span>
+                                    {{ $t('password_lowercase') }}
+                                </li>
+                                <li :class="{ ok: passwordValid.uppercase }">
+                                    <span v-if="passwordValid.uppercase"><i class="fa-solid fa-check success"></i></span>
+                                    <span v-else><i class="fa-solid fa-xmark" style="color: var(--primary-color)"></i></span>
+                                    {{ $t('password_uppercase') }}
+                                </li>
+                            </ul>
+                            <div v-if="!showOtp" class="my-right">
+                                <div class="mt-4" style="width: 150px">
+                                    <Button :loading="VerifyBtnLoading" @click="sign_up" :disabled="!canRegister">{{ $t('sign_up') }}</Button>
+                                </div>
                             </div>
-                            <div class="field">
-                                <label for="lastname1" class="sr-only">Lastname</label>
-                                <InputText id="lastname1" type="text" placeholder="Lastname" />
-                            </div>
                         </div>
-
-                        <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">{{ $t('sign_in_password') }}</label>
-                        <Password id="password1" v-model="password" :toggleMask="true" class="mb-4" fluid :feedback="false"></Password>
-
-                        <div class="flex items-center justify-between mt-2 mb-8 gap-8">
-                            <div class="flex items-center">
-                                <Checkbox v-model="checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                                <label for="rememberme1">{{ $t('sign_in_remeber_me') }}</label>
-                            </div>
-                            <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">{{ $t('sign_in_forgot_pass') }}</span>
-                        </div>
-                        <Button :label="$t('sign_in_log_in')" class="w-full" @click="login"></Button>
-                        <div class="w-full">
-                            <Divider layout="horizontal" class="!hidden md:!flex" align="center"
-                                ><b>{{ $t('sig_in_or') }}</b></Divider
-                            >
-                        </div>
-                        <div class="w-full flex items-center justify-center py-5">
-                            <Button :label="$t('sign_in_sign_in')" icon="pi pi-user-plus" severity="success" class="w-full max-w-[17.35rem] mx-auto"></Button>
-                        </div>
-                    </div>
+                    </Fluid>
                 </div>
             </div>
         </div>

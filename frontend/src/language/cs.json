@@ -200,7 +200,6 @@
     "ticket_workshop_test": "Plánujete navštívit i workshopy? Zde si můžete přečíst, co jednotlivé workshopy nabízejí, a rovnou se na ně zaregistrovat. Registrace není povinná, ale bez ní nemusí zbýt volné místo.",
     "ticket_something_is_missing": "Něco chybí vyplnit",
     "ticket_delete_conf_text": "Opravdu chcete smazat tuto vstupenku?",
-
     "meal": "Jídlo",
     "workshop": "Workshop",
     "note_pay_only_by_cash": "Platba je možná pouze v hotovosti až na akci!",
@@ -260,5 +259,16 @@
     "go_to_mirak_plus": "Přejít na Mírák+",
     "back_to_login": "Zpět na přihlášení",
     "user_merge_with_app": "Účet byl spojen již s existujícím účtem v aplikaci",
-    "user_already_exists_different_source": "Uživatel již existuje, ale z jiného zdroje. Zkus se přihlásit pomocí jiného účtu."
+    "user_already_exists_different_source": "Uživatel již existuje, ale z jiného zdroje. Zkus se přihlásit pomocí jiného účtu.",
+
+    "login_with_facebook": "Pomocí Facebooku",
+    "password_min_length": "Heslo musí obsahovat minimální počet {min} znaků",
+    "password_number": "Heslo musí obsahovat alespoň jedno číslo",
+    "password_uppercase": "Heslo musí obsahovat alespoň jedno velké písmeno",
+    "password_lowercase": "Heslo musí obsahovat alespoň jedno malé písmeno",
+    "sign_up": "Registrovat se",
+    "sig_up_email_exists_title": "Email již existuje",
+    "sig_up_email_exists_desc": "Zadaný email již existuje. Zkus se registrovat pomocí jiného účtu.",
+    "sig_up_success_title": "Registrace úspěšná",
+    "sig_up_success_desc": "Tvůj účet byl úspěšně vytvořen. Za okamžik budeš přesměrován na přihlašovací stránku."
 }

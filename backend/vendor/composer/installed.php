@@ -3,7 +3,7 @@
         'name' => 'vendor/mirak',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '703b51b37f5cd3fab63c9379eac119ac3fd29167',
+        'reference' => '1b7054548605472896fe15f9bf1d13073b70c892',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -199,7 +199,7 @@
         'vendor/mirak' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '703b51b37f5cd3fab63c9379eac119ac3fd29167',
+            'reference' => '1b7054548605472896fe15f9bf1d13073b70c892',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
