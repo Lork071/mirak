@@ -65,24 +65,24 @@ class login_controler{
             $database_result = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_users, array("email","FirstName", "LastName","permission"), "`email` = '".$_SESSION["email"]."'");
             if($database_result != null)
             {
-                $result["result"]= true;
-                $database_result = $database_result[0];
-                $_SESSION = $database_result;
-                $result["response"] = array();
-                $result["response"]["user_info"] = $_SESSION;
-                $permissions = new permissions($this->master_handler, $database_result["email"]);
-                $result["response"]["user_info"]["premissions_pages"] = $permissions->get_pages(); 
-                $result["response"]["user_info"]["premissions_operations"] = $permissions->get_operations(); 
-                $result["response"]["pages_with_permissions"] = $this->master_handler["config_handler"]->permissions_pages;
+                $result = $this->prepare_user_data($database_result[0], $parameters["page_path"]);
+            }
+        }
+        else
+        {
+            /* check of token exist */
+            $token_user = $this->toolbox->getCookie("mirak_login_token");
+            $email_user = $this->toolbox->getCookie("mirak_login_email");
+            $token_database = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_users, array("token"), "`email` = '".$email_user."'")[0]["token"];
+            if($token_user == $token_database && ($token_user != null || $email_user != null))
+            {
+                /* token exist */
+            
+                /* token is valid */
 
-                if (in_array(basename($parameters["page_path"]), $this->master_handler["config_handler"]->permissions_pages))
-                {
-                    if (!in_array(basename($parameters["page_path"]), $permissions->get_pages()))
-                    {
-                        $result["result"] = false;
-                        $result["response"] = "/auth/access";
-                    }
-                }
+                $result = $this->prepare_user_data($this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_users, array("email","FirstName", "LastName","permission"), "`email` = '".$email_user."'")[0], $parameters["page_path"]);
+
+                $this->create_login_token($email_user);
             }
         }
 
@@ -121,6 +121,9 @@ class login_controler{
         session_start();
         // Destroy the session
         session_destroy();
+
+        $this->toolbox->eraseCookie("mirak_login_token");
+        $this->toolbox->eraseCookie("mirak_login_email");
 
         return $result;
     }
@@ -215,23 +218,7 @@ class login_controler{
 
                 if($parameters["remember"])
                 {
-                    $data = array();
-            
-                    $data["token"] = hash('sha256', $this->toolbox->generateUuid() . strtolower($parameters["email"]));
-                    $data["expiration"] = $this->toolbox->addSecondsToTimestamp($this->master_handler["config_handler"]->token_expiration_sec);
-                    $this->toolbox->createCookie("log_token", $data["token"], 30);
-
-                    $json = json_encode($data);
-
-                    if(!$this->master_handler["database_handler"]->update_row($this->master_handler["config_handler"]->database_name_users, array("token"=> $json), "`email` = '".$parameters["email"]."'" ))
-                    {
-                        $result["result"] = false;
-                        $result["response"] = array(
-                            "title" => "error",
-                            "desc" => "error_comm_api"
-                        );
-                    }
-
+                    $this->create_login_token($parameters["email"]);
                 }
     
             }
@@ -468,6 +455,46 @@ class login_controler{
 
         return $result;
 
+    }
+
+    private function create_login_token($email)
+    {
+        $token = hash('sha256', $this->toolbox->generateUuid());
+        $this->toolbox->createCookie("mirak_login_token", $token, 30);
+        $this->toolbox->createCookie("mirak_login_email", $email, 30);
+        $this->master_handler["database_handler"]->update_row($this->master_handler["config_handler"]->database_name_users, array("token" => $token), "`email` = '".$email."'");
+    }
+
+    private function prepare_user_data($user_data, $page_path)
+    {
+        $result["result"] = true;
+        $result["response"] = array();
+        session_start([
+            'use_strict_mode' => true, 
+            'cookie_httponly' => true,
+            'cookie_secure' => true, 
+            'use_only_cookies' => true
+        ]);
+        $_SESSION["email"] = $user_data["email"];
+        $_SESSION["first_name"] = $user_data["FirstName"];
+        $_SESSION["last_name"] = $user_data["LastName"];
+        $_SESSION["permission"] = $user_data["permission"];
+
+        $result["response"] = array();
+        $permissions = new permissions($this->master_handler, $_SESSION["email"]);
+        $result["response"]["user_info"]["premissions_pages"] = $permissions->get_pages(); 
+        $result["response"]["user_info"]["premissions_operations"] = $permissions->get_operations(); 
+        $result["response"]["pages_with_permissions"] = $this->master_handler["config_handler"]->permissions_pages;
+
+        if (in_array(basename($page_path), $this->master_handler["config_handler"]->permissions_pages))
+        {
+            if (!in_array(basename($page_path), $permissions->get_pages()))
+            {
+                $result["result"] = false;
+                $result["response"] = "/auth/access";
+            }
+        }
+        return $result;
     }
 
 }

@@ -69,13 +69,10 @@ class config{
      ************************************/
     public $google_client_id = '875122042732-ch41ldiq5a19i9ves64lhqq7bfdkkmac.apps.googleusercontent.com';
     public $google_client_secret = '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';
-
     /*************************************
-     * Facebook auth
+     * log in
      ************************************/
-    public $facebook_app_id = '694858110206929';
-    public $facebook_app_secret = 'f458a84f78b0b85751b1a4054ea23b7f';
-
+    public $login_token_cookie_name = "mirak_login_token";
     /*************************************
      * Global
      ************************************/

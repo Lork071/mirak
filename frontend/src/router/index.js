@@ -81,11 +81,6 @@ const router = createRouter({
             component: () => import('@/views/pages/auth/Login_callback.vue')
         },
         {
-            path: '/auth/login-callback-facebook',
-            name: 'login-callback-facebook',
-            component: () => import('@/views/pages/auth/Login_callback_facebook.vue')
-        },
-        {
             path: '/auth/register',
             name: 'register',
             component: () => import('@/views/pages/auth/Register.vue')
