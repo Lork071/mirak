@@ -270,5 +270,7 @@
     "sig_up_email_exists_title": "Email již existuje",
     "sig_up_email_exists_desc": "Zadaný email již existuje. Zkus se registrovat pomocí jiného účtu.",
     "sig_up_success_title": "Registrace úspěšná",
-    "sig_up_success_desc": "Tvůj účet byl úspěšně vytvořen. Za okamžik budeš přesměrován na přihlašovací stránku."
+    "sig_up_success_desc": "Tvůj účet byl úspěšně vytvořen. Za okamžik budeš přesměrován na přihlašovací stránku.",
+    "forgot_password_reset": "Obnovení hesla",
+    "success_user_remeber": "Uživatel byl úspěšně zapamatován"
 }

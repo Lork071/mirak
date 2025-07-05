@@ -57,9 +57,7 @@ class login_controler{
             "response" => "/auth/login"
         );
 
-        if(session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        session_start();
         if(isset($_SESSION["email"]))
         {
             $database_result = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_users, array("email","FirstName", "LastName","permission"), "`email` = '".$_SESSION["email"]."'");
@@ -226,6 +224,16 @@ class login_controler{
         return $result;
     }
 
+    public function remember_user()
+    {
+        $result = $this->check_session();
+        $this->create_login_token($result["response"]["user_info"]["email"]);
+
+        return array(
+            "result" => true
+        );
+    }
+
     public function login_google_check($parameters)
     {
         $result = array(
@@ -355,6 +363,36 @@ class login_controler{
         return $result;
     }
 
+    public function reset_password_send_link($parameters)
+    {
+        $result = array(
+            "result" => false,
+            "response" => ""
+        );
+
+        $database_result = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_users, array("email"), "`email` = '".$parameters["email"]."'");
+
+        if($database_result != null)
+        {
+            $hash_password = hash('sha256', $parameters["password"]);
+            if($this->master_handler["database_handler"]->update_row( $this->master_handler["config_handler"]->database_name_users,array("hash_password"=>$hash_password), "`email` = '".$parameters["email"]."'"))
+            {
+                $result["result"] = true;
+                $result["response"] = "message_password_reset_success";
+            }
+            else
+            {
+                $result["response"] = "error_comm_database";
+            }
+        }
+        else
+        {
+            $result["response"] = "message_email_not_found";
+        }
+
+        return $result;
+    }
+
     public function google_link()
     {
         $result = array(
@@ -469,12 +507,14 @@ class login_controler{
     {
         $result["result"] = true;
         $result["response"] = array();
-        session_start([
-            'use_strict_mode' => true, 
-            'cookie_httponly' => true,
-            'cookie_secure' => true, 
-            'use_only_cookies' => true
-        ]);
+        if(session_status() === PHP_SESSION_NONE) {
+            session_start([
+                'use_strict_mode' => true, 
+                'cookie_httponly' => true,
+                'cookie_secure' => true, 
+                'use_only_cookies' => true
+            ]);
+    }
         $_SESSION["email"] = $user_data["email"];
         $_SESSION["first_name"] = $user_data["FirstName"];
         $_SESSION["last_name"] = $user_data["LastName"];
@@ -482,6 +522,7 @@ class login_controler{
 
         $result["response"] = array();
         $permissions = new permissions($this->master_handler, $_SESSION["email"]);
+        $result["response"]["user_info"] = $_SESSION;
         $result["response"]["user_info"]["premissions_pages"] = $permissions->get_pages(); 
         $result["response"]["user_info"]["premissions_operations"] = $permissions->get_operations(); 
         $result["response"]["pages_with_permissions"] = $this->master_handler["config_handler"]->permissions_pages;

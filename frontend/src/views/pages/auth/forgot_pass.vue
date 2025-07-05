@@ -1,62 +1,43 @@
 <script setup>
+import EmailVerify from '@/components/EmailVerify.vue';
+import LanguageConfigurator from '@/components/LanguageConfigurator.vue';
 import config from '@/config';
 import { useApi } from '@/service/api';
-import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
+import i18n from '@/service/i18n';
 import { useToast } from 'primevue/usetoast';
-import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const auth_code = ref('');
+const email = ref('');
+const password = ref('');
+const checked = ref(false);
+
+const email_verified = ref(false);
+
+const first_name = ref('');
+const last_name = ref('');
 
 const toast = useToast();
 const { api_post } = useApi();
 const router = useRouter();
-const route = useRoute();
-const status_result = ref(false);
-const load = ref(false);
-const status_message = ref('');
-const remember_checked = ref(false);
 
-async function login_google_check() {
-    const api = await api_post(config.endpoint_login, { method: 'login_google_check', parameters: { code: auth_code.value } });
-    if (config.debug) {
-        console.log('API [login_google_check]: ');
-        console.log(api);
-    }
-    if (api.result) {
-        status_result.value = api.result;
-        status_message.value = api.response;
-        load.value = true;
-    } else {
-        status_result.value = api.result;
-        status_message.value = api.response;
-        load.value = true;
-    }
+function setEmail(val) {
+    email.value = val;
+}
+function setEmailVerified(val) {
+    email_verified.value = val;
 }
 
-async function remember_user() {
-    if (remember_checked.value === true) {
-        if (remember_checked.value) {
-            const api = await api_post(config.endpoint_login, { method: 'remember_user', parameters: {} });
-            if (config.debug) {
-                console.log('API [remember_user]: ');
-                console.log(api);
-            }
-            if (api.result) {
-                router.push('/app');
-            } else {
-                router.push('/app');
-            }
-        }
-    } else {
+async function sign_up() {
+    const response = await api_post(config.endpoint_login, { method: 'sign_up', parameters: { email: email.value, password: password.value, first_name: first_name.value, last_name: last_name.value } });
+    if (response.result) {
+        toast.add({ severity: 'success', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         router.push('/app');
+    } else {
+        toast.add({ severity: 'error', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
     }
 }
-
-onMounted(() => {
-    auth_code.value = route.query.code;
-    login_google_check();
-});
 </script>
 
 <template>
@@ -95,27 +76,13 @@ onMounted(() => {
                                 />
                             </g>
                         </svg>
-                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">{{ $t('mirak_plus_registrace') }}</div>
-                        <span class="text-muted-color font-medium">{{ $t('status_registration') }}</span>
+                        <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">{{ $t('mirak_plus') }}</div>
+                        <span class="text-muted-color font-medium">{{ $t('forgot_password_reset') }}</span>
                     </div>
 
-                    <div v-if="load" class="flex flex-col items-center justify-center">
-                        <DotLottieVue v-if="!status_result" style="height: 250px; width: 250px" :speed="1.5" autoplay src="https://lottie.host/656da98f-81da-429c-a167-06b4f81191bf/6ht3bLPKkk.json" />
-                        <DotLottieVue v-else style="height: 250px; width: 250px" :speed="1.7" autoplay src="https://lottie.host/75ef43fd-dcdd-409b-82bc-823226c80005/EEKEtUtjLY.json" />
-
-                        <label class="texttext-center mb-8">{{ $t(status_message) }}</label>
-
-                        <div class="flex items-left mb-2">
-                            <Checkbox v-model="remember_checked" id="rememberme1" binary class="mr-2"></Checkbox>
-                            <label for="rememberme1">{{ $t('sign_in_remeber_me') }}</label>
-                        </div>
-
-                        <Button v-if="status_result" :label="$t('go_to_mirak_plus')" class="w-full mt-2 mb-2" @click="remember_user()"></Button>
-                        <Button v-else :label="$t('back_to_login')" class="w-full mt-2 mb-2" @click="() => router.push('/auth/login')"></Button>
-                    </div>
-                    <div v-else class="flex flex-col items-center justify-center">
-                        <i class="fa-solid fa-spinner fa-spin-pulse fa-2xl mt-8"></i>
-                    </div>
+                    <Fluid class="flex flex-col">
+                        <EmailVerify @email="setEmail" @verified="setEmailVerified" />
+                    </Fluid>
                 </div>
             </div>
         </div>
