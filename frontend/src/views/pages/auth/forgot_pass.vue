@@ -1,21 +1,17 @@
 <script setup>
-import EmailVerify from '@/components/EmailVerify.vue';
 import LanguageConfigurator from '@/components/LanguageConfigurator.vue';
+import OtpVerify from '@/components/OtpVerify.vue';
 import config from '@/config';
 import { useApi } from '@/service/api';
 import i18n from '@/service/i18n';
 import { useToast } from 'primevue/usetoast';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const email = ref('');
 const password = ref('');
-const checked = ref(false);
 
-const email_verified = ref(false);
-
-const first_name = ref('');
-const last_name = ref('');
+const otp_verified = ref(false);
 
 const toast = useToast();
 const { api_post } = useApi();
@@ -24,16 +20,24 @@ const router = useRouter();
 function setEmail(val) {
     email.value = val;
 }
-function setEmailVerified(val) {
-    email_verified.value = val;
+function setOtpVerified(val) {
+    otp_verified.value = val;
 }
 
-async function sign_up() {
-    const response = await api_post(config.endpoint_login, { method: 'sign_up', parameters: { email: email.value, password: password.value, first_name: first_name.value, last_name: last_name.value } });
+const passwordValid = computed(() => ({
+    length: password.value.length >= 8,
+    number: /\d/.test(password.value),
+    lowercase: /[a-z]/.test(password.value),
+    uppercase: /[A-Z]/.test(password.value)
+}));
+const isPasswordStrong = computed(() => passwordValid.value.length && passwordValid.value.number && passwordValid.value.lowercase && passwordValid.value.uppercase);
+
+async function change_password() {
+    const response = await api_post(config.endpoint_login, { method: 'change_password', parameters: { email: email.value, password: password.value } });
     if (response.result) {
         toast.add({ severity: 'success', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        router.push('/app');
+        await new Promise((resolve) => setTimeout(resolve, config.toast_lifetime));
+        router.push('/auth/login');
     } else {
         toast.add({ severity: 'error', summary: i18n.global.t(response.response.title), detail: i18n.global.t(response.response.desc), life: config.toast_lifetime });
     }
@@ -48,7 +52,7 @@ async function sign_up() {
     <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
         <div class="flex flex-col items-center justify-center">
             <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
-                <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
+                <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20 sm:w-[500px]" style="border-radius: 53px">
                     <div class="text-center mb-8">
                         <svg
                             width="100%"
@@ -81,7 +85,43 @@ async function sign_up() {
                     </div>
 
                     <Fluid class="flex flex-col">
-                        <EmailVerify @email="setEmail" @verified="setEmailVerified" />
+                        <div v-if="!otp_verified">
+                            <OtpVerify @email="setEmail" @verified="setOtpVerified" />
+                        </div>
+                        <div v-else>
+                            <FloatLabel variant="on" class="w-full mt-4">
+                                <label for="password">{{ $t('new_password') }}</label>
+                                <InputText v-model="password" type="password" />
+                            </FloatLabel>
+
+                            <ul class="password-checklist mt-2 mb-2 text-sm">
+                                <li :class="{ ok: passwordValid.length }">
+                                    <span v-if="passwordValid.length"><i class="fa-solid fa-check success"></i></span>
+                                    <span v-else><i class="fa-solid fa-xmark danger" style="color: var(--primary-color)"></i></span>
+                                    {{ $t('password_min_length', { min: 8 }) }}
+                                </li>
+                                <li :class="{ ok: passwordValid.number }">
+                                    <span v-if="passwordValid.number"><i class="fa-solid fa-check success"></i></span>
+                                    <span v-else><i class="fa-solid fa-xmark" style="color: var(--primary-color)"></i></span>
+                                    {{ $t('password_number') }}
+                                </li>
+                                <li :class="{ ok: passwordValid.lowercase }">
+                                    <span v-if="passwordValid.lowercase"><i class="fa-solid fa-check success"></i></span>
+                                    <span v-else><i class="fa-solid fa-xmark" style="color: var(--primary-color)"></i></span>
+                                    {{ $t('password_lowercase') }}
+                                </li>
+                                <li :class="{ ok: passwordValid.uppercase }">
+                                    <span v-if="passwordValid.uppercase"><i class="fa-solid fa-check success"></i></span>
+                                    <span v-else><i class="fa-solid fa-xmark" style="color: var(--primary-color)"></i></span>
+                                    {{ $t('password_uppercase') }}
+                                </li>
+                            </ul>
+                            <div v-if="!showOtp" class="my-right">
+                                <div class="mt-4" style="width: 150px">
+                                    <Button @click="change_password" :disabled="!isPasswordStrong">{{ $t('change_password') }}</Button>
+                                </div>
+                            </div>
+                        </div>
                     </Fluid>
                 </div>
             </div>

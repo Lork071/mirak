@@ -271,6 +271,13 @@
     "sig_up_email_exists_desc": "Zadaný email již existuje. Zkus se registrovat pomocí jiného účtu.",
     "sig_up_success_title": "Registrace úspěšná",
     "sig_up_success_desc": "Tvůj účet byl úspěšně vytvořen. Za okamžik budeš přesměrován na přihlašovací stránku.",
-    "forgot_password_reset": "Obnovení hesla",
-    "success_user_remeber": "Uživatel byl úspěšně zapamatován"
+    "forgot_password_reset": "Pro obnovení hesla nejprve zadej svůj email. Na tento email ti pošleme ověřovací kód.",
+    "success_user_remeber": "Uživatel byl úspěšně zapamatován",
+    "send_otp": "Poslat kód",
+    "otp_verify_success": "Dvoufázové ověření bylo úspěšné",
+    "new_password": "Nové heslo",
+    "change_password": "Změnit heslo",
+    "message_password_changed_success": "Heslo bylo úspěšně změněno. za chvíli budeš přesměrován na přihlašovací stránku.",
+    "user_email_not_exist": "Uživatel s tímto emailem neexistuje",
+    "register_text": "Pro registraci prosím nejprve zadej svůj email. Na tento email ti pošleme ověřovací kód."
 }

@@ -327,6 +327,42 @@ class login_controler{
 
     }
 
+    public function generate_otp($parameters)
+    {
+        $result = array(
+            "result" => false,
+            "response" => ""
+        );
+        $otp = $this->toolbox->generateOtp();
+        $user_exists = $this->master_handler["database_handler"]->read_row(
+            $this->master_handler["config_handler"]->database_name_users,
+            array("email"),
+            "`email` = '".$parameters["email"]."'"
+        );
+
+        if (!$user_exists) {
+            $result["response"] = "user_email_not_exist";
+            return $result;
+        }
+        if($this->master_handler["database_handler"]->update_row( $this->master_handler["config_handler"]->database_name_emails,array("otp"=>$otp), "`email` = '".$parameters["email"]."'"))
+        {
+            $email_sender = new EmailSender();
+            $email_sender->send_otp($parameters["email"],
+                $otp, 
+                $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["email_otp_title"], 
+                $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["email_otp_desc"],
+                $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["best_regards"],
+                $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["mirak_team"]);
+                $result["result"] = true;
+        }
+        else
+        {
+            $result["result"] = false;
+            $result["response"] = "error_comm_database";
+        }
+        return $result;
+    }
+
     public function verify_otp($parameters)
     {
         $result = array(
@@ -343,7 +379,7 @@ class login_controler{
             if($database_result["otp"] == $parameters["otp"])
             {
                 $result["result"] = true;
-                if($this->master_handler["database_handler"]->update_row( $this->master_handler["config_handler"]->database_name_emails,array("verify"=>true), "`email` = '".$parameters["email"]."'"))
+                if($this->master_handler["database_handler"]->update_row( $this->master_handler["config_handler"]->database_name_emails,array("verify"=>true, "otp"=>""), "`email` = '".$parameters["email"]."'"))
                 {
                     $result["result"] = true;
                 }
@@ -409,6 +445,26 @@ class login_controler{
         return $result;
     }
 
+    public function change_password($parameters)
+    {
+        $result = array(
+            "result" => false,
+            "response" => ""
+        );
+        $hash_password = hash('sha256', $parameters["password"]);
+        if($this->master_handler["database_handler"]->update_row($this->master_handler["config_handler"]->database_name_users, array("hash_password" => $hash_password), "`email` = '".$parameters["email"]."'"))
+        {
+            $result["result"] = true;
+            $result["response"] = "message_password_changed_success";
+        }
+        else
+        {
+            $result["response"] = "error_comm_database";
+        }
+
+        return $result;
+    }
+
     public function google_client()
     {
         $client = new Google_Client();
@@ -464,6 +520,12 @@ class login_controler{
         else
         {
             /* Email not exist so create the new user */
+            $email_data = array(
+                "email" => $user_data["email"],
+                "verify" => true,
+                "otp" => ""
+            );
+            $this->master_handler["database_handler"]->insert_row($this->master_handler["config_handler"]->database_name_emails, $email_data);
             $result["result"] = $this->master_handler["database_handler"]->insert_row($this->master_handler["config_handler"]->database_name_users, $user_data);
             if(!$result["result"])
             {
