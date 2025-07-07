@@ -228,6 +228,45 @@ class database_controler
         return $return_value[0]['total_count']; 
     }
 
+    public function read_static_config($database_name, $config_name)
+    {
+       
+        $return_value = -1;
+        $sql_command = 'SELECT `config_value` FROM `'.$database_name.'` WHERE `config_name` = "'.$config_name.'"';
+
+        $connection = $this->open_connection();
+
+        $stmt = $connection->query($sql_command);
+
+        if ($stmt->rowCount() > 0) {
+            $return_value = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $return_value[0]['config_value'];
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+
+    public function write_static_config($database_name, $config_name, $config_value)
+    {
+        $return_value = -1;
+        $sql_command = 'UPDATE `'.$database_name.'` SET `config_value` = "'.$config_value.'" WHERE `config_name` = "'.$config_name.'"';
+
+        $connection = $this->open_connection();
+
+        if($connection)
+        {
+            $stmt = $connection->prepare($sql_command);
+            $stmt->execute();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 
 ?>
