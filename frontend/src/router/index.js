@@ -4,7 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const baseURL = import.meta.env.VITE_BASE_URL || '/';
 
-const pages_without_login = ['/auth/login', '/auth/login-callback-facebook', '/auth/login-callback', '/', '/auth/register', '/ticket_food', '/draft_intro', '/ticket', '/not_found', '/auth/forgot-password'];
+const pages_without_login = ['/auth/login', '/auth/login-callback-facebook', '/auth/login-callback', '/', '/auth/register', '/ticket_food', '/draft_intro', '/ticket', '/not_found', '/auth/forgot-password', '/volunteer'];
 
 const router = createRouter({
     history: createWebHistory(baseURL),
@@ -62,6 +62,16 @@ const router = createRouter({
                     path: '/app/participant',
                     name: 'participant',
                     component: () => import('@/views/app/admin/participant.vue')
+                },
+                {
+                    path: '/app/mirak-crew',
+                    name: 'all_mirak_crew',
+                    component: () => import('@/views/app/admin/all_mirak_crew.vue')
+                },
+                {
+                    path: '/app/mirak-crew-person',
+                    name: 'mirak_crew_person',
+                    component: () => import('@/views/app/admin/mirak_crew_person.vue')
                 }
             ]
         },
@@ -104,6 +114,11 @@ const router = createRouter({
             path: '/ticket_food',
             name: 'ticket_food',
             component: () => import('@/views/pages/ticket_food.vue')
+        },
+        {
+            path: '/mirak-crew',
+            name: 'mirak-crew',
+            component: () => import('@/views/pages/mirak_crew.vue')
         },
         {
             path: '/ticket',
