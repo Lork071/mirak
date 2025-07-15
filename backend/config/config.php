@@ -64,6 +64,7 @@ class config{
     public $database_name_permissions = "permissions";
     public $database_name_event = "mirak_test";
     public $database_name_emails = "emails";
+    public $database_name_mirak_crew = "mirak_crew";
     /*************************************
      * google auth
      ************************************/
@@ -87,7 +88,7 @@ class config{
     public $token_expiration_sec = 3600;
 
     public $permissions_pages = array(
-        'admin','users','all_users','admin_users','permissions','errors', 'all_participant','qrscanner'
+        'admin','users','all_users','admin_users','permissions','errors', 'all_participant','qrscanner','all_mirak_crew'
     );
 
     public $permissions_operations = array(
@@ -230,6 +231,8 @@ class config{
             "email_ticket_important_info_desc" => array("QR kód slouží pouze jako identifikace účastníka, nikoli QR platba.", "Platba je možná pouze v hotovosti přímo na akci!", "Platba v eurech je možná v aktuálním kurzi vždy zaokrouhlená na celé eura nahoru",),
             'best_regards'=> 'S pozdravem,',
             'mirak_team'=> 'Tým Mírák',
+            "volunteer_form_sent" => "Děkujeme za vyplnění formuláře, brzy se ti ozveme.",
+            "volunteer_form_sent_title" => "Těšíme se na spolupráci!",
         ),
         'en'=> array(
             'email_otp_title' => 'Authentication code',
@@ -239,6 +242,8 @@ class config{
             "email_ticket_important_info_title" => "Important information:",
             'best_regards'=> 'Best Regards,',
             'mirak_team'=> 'Mírák Team',
+            "volunteer_form_sent" => "Thank you for filling out the form, we will get back to you soon.",
+            "volunteer_form_sent_title" => "We look forward to working with you!",
         ),
         'sk'=> array(
             'email_otp_title' => 'Overovací kód',
@@ -248,6 +253,8 @@ class config{
             "email_ticket_important_info_title" => "Dôležité informácie:",
             'best_regards'=> 'S pozdravom,',
             'mirak_team'=> 'Tím Mírák',
+            "volunteer_form_sent" => "Ďakujeme za vyplnenie formulára, čoskoro sa vám ozveme.",
+            "volunteer_form_sent_title" => "Tešíme sa na spoluprácu!",
         ),
     );
 
