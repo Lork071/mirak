@@ -121,6 +121,11 @@ const router = createRouter({
             component: () => import('@/views/pages/mirak_crew.vue')
         },
         {
+            path: '/mirak-crew/success',
+            name: 'mirak-crew-success',
+            component: () => import('@/views/pages/mirak_crew_success.vue')
+        },
+        {
             path: '/ticket',
             name: 'ticket',
             component: () => import('@/views/pages/ticket.vue')

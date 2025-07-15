@@ -55,6 +55,22 @@ class EmailSender {
         }
     }
 
+    public function send_email($email, $title, $description, $best_regards, $mirak_team){
+        try{
+            $this->mail->addAddress($email);
+            $Email_contents = file_get_contents(filename: "../tools/email_templates/email_template.html"); 
+            $this->mail->Subject = mb_convert_encoding($title, "UTF-8");
+            $Email_contents = str_replace("{email_title}", $title, $Email_contents);
+            $Email_contents = str_replace("{email_description}", $description, $Email_contents);
+            $Email_contents = str_replace("{best_regards}", $best_regards, $Email_contents);
+            $Email_contents = str_replace("{mirak_team}", $mirak_team, $Email_contents);
+            $this->mail->Body = mb_convert_encoding($Email_contents, "UTF-8");
+            $this->mail->send();
+        }catch(Exception $e){
+
+        }
+    }
+
 
 }
 ?>

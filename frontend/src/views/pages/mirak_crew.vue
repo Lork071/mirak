@@ -18,6 +18,7 @@ const phone_number = ref('');
 const phone_prefix = ref('+420'); // výchozí předvolba
 const email_verified = ref(false);
 const volunteer_note = ref('');
+const btnLoading = ref(false);
 
 function setEmail(val) {
     email.value = val;
@@ -35,6 +36,7 @@ const phone_number_full = computed(() => {
 const canSend = computed(() => first_name.value.trim().length > 0 && last_name.value.trim().length > 0 && /^\+\d{9,}$/.test(phone_number_full.value.replace(/\s/g, '')));
 
 async function send_volunteer() {
+    btnLoading.value = true;
     const api = await api_post(config.endpoint_volunteer, {
         method: 'send_volunteer',
         parameters: {
@@ -42,7 +44,8 @@ async function send_volunteer() {
             first_name: first_name.value,
             last_name: last_name.value,
             phone_number: phone_number_full.value,
-            volunteer_note: volunteer_note.value
+            volunteer_note: volunteer_note.value,
+            lang: i18n.global.t('lang_code')
         }
     });
     if (config.debug) {
@@ -50,8 +53,10 @@ async function send_volunteer() {
         console.log(api);
     }
     if (api.result) {
-        toast.add({ severity: 'success', summary: i18n.global.t('success'), detail: i18n.global.t('volunteer_form_sent'), life: config.toast_lifetime });
+        btnLoading.value = false;
+        router.push('/mirak-crew/success');
     } else {
+        btnLoading.value = false;
         toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t(api.response.desc), life: config.toast_lifetime });
     }
 }
@@ -139,7 +144,7 @@ async function send_volunteer() {
                         <span class="text-xs text-muted-color">{{ volunteer_note.length }}/2500</span>
                     </div>
                     <div class="my-right">
-                        <Button :label="$t('send')" style="width: 150px" @click="send_volunteer" :disabled="!canSend"></Button>
+                        <Button :label="$t('send')" style="width: 150px" @click="send_volunteer" :disabled="!canSend || btnLoading" :loading="btnLoading"></Button>
                     </div>
                 </div>
             </div>

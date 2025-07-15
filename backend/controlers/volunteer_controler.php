@@ -38,6 +38,12 @@ class volunteer_controler{
         if($this->master_handler["database_handler"]->insert_row($this->master_handler["config_handler"]->database_name_mirak_crew, $database_row)) {
             $result['result'] = true;
             $result['response'] = 'volunteer_form_sent';
+            $email_sender = new EmailSender();
+            $email_sender->send_email($parameters["email"],
+                $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["volunteer_form_sent_title"],
+                $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["volunteer_form_sent"],
+                $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["best_regards"],
+                $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["mirak_team"]);
         } else {
             $result['result'] = false;
             $result['response'] = 'error_comm_api';
