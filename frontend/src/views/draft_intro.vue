@@ -177,7 +177,7 @@ export default {
         <div class="intro-page-navbar-overlay" :class="{ visible: isMobileMenuOpen }" @click="closeMobileMenu"></div>
     </header>
     <div v-if="!OnlyIntroPage" class="intro-page-wraper">
-        <div v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }" v-if="UseIntroVideo && UseIntro" id="intro-page-intro-content" class="intro-page-video">
+        <div v-if="UseIntroVideo && UseIntro" id="intro-page-intro-content" class="intro-page-video">
             <div class="intro-page-video-overlay" v-if="paused"></div>
             <div class="intro-page-video-play-button" v-if="paused" @click="toggleVideo">
                 <i class="fa-solid fa-pause"></i>
@@ -190,7 +190,7 @@ export default {
                 {{ $t('intro_page_video_not_supported') }}
             </video>
         </div>
-        <div v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }" v-if="UseIntroFeatures && UseIntro" id="features" class="intro-page-titles px-6 lg:px-20 mt-8 mx-0 lg:mx-20">
+        <div v-if="UseIntroFeatures && UseIntro" id="features" class="intro-page-titles px-6 lg:px-20 mt-8 mx-0 lg:mx-20">
             <div class="grid grid-cols-12 gap-4 justify-center">
                 <div class="col-span-12 text-center mb-6">
                     <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_features_title') }}</div>
@@ -270,7 +270,6 @@ export default {
                 </div>
 
                 <div
-                    v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }"
                     v-if="UseIntroVision"
                     class="col-span-12 mt-20 mb-20 p-2 md:p-20"
                     style="border-radius: 20px; background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, var(--primary-color) 0%, var(--primary-contrast-color) 100%)"
@@ -313,7 +312,7 @@ export default {
             </div>
         </div>
 
-        <div v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }" v-if="UseVenue" id="intro-page-place-content" class="intro-page-titles">
+        <div v-if="UseVenue" id="intro-page-place-content" class="intro-page-titles">
             <div class="col-span-12 text-center mb-6">
                 <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_place_title') }}</div>
                 <span class="text-muted-color text-1xl">{{ $t('intro_page_place_desc') }}</span>
@@ -344,7 +343,7 @@ export default {
             </div>
         </div>
 
-        <div v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }" v-if="isLive" id="intro-page-live-content" class="intro-page-titles">
+        <div v-if="isLive" id="intro-page-live-content" class="intro-page-titles">
             <div class="col-span-12 text-center mt-20 mb-6">
                 <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl"><i class="fa-solid fa-video"></i> {{ $t('intro_page_live_title') }} <i class="fa-solid fa-video"></i></div>
                 <span class="text-muted-color text-1xl">{{ $t('intro_page_live_description') }}</span>
@@ -363,7 +362,7 @@ export default {
             </div>
         </div>
 
-        <div v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }" v-if="UseTickets" id="pricing" class="intro-page-titles px-6 my-2 md:my-6">
+        <div v-if="UseTickets" id="pricing" class="intro-page-titles px-6 my-2 md:my-6">
             <div class="text-center mb-6">
                 <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_pricing_title') }}</div>
                 <span class="text-muted-color text-1xl">{{ $t('intro_page_pricing_description') }}</span>
@@ -378,7 +377,7 @@ export default {
                             <div class="flex items-center">
                                 <span class="text-5xl font-bold mr-2 text-surface-900 dark:text-surface-0">{{ $t('intro_page_pricing_only_allmeal_price') }}</span>
                             </div>
-                            <Button class="p-button-rounded border-0 ml-4 font-bold leading-tight bg-blue-500 text-white">{{ $t('intro_page_pricing_button_text') }}</Button>
+                            <Button class="p-button-rounded border-0 ml-4 font-bold leading-tight bg-blue-500 text-white" @click="() => router.push('/get-ticket?only_friday=false&meal=true')">{{ $t('intro_page_pricing_button_text') }}</Button>
                         </div>
                         <Divider class="w-full bg-surface-200"></Divider>
                         <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
@@ -406,7 +405,7 @@ export default {
                             <div class="flex items-center">
                                 <span class="text-5xl font-bold mr-2 text-surface-900 dark:text-surface-0">{{ $t('intro_page_pricing_only_all_price') }}</span>
                             </div>
-                            <Button class="p-button-rounded border-0 ml-4 font-bold leading-tight bg-blue-500 text-white">{{ $t('intro_page_pricing_button_text') }}</Button>
+                            <Button class="p-button-rounded border-0 ml-4 font-bold leading-tight bg-blue-500 text-white" @click="() => router.push('/get-ticket?only_friday=false&meal=false')">{{ $t('intro_page_pricing_button_text') }}</Button>
                         </div>
                         <Divider class="w-full bg-surface-200"></Divider>
                         <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
@@ -434,7 +433,7 @@ export default {
                             <div class="flex items-center">
                                 <span class="text-5xl font-bold mr-2 text-surface-900 dark:text-surface-0">{{ $t('intro_page_pricing_only_friday_price') }}</span>
                             </div>
-                            <Button class="p-button-rounded border-0 ml-4 font-bold leading-tight bg-blue-500 text-white">{{ $t('intro_page_pricing_button_text') }}</Button>
+                            <Button class="p-button-rounded border-0 ml-4 font-bold leading-tight bg-blue-500 text-white" @click="() => router.push('/get-ticket?only_friday=true&meal=false')">{{ $t('intro_page_pricing_button_text') }}</Button>
                         </div>
                         <Divider class="w-full bg-surface-200"></Divider>
                         <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
@@ -456,7 +455,7 @@ export default {
             </div>
         </div>
 
-        <div v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }" v-if="UseContentVolunteer" id="intro-page-volunteer-content" class="intro-page-titles intro-page-volunteer-content-all">
+        <div v-if="UseContentVolunteer" id="intro-page-volunteer-content" class="intro-page-titles intro-page-volunteer-content-all">
             <div class="col-span-12 text-center mb-6">
                 <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_volunteer_title') }}</div>
                 <span class="text-muted-color text-1xl">{{ $t('intro_page_volunteer_description') }}</span>
@@ -469,7 +468,7 @@ export default {
             </div>
         </div>
 
-        <div v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }" v-if="UseContact" id="intro-page-contact-content" class="intro-page-titles">
+        <div v-if="UseContact" id="intro-page-contact-content" class="intro-page-titles">
             <div class="col-span-12 text-center mb-6">
                 <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_soc_network_title') }}</div>
                 <span class="text-muted-color text-1xl">{{ $t('intro_page_soc_network_description') }}</span>
@@ -493,7 +492,7 @@ export default {
             </div>
         </div>
 
-        <div v-animateonscroll="{ enterClass: 'animate-fadein', leaveClass: 'animate-fadeout' }" v-if="UseFaq" id="intro-page-fqa-content" class="intro-page-titles col-span-12 text-center mt-20 mb-6">
+        <div v-if="UseFaq" id="intro-page-fqa-content" class="intro-page-titles col-span-12 text-center mt-20 mb-6">
             <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_soc_faq_title') }}</div>
             <span class="text-muted-color text-1xl">{{ $t('intro_page_soc_faq_desc') }}</span>
         </div>

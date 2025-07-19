@@ -287,12 +287,19 @@ class ticket_controler{
         }
 
         /* check meal */
-        if($info['response']['meal'][$parameters["form"]["meal"]]["disable"] == true)
+        if($parameters["static_cfg"]["meal"] == true)
+        {
+            if($info['response']['meal'][$parameters["form"]["meal"]]["disable"] == true)
+            {
+                $parameters["form"]["meal"] = null;
+                /* put info to user and update the price */
+                $result["result"] &= false;
+                $result["response"] .= "meal_not_available, ";
+            }
+        }
+        else
         {
             $parameters["form"]["meal"] = null;
-            /* put info to user and update the price */
-            $result["result"] &= false;
-            $result["response"] .= "meal_not_available, ";
         }
 
         /* check workshops */
@@ -309,7 +316,7 @@ class ticket_controler{
             if($this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_event, array("id"), "`email` = '".$parameters["form"]["email"]."' AND `first_name` = '".$parameters["form"]["first_name"]."'AND `last_name` = '".$parameters["form"]["last_name"]."'") != null)
             {
                 $result["result"] &= false;
-                $result["response"] .= "ticket_already_exist, ";
+                $result["response"] .= "ticket_already_exists";
             }
             else
             {
@@ -319,13 +326,23 @@ class ticket_controler{
                 if(!$this->master_handler["database_handler"]->insert_row($this->master_handler["config_handler"]->database_name_event, $parameters["form"]))
                 {
                     $result["result"] &= false;
-                    $result["response"] .= "error_comm_database, ";
+                    $result["response"] .= "error_comm_database";
                 }
                 else
                 {
                     $sign = $this->toolbox->cmac_sha256($parameters["form"]["id"]);
+                    $email_sender = new EmailSender();
+                    $result["result"] = true;
                     $result["response"] = $this->master_handler["config_handler"]->url_ticket."?id=".$parameters["form"]["id"]."&sign=".$sign;
+                    $email_sender->send_ticket($parameters["form"]["email"],
+                        $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["email_ticket_title"],
+                        $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["email_ticket_desc"],
+                        $this->master_handler["config_handler"]->frontend_url."ticket?id=".$parameters["form"]["id"]."&sign=".$sign,
+                        $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["open_ticket"],
+                        $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["best_regards"],
+                        $this->master_handler["config_handler"]->lang_text[$parameters["lang"]]["mirak_team"]);
                 }
+
                 
             }
         }
@@ -708,6 +725,10 @@ class ticket_controler{
         $meal_counts = $this->master_handler["database_handler"]->sql_cmd_fetchAll("SELECT `meal`, COUNT(*) AS count FROM `".$database."` GROUP BY `meal` ORDER BY count DESC;");
     
         foreach($meal_counts as $row){
+            if($row["meal"] == null)
+            {
+                continue; // no meal selected
+            }
             if($this->master_handler["config_handler"]->debug == true)
             {
                 $config_meals[$row["meal"]]["ordered"] = $row['count'];

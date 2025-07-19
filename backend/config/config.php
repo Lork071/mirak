@@ -4,11 +4,13 @@ require_once 'web_config.php';
 class config{
 
     public function __construct() {
-        global $ServerName, $UserName, $Password, $DBName, $web_backend_url, $web_google_auth_callback, $web_facebook_auth_callback;
+        global $ServerName, $UserName, $Password, $DBName, $web_backend_url, $web_google_auth_callback, $web_facebook_auth_callback, $frontend_url;
         $this->database_server_name = $ServerName;
         $this->database_user_name = $UserName;
         $this->database_password = $Password;
         $this->database_name = $DBName;
+
+        $this->frontend_url = $frontend_url;
 
         $this->backend_url = $web_backend_url;
         $this->google_auth_callback = $web_google_auth_callback;
@@ -164,7 +166,7 @@ class config{
         ),
         'Bez jídla' => array(
             'id' => 'Bez jídla',
-            'title'=> 'meal_food2_title',
+            'title'=> 'meal_food3_title',
             'img'=> 'menu3.jpg',
             'alerg'=> array(1,2,7),
             'max_count'=> 159,
@@ -230,6 +232,9 @@ class config{
             "email_ticket_important_info_desc" => array("QR kód slouží pouze jako identifikace účastníka, nikoli QR platba.", "Platba je možná pouze v hotovosti přímo na akci!", "Platba v eurech je možná v aktuálním kurzi vždy zaokrouhlená na celé eura nahoru",),
             'best_regards'=> 'S pozdravem,',
             'mirak_team'=> 'Tým Mírák',
+            "volunteer_form_sent" => "Děkujeme za vyplnění formuláře, brzy se ti ozveme.",
+            "volunteer_form_sent_title" => "Těšíme se na spolupráci!",
+            "open_ticket" => "Otevřít vstupenku",
         ),
         'en'=> array(
             'email_otp_title' => 'Authentication code',
@@ -239,6 +244,9 @@ class config{
             "email_ticket_important_info_title" => "Important information:",
             'best_regards'=> 'Best Regards,',
             'mirak_team'=> 'Mírák Team',
+            "volunteer_form_sent" => "Thank you for filling out the form, we will get back to you soon.",
+            "volunteer_form_sent_title" => "We look forward to working with you!",
+            "open_ticket" => "Open Ticket",
         ),
         'sk'=> array(
             'email_otp_title' => 'Overovací kód',
@@ -248,6 +256,9 @@ class config{
             "email_ticket_important_info_title" => "Dôležité informácie:",
             'best_regards'=> 'S pozdravom,',
             'mirak_team'=> 'Tím Mírák',
+            "volunteer_form_sent" => "Ďakujeme za vyplnenie formulára, čoskoro sa vám ozveme.",
+            "volunteer_form_sent_title" => "Tešíme sa na spoluprácu!",
+            "open_ticket" => "Otvoriť vstupenku",
         ),
     );
 

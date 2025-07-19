@@ -233,7 +233,14 @@ onMounted(() => {
                                 </div>
                                 <div id="ticket_birthday" class="flex-wrap gap-2 w-full">
                                     <label for="birthdate">{{ $t('date_of_birth') }}</label>
-                                    <DatePicker :showIcon="true" :showButtonBar="true" v-model="selectedDate" dateFormat="yy-mm-dd"></DatePicker>
+                                    <DatePicker
+                                        :showIcon="true"
+                                        :showButtonBar="true"
+                                        v-model="participant.birthday"
+                                        dateFormat="yy-mm-dd"
+                                        :modelValue="participant.birthday ? new Date(participant.birthday) : null"
+                                        @update:modelValue="(val) => (participant.birthday = val instanceof Date ? val.toISOString().slice(0, 10) : '')"
+                                    />
                                 </div>
                             </div>
                             <div id="ticket_gender" class="flex flex-wrap gap-2 mt-4 w-full my-center">

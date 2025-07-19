@@ -23,7 +23,8 @@
         "vue": "^3.4.34",
         "vue-i18n": "^11.0.1",
         "vue-qrcode-reader": "^5.7.0",
-        "vue-router": "^4.4.0"
+        "vue-router": "^4.4.0",
+        "vue3-animate-onscroll": "^1.0.6"
     },
     "devDependencies": {
         "@primevue/auto-import-resolver": "^4.0.1",

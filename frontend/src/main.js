@@ -7,6 +7,7 @@ import ConfirmationService from 'primevue/confirmationservice';
 import ToastService from 'primevue/toastservice';
 import { createApp } from 'vue';
 import { VueQrcodeReader } from 'vue-qrcode-reader';
+import AnimateOnScroll from 'vue3-animate-onscroll';
 import App from './App.vue';
 import router from './router';
 
@@ -48,4 +49,5 @@ app.use(ToastService);
 app.use(ConfirmationService);
 app.use(i18n);
 app.use(VueQrcodeReader);
+app.use(AnimateOnScroll);
 app.mount('#app');

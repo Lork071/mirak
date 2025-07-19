@@ -48,11 +48,61 @@ class EmailSender {
             $Email_contents = str_replace("{verify_code}", $code, $Email_contents);
             $Email_contents = str_replace("{best_regards}", $best_regards, $Email_contents);
             $Email_contents = str_replace("{mirak_team}", $mirak_team, $Email_contents);
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/Mirak_logo_black.png', 'mirak-logo');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/mirak_text.png', 'mirak-text');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/facebook.png', 'facebook');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/instagram.png', 'instagram');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/youtube.png', 'youtube');
             $this->mail->Body = mb_convert_encoding($Email_contents, "UTF-8");
             $this->mail->send();
         }catch(Exception $e){
 
         }
+    }
+
+    public function send_email($email, $title, $description, $best_regards, $mirak_team){
+        try{
+            $this->mail->addAddress($email);
+            $Email_contents = file_get_contents(filename: "../tools/email_templates/email_template.html"); 
+            $this->mail->Subject = mb_convert_encoding($title, "UTF-8");
+            $Email_contents = str_replace("{email_title}", $title, $Email_contents);
+            $Email_contents = str_replace("{email_description}", $description, $Email_contents);
+            $Email_contents = str_replace("{best_regards}", $best_regards, $Email_contents);
+            $Email_contents = str_replace("{mirak_team}", $mirak_team, $Email_contents);
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/Mirak_logo_black.png', 'mirak-logo');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/mirak_text.png', 'mirak-text');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/facebook.png', 'facebook');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/instagram.png', 'instagram');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/youtube.png', 'youtube');
+            $this->mail->Body = mb_convert_encoding($Email_contents, "UTF-8");
+            $this->mail->send();
+        }catch(Exception $e){
+
+        }
+    }
+
+    public function send_ticket($email, $title, $description,$link, $open_ticket, $best_regards, $mirak_team){
+        try{
+            $this->mail->addAddress($email);
+            $Email_contents = file_get_contents(filename: "../tools/email_templates/email_template_ticket.html"); 
+            $this->mail->Subject = mb_convert_encoding($title, "UTF-8");
+            $Email_contents = str_replace("{email_title}", $title, $Email_contents);
+            $Email_contents = str_replace("{email_description}", $description, $Email_contents);
+            $Email_contents = str_replace("{link}", $link, $Email_contents);
+            $Email_contents = str_replace("{open_ticket}", $open_ticket, $Email_contents);
+            $Email_contents = str_replace("{best_regards}", $best_regards, $Email_contents);
+            $Email_contents = str_replace("{mirak_team}", $mirak_team, $Email_contents);
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/Mirak_logo_black.png', 'mirak-logo');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/mirak_text.png', 'mirak-text');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/facebook.png', 'facebook');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/instagram.png', 'instagram');
+            $this->mail->AddEmbeddedImage('../tools/email_templates/img/youtube.png', 'youtube');
+            $this->mail->Body = mb_convert_encoding($Email_contents, "UTF-8");
+            $this->mail->send();
+        }catch(Exception $e){
+
+        }
+        
     }
 
 

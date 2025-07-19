@@ -9,9 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/6b8b5c9f92.js" crossorigin="anonymous"></script>
     <style>
-        :root{
-            --primary-color:#fb923c;
-        }
         @font-face {
             font-family: 'MirakFontPrimaryBold';
             src: url('https://mirak.casd.cz/font/UnisonProBold.otf') format('opentype'); /* path to font */
@@ -105,7 +102,7 @@
         }
 
         .logo-back{
-            background-color: #fb923c;
+            background-color: #a855f7;
             right: 10px;
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
@@ -129,7 +126,7 @@
             background-position: center;
         }
         .btn-primary {
-            background-color: #fb923c;
+            background-color: #a855f7;
             color: #0c0c0c;
             font-size: 1rem;
             font-weight: bold;
@@ -148,31 +145,23 @@
             text-decoration: none;
         }
         .btn-primary:hover {
-            background-color: #f97316;
+            background-color: #9333ea;
             text-decoration: none;
         }
 
         .btn-primary:active {
-            background-color: #ea580c;
+            background-color: #9333ea;
             text-decoration: none;
         }
-
-        .btn-primary:disabled {
-            background-color: #fbbf24;
-            cursor: not-allowed;
-            text-decoration: none;
-            opacity: 0.7;
-        }
-
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="logo-back">
-                <div class="logo-img"><img src="https://mirak.casd.cz/share/Mirak_logo_black.png" width="60" height="54" /></div>
+                <div class="logo-img"><img src="cid:mirak-logo" width="60" height="54" /></div>
             </div>
-            <img class="logo_text"  src="https://mirak.casd.cz/share/mirak_text.png">
+            <img class="logo_text"  src="cid:mirak-text">
         </div>
         <div class="content">
             <p class="title text-center font-color">{email_title}</p>
@@ -182,9 +171,9 @@
             <p class="text-right font-color">{mirak_team}</p>
         </div>
         <div class="footer">
-            <a class="mt-10" href="https://www.facebook.com/mirakcz"><img src="https://mirak.casd.cz/share/facebook.png"/></a>
-            <a class="mt-10" href="https://www.instagram.com/mirakcz/"><img src="https://mirak.casd.cz/share/instagram.png"/></a>
-            <a class="mt-10" href="https://www.youtube.com/@mirakCZ"><img src="https://mirak.casd.cz/share/youtube.png"/></a>
+            <a class="mt-10" href="https://www.facebook.com/mirakcz"><img src="cid:facebook"/></a>
+            <a class="mt-10" href="https://www.instagram.com/mirakcz/"><img src="cid:instagram"/></a>
+            <a class="mt-10" href="https://www.youtube.com/@mirakCZ"><img src="cid:youtube"/></a>
         </div>
         <div class="text-center mt-20 copyright">&copy; 2025 MÍRÁK</div>
     </div>
