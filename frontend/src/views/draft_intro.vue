@@ -1,95 +1,69 @@
-<script>
+<script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
-    name: 'StickyNavbar',
-    setup() {
-        const isMobileMenuOpen = ref(false);
-        const video = ref(null);
-        const played = ref(false);
-        const paused = ref(true);
+const router = useRouter();
 
-        /*************************************************************
-         *********************** STATIC SET UP ***********************
-         *************************************************************/
-        const OnlyIntroPage = false; /* Only first intro page */
-        /*************************************
-         ********** USAGE DEFINITION **********
-         **************************************/
-        const UseIntroVideo = true;
-        const UseIntroFeatures = true;
-        const UseIntroVision = true;
-        const UseIntro = UseIntroVideo || UseIntroFeatures;
-        const UseVenue = true;
-        const UseTickets = true;
-        const UseContentVolunteer = true;
-        const UseContact = true;
-        const UseFaq = true;
-        const UseMirakAccount = true;
+const isMobileMenuOpen = ref(false);
+const video = ref(null);
+const played = ref(false);
+const paused = ref(true);
 
-        /*************************************
-         ************ LIVE SET UP *************
-         **************************************/
-        const isLive = true;
-        const LiveLink = 'https://www.youtube.com/embed/HrxE94110_Y?si=gTDnACpCRw0yqR7R';
+/*************************************************************
+ *********************** STATIC SET UP ***********************
+ *************************************************************/
+const OnlyIntroPage = false; /* Only first intro page */
+/*************************************
+ ********** USAGE DEFINITION **********
+ **************************************/
+const UseIntroVideo = true;
+const UseIntroFeatures = true;
+const UseIntroVision = true;
+const UseIntro = UseIntroVideo || UseIntroFeatures;
+const UseVenue = true;
+const UseTickets = true;
+const UseContentVolunteer = true;
+const UseContact = true;
+const UseFaq = true;
+const UseMirakAccount = true;
 
-        const toggleMobileMenu = () => {
-            isMobileMenuOpen.value = !isMobileMenuOpen.value;
-        };
+/*************************************
+ ************ LIVE SET UP *************
+ **************************************/
+const isLive = true;
+const LiveLink = 'https://www.youtube.com/embed/HrxE94110_Y?si=gTDnACpCRw0yqR7R';
 
-        const closeMobileMenu = () => {
-            isMobileMenuOpen.value = false;
-        };
+function toggleMobileMenu() {
+    isMobileMenuOpen.value = !isMobileMenuOpen.value;
+}
 
-        const playVideo = () => {
-            if (video.value) {
-                video.value.play().catch((error) => {
-                    console.warn('Video playback was blocked:', error);
-                });
-                played.value = true;
-                paused.value = false; // Video přehrává
-            }
-        };
+function closeMobileMenu() {
+    isMobileMenuOpen.value = false;
+}
 
-        const toggleVideo = () => {
-            if (video.value) {
-                if (video.value.paused) {
-                    video.value.play().catch((error) => {
-                        console.warn('Video playback was blocked:', error);
-                    });
-                    paused.value = false;
-                } else {
-                    video.value.pause();
-                    paused.value = true;
-                }
-            }
-        };
-
-        return {
-            UseIntroVideo,
-            UseIntroFeatures,
-            UseIntroVision,
-            UseIntro,
-            UseVenue,
-            UseTickets,
-            UseContentVolunteer,
-            UseContact,
-            UseFaq,
-            UseMirakAccount,
-            isMobileMenuOpen,
-            toggleMobileMenu,
-            closeMobileMenu,
-            video,
-            played,
-            paused,
-            playVideo,
-            toggleVideo,
-            isLive,
-            LiveLink,
-            OnlyIntroPage
-        };
+function playVideo() {
+    if (video.value) {
+        video.value.play().catch((error) => {
+            console.warn('Video playback was blocked:', error);
+        });
+        played.value = true;
+        paused.value = false; // Video přehrává
     }
-};
+}
+
+function toggleVideo() {
+    if (video.value) {
+        if (video.value.paused) {
+            video.value.play().catch((error) => {
+                console.warn('Video playback was blocked:', error);
+            });
+            paused.value = false;
+        } else {
+            video.value.pause();
+            paused.value = true;
+        }
+    }
+}
 </script>
 
 <template>
@@ -461,7 +435,7 @@ export default {
                 <span class="text-muted-color text-1xl">{{ $t('intro_page_volunteer_description') }}</span>
             </div>
             <div class="flex my-center">
-                <Button class="p-button-rounded border-0 ml-4 font-bold mt-8 mb-16"
+                <Button class="p-button-rounded border-0 ml-4 font-bold mt-8 mb-16" @click="() => router.push('/mirak-crew')"
                     ><i class="fa-brands fa-wpforms fa-2xl"></i>
                     <div class="text-2xl">{{ $t('intro_page_volunteer_button') }}</div></Button
                 >

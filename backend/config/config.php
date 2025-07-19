@@ -66,6 +66,7 @@ class config{
     public $database_name_permissions = "permissions";
     public $database_name_event = "mirak_test";
     public $database_name_emails = "emails";
+    public $database_name_mirak_crew = "mirak_crew";
     /*************************************
      * google auth
      ************************************/
@@ -89,7 +90,7 @@ class config{
     public $token_expiration_sec = 3600;
 
     public $permissions_pages = array(
-        'admin','users','all_users','admin_users','permissions','errors', 'all_participant','qrscanner'
+        'admin','users','all_users','admin_users','permissions','errors', 'all_participant','qrscanner','all_mirak_crew'
     );
 
     public $permissions_operations = array(

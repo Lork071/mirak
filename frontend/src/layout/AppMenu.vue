@@ -40,6 +40,12 @@ const model = ref([
                         id: 'all_participant',
                         icon: 'fa-solid fa-users-line',
                         to: '/app/all_participant'
+                    },
+                    {
+                        label: 'mirak_crew',
+                        id: 'all_mirak_crew',
+                        icon: 'fa-solid fa-handshake-angle',
+                        to: '/app/mirak-crew'
                     }
                 ]
             },

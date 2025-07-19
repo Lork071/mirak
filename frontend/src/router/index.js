@@ -62,6 +62,16 @@ const router = createRouter({
                     path: '/app/participant',
                     name: 'participant',
                     component: () => import('@/views/app/admin/participant.vue')
+                },
+                {
+                    path: '/app/mirak-crew',
+                    name: 'all_mirak_crew',
+                    component: () => import('@/views/app/admin/all_mirak_crew.vue')
+                },
+                {
+                    path: '/app/mirak-crew-person',
+                    name: 'mirak_crew_person',
+                    component: () => import('@/views/app/admin/mirak_crew_person.vue')
                 }
             ]
         },
@@ -104,6 +114,16 @@ const router = createRouter({
             path: '/get-ticket',
             name: 'get_ticket',
             component: () => import('@/views/pages/get_ticket.vue')
+        },
+        {
+            path: '/mirak-crew',
+            name: 'mirak-crew',
+            component: () => import('@/views/pages/mirak_crew.vue')
+        },
+        {
+            path: '/mirak-crew/success',
+            name: 'mirak-crew-success',
+            component: () => import('@/views/pages/mirak_crew_success.vue')
         },
         {
             path: '/ticket',
