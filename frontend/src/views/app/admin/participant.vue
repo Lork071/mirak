@@ -52,6 +52,36 @@ const filters = ref({
     global: { value: null, matchMode: FilterMatchMode.CONTAINS }
 });
 
+const showDeleteConfirm = ref(false);
+
+function onDelete() {
+    showDeleteConfirm.value = true;
+}
+
+async function confirmDelete() {
+    showDeleteConfirm.value = false;
+    const api = await api_post(config.endpoint_admin, {
+        method: 'admin_delete_ticket',
+        parameters: { id: participant.value.id }
+    });
+    if (config.debug) {
+        console.log('API [admin_delete_ticket]: ');
+        console.log(api);
+    }
+    if (api.result) {
+        toast.add({ severity: 'success', summary: i18n.global.t('success'), detail: i18n.global.t('deleted_successfully'), life: config.toast_lifetime });
+        setTimeout(() => {
+            window.location.href = '/app/all_participant';
+        }, 1200);
+    } else {
+        toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t(api.response), life: config.toast_lifetime });
+    }
+}
+
+function cancelDelete() {
+    showDeleteConfirm.value = false;
+}
+
 async function read_one_participant() {
     const api = await api_post(config.endpoint_ticket, { method: 'read_one_participant', parameters: { id: id_ticket.value } });
     if (config.debug) {
@@ -137,28 +167,44 @@ onMounted(() => {
     read_one_participant();
     CountryService.getCountries().then((data) => (CountryselectValues.value = data));
 });
+
+function copyToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text);
+    } else {
+        // fallback pro starší prohlížeče
+        const input = document.createElement('input');
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+    }
+}
 </script>
 
 <template>
-    <Fluid>
-        <div class="card flex flex-col gap-4 ws-full">
+    <div class="card flex flex-col gap-4 ws-full relative">
+        <Fluid>
             <div class="font-semibold text-xl mb-4">
                 <i v-if="participant.role == role_not_pay" class="fa-solid fa-star fa-beat mr-2" style="color: #e01515"></i>{{ participant.email
                 }}<i v-if="participant.role == role_not_pay" class="fa-solid fa-star fa-beat ml-2" style="color: #e01515"></i>
             </div>
-            <div class="flex">
-                <label class="font-semibold mr-4">{{ $t('user_id') }}:</label>{{ participant.id }}
+            <Divider></Divider>
+            <div v-if="participant.role != 'organizer'" class="flex flex-col md:flex-row gap-8">
+                <div id="ticket_first_name" class="flex flex-wrap gap-2 w-full">
+                    <label for="first_name">{{ $t('total_price') }}</label>
+                    <InputGroup>
+                        <InputGroupAddon>{{ $t('currency_shortcut') }}</InputGroupAddon>
+                        <InputNumber v-model="participant.pay" placeholder="Price" />
+                        <InputGroupAddon>/{{ participant.pay }}</InputGroupAddon>
+                    </InputGroup>
+                </div>
             </div>
-            <Tabs value="0">
-                <TabList>
-                    <Tab value="0">{{ $t('registration') }}</Tab>
-                    <Tab value="1">{{ $t('meal') }}</Tab>
-                </TabList>
-                <TabPanels>
-                    <TabPanel value="0">
-                        <label
-                            ><b>{{ $t('state_of_registration') }} :</b></label
-                        ><br />
+            <Accordion class="mt-4">
+                <AccordionPanel value="0">
+                    <AccordionHeader>{{ $t('state_of_registration') }}</AccordionHeader>
+                    <AccordionContent>
                         <SelectButton class="mt-2" v-model="registration_value" :options="registration_options" @change="(val) => fast_update_participant({ value: val }, 'register')">
                             <template #option="slotProps">
                                 {{ $t(slotProps.option) }}
@@ -177,45 +223,9 @@ onMounted(() => {
                             >
                             <label>{{ participant.register_time }}</label>
                         </div>
-                    </TabPanel>
-                    <TabPanel value="1">
-                        <label
-                            ><b>{{ $t('participant_lunch_status_text') }} :</b></label
-                        ><br />
-                        <SelectButton class="mt-2" v-model="food_value" :options="food_options" @change="(val) => fast_update_participant({ value: val }, 'food_delivered')">
-                            <template #option="slotProps">
-                                {{ $t(slotProps.option) }}
-                            </template>
-                        </SelectButton>
-                        <div v-if="participant.food_delivered" class="mt-2">
-                            <label class="mr-2"
-                                ><b>{{ $t('performed') }}</b
-                                >:</label
-                            >
-                            <label>{{ participant.food_delivered_person }}</label
-                            ><br />
-                            <label class="mr-2"
-                                ><b>{{ $t('time') }}</b
-                                >:</label
-                            >
-                            <label>{{ participant.food_delivered_time }}</label>
-                        </div>
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
-            <Divider></Divider>
-            <div v-if="participant.role != 'organizer'" class="flex flex-col md:flex-row gap-8">
-                <div id="ticket_first_name" class="flex flex-wrap gap-2 w-full">
-                    <label for="first_name">{{ $t('total_price') }}</label>
-                    <InputGroup>
-                        <InputGroupAddon>{{ $t('currency_shortcut') }}</InputGroupAddon>
-                        <InputNumber v-model="participant.pay" placeholder="Price" />
-                        <InputGroupAddon>/{{ participant.pay }}</InputGroupAddon>
-                    </InputGroup>
-                </div>
-            </div>
-            <Accordion>
-                <AccordionPanel value="0">
+                    </AccordionContent>
+                </AccordionPanel>
+                <AccordionPanel value="1">
                     <AccordionHeader>{{ $t('personal_information') }}</AccordionHeader>
                     <AccordionContent>
                         <div class="mb-4">
@@ -291,7 +301,7 @@ onMounted(() => {
                         </div>
                     </AccordionContent>
                 </AccordionPanel>
-                <AccordionPanel value="1">
+                <AccordionPanel value="2">
                     <AccordionHeader>{{ $t('role') }}</AccordionHeader>
                     <AccordionContent>
                         <div class="flex flex-col md:flex-row gap-4">
@@ -316,7 +326,7 @@ onMounted(() => {
                         </div>
                     </AccordionContent>
                 </AccordionPanel>
-                <AccordionPanel value="2">
+                <AccordionPanel value="3">
                     <AccordionHeader>{{ $t('accommodation') }}</AccordionHeader>
                     <AccordionContent>
                         <div class="flex mt-8">
@@ -365,7 +375,7 @@ onMounted(() => {
                         </div>
                     </AccordionContent>
                 </AccordionPanel>
-                <AccordionPanel value="3">
+                <AccordionPanel value="4">
                     <AccordionHeader>{{ $t('program_parts') }}</AccordionHeader>
                     <AccordionContent>
                         <div id="ticket_program" class="card flex flex-col gap-4 w-full">
@@ -410,9 +420,31 @@ onMounted(() => {
                         </div>
                     </AccordionContent>
                 </AccordionPanel>
-                <AccordionPanel value="4">
+                <AccordionPanel value="5">
                     <AccordionHeader>{{ $t('lunch') }} </AccordionHeader>
                     <AccordionContent>
+                        <label
+                            ><b>{{ $t('participant_lunch_status_text') }} :</b></label
+                        ><br />
+                        <SelectButton class="mt-2" v-model="food_value" :options="food_options" @change="(val) => fast_update_participant({ value: val }, 'food_delivered')">
+                            <template #option="slotProps">
+                                {{ $t(slotProps.option) }}
+                            </template>
+                        </SelectButton>
+                        <div v-if="participant.food_delivered" class="mt-2">
+                            <label class="mr-2"
+                                ><b>{{ $t('performed') }}</b
+                                >:</label
+                            >
+                            <label>{{ participant.food_delivered_person }}</label
+                            ><br />
+                            <label class="mr-2"
+                                ><b>{{ $t('time') }}</b
+                                >:</label
+                            >
+                            <label>{{ participant.food_delivered_time }}</label>
+                        </div>
+
                         <p v-if="participant.food_delivered" class="m-0 mb-2">
                             {{ $t('participant_food_select_disabled') }}
                         </p>
@@ -445,7 +477,7 @@ onMounted(() => {
                         </div>
                     </AccordionContent>
                 </AccordionPanel>
-                <AccordionPanel value="5">
+                <AccordionPanel value="6">
                     <AccordionHeader>{{ $t('intro_page_features_workshops_title') }}</AccordionHeader>
                     <AccordionContent>
                         <div class="card flex flex-col gap-4 w-full">
@@ -469,7 +501,7 @@ onMounted(() => {
                         </div>
                     </AccordionContent>
                 </AccordionPanel>
-                <AccordionPanel value="6">
+                <AccordionPanel value="7">
                     <AccordionHeader>{{ $t('ticket') }}</AccordionHeader>
                     <AccordionContent>
                         <div class="qr-container">
@@ -502,16 +534,45 @@ onMounted(() => {
                         </div>
                     </AccordionContent>
                 </AccordionPanel>
+                <AccordionPanel value="8">
+                    <AccordionHeader>{{ $t('other_operation') }}</AccordionHeader>
+                    <AccordionContent>
+                        <Button
+                            icon="pi pi-copy"
+                            class="mr-2"
+                            style="width: 125px"
+                            :label="$t('user_id')"
+                            @click="
+                                () => {
+                                    copyToClipboard(participant.id);
+                                    toast.add({ severity: 'info', summary: $t('copied'), detail: participant.id, life: config.toast_lifetime });
+                                }
+                            "
+                        />
+                        <Button :label="$t('delete')" style="width: 125px" severity="danger" icon="pi pi-trash" @click="onDelete" />
+                    </AccordionContent>
+                </AccordionPanel>
             </Accordion>
-            <div class="my-right"><Button :label="$t('save')" style="width: 150px" :disabled="!isChanged"></Button></div>
-        </div>
-    </Fluid>
+            <div class="my-right mt-4"><Button :label="$t('save')" style="width: 150px" :disabled="!isChanged"></Button></div>
+        </Fluid>
+    </div>
     <Dialog :header="$t(OpenWorkshopTitle)" v-model:visible="dialogWorkshop" :breakpoints="{ '960px': '75vw' }" :style="{ width: '30vw' }" :modal="true">
         <img class="mb-4" :src="`/demo/images/workshops/${OpenWorkshop.img}`" />
         <p class="leading-normal m-0">
             {{ $t(OpenWorkshop.desc) }}
         </p>
         <template #footer> </template>
+    </Dialog>
+
+    <!-- Potvrzovací dialog pro smazání -->
+    <Dialog v-model:visible="showDeleteConfirm" modal header="Potvrzení smazání" :closable="false">
+        <div>
+            {{ $t('confirm_delete_person', { name: participant.first_name + ' ' + participant.last_name }) }}
+        </div>
+        <template #footer>
+            <Button label="Smazat" severity="danger" @click="confirmDelete" />
+            <Button label="Zrušit" severity="secondary" @click="cancelDelete" />
+        </template>
     </Dialog>
 </template>
 

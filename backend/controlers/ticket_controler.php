@@ -507,7 +507,6 @@ class ticket_controler{
         return $result;
     }
 
-
     /**********************************
      * 
      * Private function

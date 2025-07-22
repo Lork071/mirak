@@ -17,13 +17,15 @@ class admin_controler{
     {
         $result = array(
             "result" => false,
-            "response" =>""
+            "response" => ""
         );
-        $result["response"] = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_error, "all", "");
+        $rows = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_error, "all", "");
 
-        if($result["response"] != null)
-        {
+        if ($rows != null && is_array($rows) && count($rows) > 0) {
             $result["result"] = true;
+            $result["response"] = array_reverse($rows);
+        } else {
+            $result["response"] = $rows;
         }
 
         return $result;
@@ -486,6 +488,31 @@ class admin_controler{
 
         }
 
+        return $result;
+    }
+
+    
+    public function admin_delete_ticket($parameters)
+    {
+        $result = array(
+            "result" => false,
+            "response" => ""
+        );
+
+        if(!isset($parameters["id"]) || empty($parameters["id"])){
+            $result["response"] = "error_comm_api";
+            return $result;
+        }
+
+        $database = $this->master_handler["config_handler"]->database_name_event;
+        if($this->master_handler["database_handler"]->delete_row($database, "`id`='".$parameters["id"]."'")){
+            $result["result"] = true;
+            $result["response"] = "operation_was_successful";
+        }
+        else{
+            $result["response"] = "operation_was_not_successful";
+        }
+        
         return $result;
     }
     /**************************************

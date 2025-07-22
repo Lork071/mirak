@@ -296,5 +296,10 @@
     "btn_mark_as_processed": "Kontaktován",
     "btn_mark_as_not_processed": "Nekontaktován",
     "contacted_info": "Dobrovolník byl označen jako kontaktovaný.",
-    "ticket_already_exists": "Vstupenka pro tohoto uživatele již existuje."
+    "ticket_already_exists": "Vstupenka pro tohoto uživatele již existuje.",
+    "confirm_delete_person": "Opravdu chcete smazat osobu {name}?",
+    "deleted_successfully": "Osoba byla úspěšně smazána.",
+    "other_operation": "Další operace",
+    "main_page_configuration": "Konfigurace",
+    "configuration_saved": "Konfigurace byla úspěšně uložena."
 }

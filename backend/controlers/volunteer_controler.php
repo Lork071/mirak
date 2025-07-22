@@ -112,6 +112,27 @@ class volunteer_controler{
         }
         return $result;
     }
+
+    public function delete_mirak_crew_person($parameters)
+    {
+        $result = array(
+            'result' => false,
+            'response' => array(),
+        );
+        if(!isset($parameters['id']) || empty($parameters['id'])) {
+            $result['result'] = false;
+            $result['response']['desc'] = 'error_comm_api';
+            return $result;
+        }
+        if($this->master_handler["database_handler"]->delete_row($this->master_handler["config_handler"]->database_name_mirak_crew, "`id`='".$parameters['id']."'")) {
+            $result['result'] = true;
+            $result['response']['desc'] = 'deleted_successfully';
+        } else {
+            $result['result'] = false;
+            $result['response']['desc'] = 'error_comm_api';
+        }
+        return $result;
+    }
     
 
 }

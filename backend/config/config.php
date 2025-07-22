@@ -67,6 +67,7 @@ class config{
     public $database_name_event = "mirak_test";
     public $database_name_emails = "emails";
     public $database_name_mirak_crew = "mirak_crew";
+    public $database_name_static = "static_config";
     /*************************************
      * google auth
      ************************************/
@@ -90,13 +91,14 @@ class config{
     public $token_expiration_sec = 3600;
 
     public $permissions_pages = array(
-        'admin','users','all_users','admin_users','permissions','errors', 'all_participant','qrscanner','all_mirak_crew'
+        'admin','users','all_users','admin_users','permissions','errors', 'all_participant','qrscanner','all_mirak_crew',"main_page_configuration"
     );
 
     public $permissions_operations = array(
         'delete_normal_user','delete_admin_user',
         'permission_user_update','change_rank_user',
-        'scan_meal','read_all_participant','get_qr_reader_info','update_user_scanner','scan_registration_get_info'
+        'scan_meal','read_all_participant','get_qr_reader_info','update_user_scanner','scan_registration_get_info',
+        'admin_delete_ticket','update_cfg'
     );
 
     public $scanner_options = array("scanner_registration","scanner_meal","scanner_admin");

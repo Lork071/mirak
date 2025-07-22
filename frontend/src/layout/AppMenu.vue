@@ -31,6 +31,12 @@ const model = ref([
                 to: '/app/qrscanner'
             },
             {
+                label: 'main_page_configuration',
+                id: 'main_page_configuration',
+                icon: 'fa-solid fa-gears',
+                to: '/app/main-page-configuration'
+            },
+            {
                 label: 'actual_event',
                 id: 'actual_event',
                 icon: 'fa-regular fa-calendar',

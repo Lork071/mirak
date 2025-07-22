@@ -228,44 +228,66 @@ class database_controler
         return $return_value[0]['total_count']; 
     }
 
-    public function read_static_config($database_name, $config_name)
+    public function read_static_config($database_name, $config_names)
     {
-       
         $return_value = -1;
-        $sql_command = 'SELECT `config_value` FROM `'.$database_name.'` WHERE `config_name` = "'.$config_name.'"';
-
         $connection = $this->open_connection();
 
-        $stmt = $connection->query($sql_command);
+        if (is_array($config_names)) {
+            if (empty($config_names)) {
+                return [];
+            }
+            // Připravíme placeholdery pro prepared statement
+            $placeholders = implode(',', array_fill(0, count($config_names), '?'));
+            $sql_command = 'SELECT `config_key`, `config_value` FROM `'.$database_name.'` WHERE `config_key` IN ('.$placeholders.')';
+            $stmt = $connection->prepare($sql_command);
+            $stmt->execute($config_names);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if ($stmt->rowCount() > 0) {
-            $return_value = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return $return_value[0]['config_value'];
+            // Vrátíme asociativní pole: [config_key => config_value, ...]
+            $assoc = [];
+            foreach ($result as $row) {
+                $assoc[$row['config_key']] = $row['config_value'];
+            }
+            return $assoc;
+        } else {
+            // Původní chování pro jeden název
+            $sql_command = 'SELECT `config_value` FROM `'.$database_name.'` WHERE `config_key` = ?';
+            $stmt = $connection->prepare($sql_command);
+            $stmt->execute([$config_names]);
+            if ($stmt->rowCount() > 0) {
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                return $result[0]['config_value'];
+            } else {
+                return null;
+            }
         }
-        else
-        {
-            return null;
-        }
-
     }
 
-    public function write_static_config($database_name, $config_name, $config_value)
+    public function write_static_config($database_name, $config_array = [])
     {
-        $return_value = -1;
-        $sql_command = 'UPDATE `'.$database_name.'` SET `config_value` = "'.$config_value.'" WHERE `config_name` = "'.$config_name.'"';
-
         $connection = $this->open_connection();
-
-        if($connection)
-        {
-            $stmt = $connection->prepare($sql_command);
-            $stmt->execute();
-            return true;
-        }
-        else
-        {
+        if (!$connection) {
             return false;
         }
+
+        if (!is_array($config_array) || empty($config_array)) {
+            return false;
+        }
+
+        $success = true;
+        foreach ($config_array as $config_key => $config_value) {
+            if($config_value === true || $config_value === false) {
+                $config_value = $config_value ? 'true' : 'false'; // Převod boolean na string
+            }
+            $sql_command = 'UPDATE `'.$database_name.'` SET `config_value` = ? WHERE `config_key` = ?';
+            $stmt = $connection->prepare($sql_command);
+            $result = $stmt->execute([$config_value, $config_key]);
+            if (!$result) {
+                $success = false;
+            }
+        }
+        return $success;
     }
 }
 

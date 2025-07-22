@@ -305,5 +305,10 @@
     "btn_mark_as_processed": "Contacted",
     "btn_mark_as_not_processed": "Not contacted",
     "contacted_info": "The volunteer has been marked as contacted.",
-    "ticket_already_exists": "A ticket for this user already exists."
+    "ticket_already_exists": "A ticket for this user already exists.",
+    "confirm_delete_person": "Are you sure you want to delete {name}?",
+    "deleted_successfully": "The person has been successfully deleted.",
+    "other_operation": "Other operation",
+    "main_page_configuration": "Configuration",
+    "configuration_saved": "Configuration has been successfully saved."
 }

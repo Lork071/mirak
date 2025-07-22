@@ -72,6 +72,11 @@ const router = createRouter({
                     path: '/app/mirak-crew-person',
                     name: 'mirak_crew_person',
                     component: () => import('@/views/app/admin/mirak_crew_person.vue')
+                },
+                {
+                    path: '/app/main-page-configuration',
+                    name: 'main_page_configuration',
+                    component: () => import('@/views/app/admin/main_page_configuration.vue')
                 }
             ]
         },

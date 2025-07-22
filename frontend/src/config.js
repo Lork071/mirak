@@ -18,5 +18,6 @@ export default {
     endpoint_login: 'controlers/login_controler.php',
     endpoint_admin: 'controlers/admin_controler.php',
     endpoint_ticket: 'controlers/ticket_controler.php',
-    endpoint_volunteer: 'controlers/volunteer_controler.php'
+    endpoint_volunteer: 'controlers/volunteer_controler.php',
+    endpoint_static: 'controlers/static_config_controler.php'
 };

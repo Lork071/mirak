@@ -12,6 +12,7 @@ const toast = useToast();
 const { api_post } = useApi();
 const crew_persons = ref();
 const showConfirm = ref(false);
+const showDeleteConfirm = ref(false);
 
 onMounted(() => {
     load_mirak_crew_person(router.query.id);
@@ -76,10 +77,43 @@ async function confirmContacted() {
 function cancelConfirm() {
     showConfirm.value = false;
 }
+
+function onDelete() {
+    showDeleteConfirm.value = true;
+}
+
+async function confirmDelete() {
+    showDeleteConfirm.value = false;
+    const api = await api_post(config.endpoint_volunteer, {
+        method: 'delete_mirak_crew_person',
+        parameters: {
+            id: crew_persons.value.id
+        }
+    });
+    if (config.debug) {
+        console.log('API [delete_mirak_crew_person]: ');
+        console.log(api);
+    }
+    if (api.result) {
+        toast.add({ severity: 'success', summary: i18n.global.t('success'), detail: i18n.global.t('deleted_successfully'), life: config.toast_lifetime });
+        setTimeout(() => {
+            window.location.href = '/app/mirak-crew'; // nebo jiná stránka po smazání
+        }, 1200);
+    } else {
+        toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t(api.response.desc), life: config.toast_lifetime });
+    }
+}
+
+function cancelDelete() {
+    showDeleteConfirm.value = false;
+}
 </script>
 
 <template>
     <div class="card mx-auto p-6 rounded-lg shadow-lg bg-surface-0 dark:bg-surface-900">
+        <div class="flex justify-end gap-2 mb-2">
+            <Button :label="$t('delete')" severity="danger" :disabled="!crew_persons" @click="onDelete" />
+        </div>
         <div class="text-center mb-6">
             <span class="font-semibold text-2xl">{{ crew_persons?.first_name }} {{ crew_persons?.last_name }}</span>
         </div>
@@ -118,6 +152,18 @@ function cancelConfirm() {
                 <Button label="Zrušit" severity="secondary" @click="cancelConfirm" />
             </template>
         </Dialog>
+
+        <!-- Delete confirmation dialog -->
+        <Dialog v-model:visible="showDeleteConfirm" modal header="Potvrzení smazání" :closable="false">
+            <div>
+                {{ $t('confirm_delete_person', { name: crew_persons?.first_name + ' ' + crew_persons?.last_name }) }}
+            </div>
+            <template #footer>
+                <Button label="Smazat" severity="danger" @click="confirmDelete" />
+                <Button label="Zrušit" severity="secondary" @click="cancelDelete" />
+            </template>
+        </Dialog>
+
         <div class="flex justify-end gap-2">
             <Button :label="crew_persons?.processed === 1 ? $t('btn_mark_as_processed') : $t('btn_mark_as_not_processed')" :severity="crew_persons?.processed === 1 ? 'success' : 'danger'" :disabled="!crew_persons" @click="onContacted" />
             <Button :label="$t('import_to_contacts')" :disabled="!crew_persons" @click="downloadVCard" />
