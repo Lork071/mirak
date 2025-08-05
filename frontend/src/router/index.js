@@ -74,7 +74,7 @@ const router = createRouter({
                     component: () => import('@/views/app/admin/mirak_crew_person.vue')
                 },
                 {
-                    path: '/app/main-page-configuration',
+                    path: '/app/main-page-configuration' /* to php main-page-configuration is right insted og the main_page_configuration */,
                     name: 'main_page_configuration',
                     component: () => import('@/views/app/admin/main_page_configuration.vue')
                 }
@@ -134,6 +134,11 @@ const router = createRouter({
             path: '/ticket',
             name: 'ticket',
             component: () => import('@/views/pages/ticket.vue')
+        },
+        {
+            path: '/mirak-bar',
+            name: 'mirak-bar',
+            component: () => import('@/views/pages/mirak_bar.vue')
         },
         {
             path: '/not_found',

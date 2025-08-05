@@ -91,7 +91,7 @@ class config{
     public $token_expiration_sec = 3600;
 
     public $permissions_pages = array(
-        'admin','users','all_users','admin_users','permissions','errors', 'all_participant','qrscanner','all_mirak_crew',"main_page_configuration"
+        'admin','users','all_users','admin_users','permissions','errors', 'all_participant','qrscanner','all_mirak_crew',"main-page-configuration"
     );
 
     public $permissions_operations = array(

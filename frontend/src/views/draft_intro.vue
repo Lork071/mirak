@@ -4,10 +4,9 @@ import { useApi } from '@/service/api';
 import i18n from '@/service/i18n';
 import { useToast } from 'primevue/usetoast';
 import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
-const role_not_pay = ref('organizer');
-const router = useRoute();
+const router = useRouter();
 const toast = useToast();
 const { api_post } = useApi();
 
@@ -125,8 +124,8 @@ async function load_static_cfg() {
                             <a href="#intro-page-fqa-content" @click="closeMobileMenu">{{ $t('intro_page_menu_faq') }}</a>
                         </li>
                     </ul>
-                    <Button v-if="configuration.UseMirakAccount" to="/auth/login" rounded
-                        ><b>{{ $t('intro_page_menu_account') }}</b></Button
+                    <Button v-if="configuration.UseMirakAccount" @click="() => router.push('/mirak-bar')" rounded
+                        ><b>{{ $t('bars_menu') }}</b></Button
                     >
                 </nav>
                 <div class="intro-page-navbar-lang my-right">
@@ -230,7 +229,8 @@ async function load_static_cfg() {
                                 background: linear-gradient(90deg, var(--primary-color), var(--primary-contrast-color)), linear-gradient(180deg, var(--primary-color), var(--primary-contrast-color));
                             "
                         >
-                            <div class="p-4 bg-surface-0 dark:bg-surface-900 h-full" style="border-radius: 8px">
+                            <div class="p-4 bg-surface-0 dark:bg-surface-900 h-full relative" style="border-radius: 8px">
+                                <Button class="absolute top-4 right-4 z-10" @click="() => router.push('/mirak-bar')" outlined>{{ $t('bars_menu') }}</Button>
                                 <div class="flex items-center justify-center bg-primary mb-4" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="fa-solid fa-martini-glass-citrus" style="color: #000000"></i>
                                 </div>
@@ -282,10 +282,10 @@ async function load_static_cfg() {
 
             <div
                 v-if="configuration.UseIntroVision"
-                class="col-span-12 mt-20 mb-20 p-2 md:p-20"
+                class="col-span-12 mt-20 p-2 md:p-20"
                 style="border-radius: 20px; background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, var(--primary-color) 0%, var(--primary-contrast-color) 100%)"
             >
-                <div class="flex flex-col justify-center items-center text-center px-4 py-4 md:py-0">
+                <div class="flex flex-col justify-center items-center text-center px-2 py-2 md:py-0">
                     <div class="text-gray-900 mb-2 text-3xl font-semibold">{{ $t('intro_page_info_title') }}</div>
                     <span class="text-gray-600 text-2xl">{{ $t('intro_page_info_desc') }}</span>
                     <p class="text-gray-900 sm:line-height-2 md:line-height-4 text-2xl mt-6" style="max-width: 800px">
@@ -322,7 +322,7 @@ async function load_static_cfg() {
             </div>
 
             <div v-if="configuration.UseVenue" id="intro-page-place-content" class="intro-page-titles">
-                <div class="col-span-12 text-center mb-6">
+                <div class="col-span-12 text-center mb-6 mt-6">
                     <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_place_title') }}</div>
                     <span class="text-muted-color text-1xl">{{ $t('intro_page_place_desc') }}</span>
                 </div>
@@ -353,8 +353,8 @@ async function load_static_cfg() {
             </div>
 
             <div v-if="configuration.isLive" id="intro-page-live-content" class="intro-page-titles">
-                <div class="col-span-12 text-center mt-20 mb-6">
-                    <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl"><i class="fa-solid fa-video"></i> {{ $t('intro_page_live_title') }} <i class="fa-solid fa-video"></i></div>
+                <div class="col-span-12 text-center mb-6">
+                    <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl"><i class="fa-solid fa-video"></i> {{ $t('intro_page_live_title') }}</div>
                     <span class="text-muted-color text-1xl">{{ $t('intro_page_live_description') }}</span>
                 </div>
                 <div id="intro-page-live-content-video">
@@ -377,7 +377,7 @@ async function load_static_cfg() {
                     <span class="text-muted-color text-1xl">{{ $t('intro_page_pricing_description') }}</span>
                 </div>
 
-                <div class="grid grid-cols-12 gap-4 justify-between mt-20 md:mt-0">
+                <div class="grid grid-cols-12 gap-4 justify-between md:mt-0">
                     <div class="col-span-12 lg:col-span-4 p-0 md:p-4 mt-6 md:mt-0">
                         <div class="p-4 flex flex-col border-surface-200 dark:border-surface-600 pricing-card cursor-pointer border-2 hover:border-primary duration-300 transition-all" style="border-radius: 10px">
                             <div class="text-surface-900 dark:text-surface-0 text-center my-8 text-3xl">{{ $t('intro_page_pricing_only_allmeal_title') }}</div>
@@ -386,7 +386,9 @@ async function load_static_cfg() {
                                 <div class="flex items-center">
                                     <span class="text-5xl font-bold mr-2 text-surface-900 dark:text-surface-0">{{ $t('intro_page_pricing_only_allmeal_price') }}</span>
                                 </div>
-                                <Button class="p-button-rounded border-0 ml-4 font-bold leading-tight bg-blue-500 text-white" @click="() => router.push('/get-ticket?only_friday=false&meal=true')">{{ $t('intro_page_pricing_button_text') }}</Button>
+                                <Button class="p-button-rounded border-0 ml-4 font-bold leading-tight bg-blue-500 text-white" @click="() => router.push({ path: '/get-ticket', query: { only_friday: 'false', meal: 'true' } })">{{
+                                    $t('intro_page_pricing_button_text')
+                                }}</Button>
                             </div>
                             <Divider class="w-full bg-surface-200"></Divider>
                             <ul class="my-8 list-none p-0 flex text-surface-900 dark:text-surface-0 flex-col px-8">
@@ -464,7 +466,7 @@ async function load_static_cfg() {
                 </div>
             </div>
 
-            <div v-if="configuration.UseContentVolunteer" id="intro-page-volunteer-content" class="intro-page-titles intro-page-volunteer-content-all">
+            <div v-if="configuration.UseContentVolunteer" id="intro-page-volunteer-content" class="intro-page-titles mt-10 intro-page-volunteer-content-all">
                 <div class="col-span-12 text-center mb-6">
                     <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_volunteer_title') }}</div>
                     <span class="text-muted-color text-1xl">{{ $t('intro_page_volunteer_description') }}</span>
@@ -477,7 +479,7 @@ async function load_static_cfg() {
                 </div>
             </div>
 
-            <div v-if="configuration.UseContact" id="intro-page-contact-content" class="intro-page-titles">
+            <div v-if="configuration.UseContact" id="intro-page-contact-content" class="intro-page-titles mt-10">
                 <div class="col-span-12 text-center mb-6">
                     <div class="text-surface-900 dark:text-surface-0 font-normal mb-2 text-4xl">{{ $t('intro_page_soc_network_title') }}</div>
                     <span class="text-muted-color text-1xl">{{ $t('intro_page_soc_network_description') }}</span>
@@ -538,3 +540,21 @@ async function load_static_cfg() {
         </div>
     </div>
 </template>
+
+<style scoped>
+.relative {
+    position: relative;
+}
+.absolute {
+    position: absolute;
+}
+.top-4 {
+    top: 1rem;
+}
+.right-4 {
+    right: 1rem;
+}
+.z-10 {
+    z-index: 10;
+}
+</style>

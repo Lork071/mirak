@@ -57,7 +57,9 @@ class login_controler{
             "response" => "/auth/login"
         );
 
-        session_start();
+        if(session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         if(isset($_SESSION["email"]))
         {
             $database_result = $this->master_handler["database_handler"]->read_row($this->master_handler["config_handler"]->database_name_users, array("email","FirstName", "LastName","permission"), "`email` = '".$_SESSION["email"]."'");
@@ -589,6 +591,7 @@ class login_controler{
         $result["response"]["user_info"]["premissions_operations"] = $permissions->get_operations(); 
         $result["response"]["pages_with_permissions"] = $this->master_handler["config_handler"]->permissions_pages;
 
+        $result["debug"] = $page_path;
         if (in_array(basename($page_path), $this->master_handler["config_handler"]->permissions_pages))
         {
             if (!in_array(basename($page_path), $permissions->get_pages()))
