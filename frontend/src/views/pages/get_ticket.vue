@@ -534,7 +534,7 @@ function gender_change() {
                             <div id="ticket_zip" class="flex flex-wrap md:flex-row gap-2 w-full">
                                 <FloatLabel variant="on" class="w-full">
                                     <label for="zip">*{{ $t('zip') }}</label>
-                                    <InputMask v-model="formVal.zip" @click="toggle($event, 'zip')" id="zip" mask="999 99" placeholder="000 00" @blur="handleBlur('zip')" :invalid="touched.zip && !valid.zip" />
+                                    <InputMask v-model="formVal.zip" @click="toggle($event, 'zip')" id="zip" mask="999 99" placeholder="" @blur="handleBlur('zip')" :invalid="touched.zip && !valid.zip" />
                                 </FloatLabel>
                                 <Popover v-if="touched.zip && !valid.zip" :ref="(el) => (popovers.zip = el)" class="ticket-font-popup">
                                     <div class="flex flex-col gap-4">{{ $t('ticket_invalid_text_last_name') }}</div>
