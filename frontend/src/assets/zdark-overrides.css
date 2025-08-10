@@ -1,0 +1,546 @@
+:root,
+:root.app-dark,
+.app-dark {
+  color-scheme: dark;
+
+  /* základní šedé odstíny pro background/surface */
+  --surface-ground:  #0E0E10;
+  --surface-section: #141417;
+  --surface-card:    #1A1B1F;
+  --surface-border:  #2E3036;
+
+  /* texty */
+  --text-color:           #E6E6EA; /* hlavní text */
+  --text-color-secondary: #A7A9B2; /* popisky, méně výrazný text */
+  --text-muted-color:     var(--text-color-secondary); /* alias pro konzistenci */
+
+  /* PrimeVue expects */
+  --p-text-color:         var(--text-color);
+  --p-content-color:      var(--text-color);
+  --p-muted-color:        var(--text-muted-color);
+
+  --primary-color-text: #FFFFFF;
+  --highlight-bg:       rgba(168,85,247,.14);
+
+  /* surface odstíny */
+  --p-surface-0:   var(--surface-ground);
+  --p-surface-50:  var(--surface-section);
+  --p-surface-100: var(--surface-card);
+  --p-surface-200: #202127;
+  --p-surface-300: #24262C;
+  --p-surface-400: #282B31;
+  --p-surface-500: #2C2F36;
+  --p-surface-600: #31343B;
+  --p-surface-700: #353941;
+  --p-surface-800: #393D46;
+  --p-surface-900: #3E424B;
+  --p-border-color: var(--surface-border);
+  --p-focus-ring:   0 0 0 2px rgba(168,85,247,.35);
+
+    /* Tailwind aliasy – aby fungovalo bg-surface-XXX */
+  --surface-50:  var(--p-surface-50);
+  --surface-100: var(--p-surface-100);
+  --surface-200: var(--p-surface-200);
+  --surface-300: var(--p-surface-300);
+  --surface-400: var(--p-surface-400);
+  --surface-500: var(--p-surface-500);
+  --surface-600: var(--p-surface-600);
+  --surface-700: var(--p-surface-700);
+  --surface-800: var(--p-surface-800);
+  --surface-900: var(--p-surface-900);
+  --surface-950: var(--p-surface-950);
+}
+
+/* vynutit dark všude a hned */
+html{color-scheme:dark}
+html,body,.p-component{color:var(--text-color)!important}
+*{color:inherit}
+
+/* pozadí stránky */
+.app-dark body{background:var(--surface-ground)!important}
+
+/* kontejnery/karty/panely */
+.app-dark .p-card,.app-dark .p-panel,.app-dark .p-fieldset,
+.app-dark .p-toolbar,.app-dark .p-menubar,.app-dark .p-sidebar,
+.app-dark .p-dialog,.app-dark .p-overlaypanel,.app-dark .p-toast,
+.app-dark .p-confirm-popup,.app-dark .p-datatable,
+.app-dark .surface-section,.app-dark .surface-card,.app-dark .card {
+  background:var(--surface-card)!important;
+  color:var(--text-color)!important;
+  border-color:var(--surface-border)!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.02),0 8px 24px rgba(0,0,0,.45);
+}
+
+/* formuláře */
+.app-dark .p-inputtext,.app-dark .p-inputtextarea,.app-dark .p-dropdown,
+.app-dark .p-multiselect,.app-dark .p-calendar,.app-dark .p-password,
+.app-dark .p-inputnumber,.app-dark .p-autocomplete,.app-dark .p-listbox,
+.app-dark .p-selectbutton .p-button,.app-dark .p-togglebutton,.app-dark .p-inputswitch{
+  background:var(--surface-section)!important;
+  color:var(--text-color)!important;
+  border-color:var(--surface-border)!important;
+}
+.app-dark ::placeholder{color:var(--text-color-secondary)!important;opacity:.9}
+.app-dark .p-inputtext:hover,
+.app-dark .p-dropdown:not(.p-disabled):hover,
+.app-dark .p-multiselect:not(.p-disabled):hover{
+  background:var(--p-surface-200)!important;border-color:var(--p-surface-300)!important;
+}
+
+/* tabulky */
+.app-dark .p-datatable .p-datatable-thead>tr>th{
+  background:var(--surface-card)!important;color:var(--text-color-secondary)!important;border-color:var(--surface-border)!important;
+}
+.app-dark .p-datatable .p-datatable-tbody>tr{
+  background:var(--surface-card)!important;color:var(--text-color)!important;
+}
+.app-dark .p-datatable .p-datatable-tbody>tr:hover{background:var(--surface-section)!important}
+
+/* utility co často kazí barvy */
+.app-dark .bg-white{background-color:var(--surface-card)!important}
+.app-dark .text-black,.app-dark .text-gray-900,.app-dark .text-surface-900{color:var(--text-color)!important}
+.app-dark .border-gray-200,.app-dark .border-surface-200{border-color:var(--surface-border)!important}
+
+
+/* Tailwind text-gray-* – čitelné odstíny pro dark UI */
+.app-dark .text-gray-50  { color: #F5F6F8 !important; }
+.app-dark .text-gray-100 { color: #E6E6EA !important; }
+.app-dark .text-gray-200 { color: #CFD1D6 !important; }
+.app-dark .text-gray-300 { color: #B9BCC4 !important; }
+.app-dark .text-gray-400 { color: #A3A7B1 !important; }
+.app-dark .text-gray-500 { color: #8C92A0 !important; }
+.app-dark .text-gray-600 { color: #7A808E !important; }
+.app-dark .text-gray-700 { color: #636363 !important; } /* stále čitelné */
+.app-dark .text-gray-800 { color: #494949 !important; } /* NE nechceme skoro černou */
+.app-dark .text-gray-900 { color: #252525 !important; } /* zvednuto kvůli kontrastu */
+
+/* pro jistotu i aliasy z PrimeFlexu/Sakai (pokud by se použily) */
+.app-dark .text-900,
+.app-dark .text-surface-900,
+.app-dark .text-surface-800 { color: #E6E6EA !important; }
+
+/* 1) Highlight tokens – pokryj staré i nové názvy */
+:root.app-dark, .app-dark {
+  /* PrimeVue v4 tokens */
+  --p-highlight-background: rgba(168, 85, 247, 0.22);
+  --p-highlight-text-color: #ececf2;
+
+  /* Legacy PrimeOne/PrimeFlex tokens (Sakai) */
+  --highlight-bg: rgba(168, 85, 247, 0.22);
+  --highlight-text-color: #ececf2;
+}
+
+/* 2) Obecně přebij cokoliv s .p-highlight (používá se napříč komponentami) */
+.app-dark .p-highlight {
+  background: var(--p-highlight-background, var(--highlight-bg)) !important;
+  color: var(--p-highlight-text-color, var(--highlight-text-color)) !important;
+}
+
+/* 3) Konkrétní seznamové komponenty (vyšší specificita) */
+.app-dark .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight,
+.app-dark .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight,
+.app-dark .p-listbox .p-listbox-list .p-listbox-item.p-highlight,
+.app-dark .p-select-list .p-select-option.p-highlight {
+  background: var(--p-highlight-background, var(--highlight-bg)) !important;
+  color: var(--p-highlight-text-color, var(--highlight-text-color)) !important;
+}
+
+/* 4) Hover na vybrané položce – o chlup výraznější */
+.app-dark .p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight:hover,
+.app-dark .p-multiselect-panel .p-multiselect-items .p-multiselect-item.p-highlight:hover,
+.app-dark .p-listbox .p-listbox-list .p-listbox-item.p-highlight:hover,
+.app-dark .p-select-list .p-select-option.p-highlight:hover {
+  background: rgba(168, 85, 247, 0.32) !important;
+}
+
+/* 5) Aktivní/Focus okraj, kdyby bílel */
+.app-dark .p-dropdown-item.p-highlight,
+.app-dark .p-select-option.p-highlight {
+  outline: none !important;
+  box-shadow: 0 0 0 1px rgba(168,85,247,.35) inset !important;
+}
+
+
+
+/* 🔒 Muted/secondary text – pokryjeme všechny varianty tokenů i utility třídy */
+:root.app-dark, .app-dark {
+  /* staré PrimeOne/PrimeFlex */
+  --text-color-secondary: #A7A9B2;
+  --text-muted-color:     var(--text-color-secondary);
+
+  /* PrimeVue tokens – obě varianty, které se v praxi objevují */
+  --p-muted-color:        var(--text-color-secondary);
+  --p-text-muted-color:   var(--text-color-secondary);
+
+  /* pro jistotu zarovnáme i hlavní text – některé komponenty čtou tohle */
+  --p-content-color:      var(--text-color, #E6E6EA);
+  --p-text-color:         var(--text-color, #E6E6EA);
+}
+
+/* utility a typické „muted“ místa */
+.app-dark .p-text-secondary,
+.app-dark .text-muted,
+.app-dark .text-secondary,
+.app-dark .muted,
+.app-dark small,
+.app-dark .p-tooltip .p-tooltip-text {
+  color: var(--p-text-muted-color, var(--p-muted-color)) !important;
+}
+
+/* placeholdery & „prázdné“ labely v input/dropdown */
+.app-dark .p-inputtext::placeholder,
+.app-dark .p-textarea::placeholder,
+.app-dark .p-dropdown-label.p-placeholder,
+.app-dark .p-multiselect-label.p-placeholder {
+  color: var(--p-text-muted-color, var(--p-muted-color)) !important;
+  opacity: .95;
+}
+
+/* disabled stavy (někdy mají vlastní barvu/opacity) */
+.app-dark .p-disabled,
+.app-dark .p-component.p-disabled {
+  color: var(--p-text-muted-color, var(--p-muted-color)) !important;
+  opacity: .75;
+}
+
+/* u tabulek bývá header „muted“ – sjednotíme */
+.app-dark .p-datatable .p-datatable-thead > tr > th,
+.app-dark .p-datatable .p-column-title {
+  color: var(--p-text-muted-color, var(--p-muted-color)) !important;
+}
+
+
+:root.app-dark, .app-dark {
+  /* primární odstíny pro hover/active */
+  --accent-hover:  rgba(168, 85, 247, 0.18); /* světlejší fialová, tmavý podklad */
+  --accent-active: rgba(168, 85, 247, 0.28); /* o trochu silnější pro selected */
+  --p-highlight-background: var(--accent-active);
+  --p-highlight-text-color: var(--p-text-color);
+  --highlight-bg:           var(--accent-active);
+  --highlight-text-color:   var(--p-text-color);
+}
+
+/* Buttons hover/active */
+.app-dark .p-button:hover:not(.p-disabled),
+.app-dark .p-button:active:not(.p-disabled),
+.app-dark .p-button:focus-visible:not(.p-disabled) {
+  background: var(--accent-hover) !important;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color-text) !important;
+}
+
+/* Selected states (Dropdown, MultiSelect, Listbox) */
+.app-dark .p-dropdown-item.p-highlight,
+.app-dark .p-multiselect-item.p-highlight,
+.app-dark .p-listbox-item.p-highlight {
+  background: var(--accent-active) !important;
+  color: var(--p-highlight-text-color) !important;
+}
+.app-dark .p-dropdown-item.p-highlight:hover,
+.app-dark .p-multiselect-item.p-highlight:hover,
+.app-dark .p-listbox-item.p-highlight:hover {
+  background: var(--accent-hover) !important;
+}
+
+/* Hover na menu/tab/paginator */
+.app-dark .p-tabview .p-tabview-nav li:not(.p-highlight):hover a,
+.app-dark .p-menuitem:not(.p-highlight):hover > .p-menuitem-link,
+.app-dark .p-paginator .p-paginator-page:not(.p-highlight):hover {
+  background: var(--accent-hover) !important;
+}
+
+
+/* ==== Locked Dark — Toast s akcentem podle severity ==== */
+:root.app-dark, .app-dark {
+  --toast-bg:     var(--p-surface-100, #1A1B1F);
+  --toast-border: var(--p-border-color, #2E3036);
+  --toast-text:   var(--p-text-color, #E6E6EA);
+}
+
+/* základ toastu: tmavé pozadí + jemný akcentový závoj */
+.app-dark .p-toast .p-toast-message {
+  position: relative;
+  color: var(--toast-text) !important;
+  border: 1px solid var(--toast-border) !important;
+  /* akcentový film přes bg (není bílý) */
+  background:
+    linear-gradient(var(--toast-accent-bg, transparent), var(--toast-accent-bg, transparent)) padding-box,
+    var(--toast-bg) border-box !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.03) inset !important;
+  border-radius: .75rem; /* klidně uprav */
+}
+
+/* tenký akcentový proužek vlevo (jako u light theme, ale tmavý) */
+.app-dark .p-toast .p-toast-message::before {
+  content: "";
+  position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--toast-accent, rgba(168,85,247,.6));
+  border-top-left-radius: inherit; border-bottom-left-radius: inherit;
+}
+
+/* barvy pro jednotlivé severity (akcent + průsvitné pozadí) */
+.app-dark .p-toast-message-info    { --toast-accent:#60A5FA; --toast-accent-bg: rgba(96,165,250,.12); }
+.app-dark .p-toast-message-success { --toast-accent:#34D399; --toast-accent-bg: rgba(52,211,153,.12); }
+.app-dark .p-toast-message-warn    { --toast-accent:#FBBF24; --toast-accent-bg: rgba(251,191,36,.12); }
+.app-dark .p-toast-message-error   { --toast-accent:#F87171; --toast-accent-bg: rgba(248,113,113,.12); }
+
+/* ikonka a close button */
+.app-dark .p-toast .p-toast-message .p-toast-message-icon { color: var(--toast-accent) !important; }
+.app-dark .p-toast .p-toast-icon-close { color: var(--toast-text) !important; border-radius: .5rem; }
+.app-dark .p-toast .p-toast-icon-close:hover { background: rgba(168,85,247,.18) !important; }
+
+/* texty uvnitř */
+.app-dark .p-toast .p-toast-message .p-toast-message-content,
+.app-dark .p-toast .p-toast-message .p-toast-summary,
+.app-dark .p-toast .p-toast-message .p-toast-detail {
+  color: var(--toast-text) !important;
+}
+
+
+/* Toast container musí být průhledný */
+.p-toast { background: transparent !important; }
+
+/* Žádné spodní „prkno“ – zjemníme stín a zrušíme inset i pseudo-elementy */
+.p-toast .p-toast-message {
+  margin: 0 !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35) !important; /* jen jeden měkký stín */
+  overflow: hidden; /* ať nic „nepřetéká“ mimo radius */
+}
+
+/* Kdyby téma přidávalo dekorativní pseudo-element dole, vypnout */
+.p-toast .p-toast-message::after {
+  content: none !important;
+}
+
+/* Pro jistotu zruš mezery mezi zprávami */
+.p-toast .p-toast-message + .p-toast-message {
+  margin-top: .5rem !important; /* nebo 0 – podle chuti */
+}
+
+
+/* ==== Locked Dark – Inputs (PrimeVue) ==== */
+:root.app-dark, .app-dark {
+  --inp-bg:        var(--p-surface-100, #1A1B1F);
+  --inp-bg-hover:  var(--p-surface-200, #202127);
+  --inp-text:      var(--p-text-color, #E6E6EA);
+  --inp-muted:     var(--p-muted-color, #A7A9B2);
+  --inp-border:    var(--p-border-color, #2E3036);
+  --inp-focus:     rgba(168,85,247,.45);  /* fialový ring */
+  --inp-invalid:   #F87171;
+}
+
+/* základní vzhled polí */
+.app-dark .p-inputtext,
+.app-dark .p-inputtextarea,
+.app-dark .p-inputnumber-input,
+.app-dark .p-dropdown,
+.app-dark .p-dropdown .p-inputtext,
+.app-dark .p-multiselect,
+.app-dark .p-multiselect .p-inputtext,
+.app-dark .p-password-input,
+.app-dark .p-calendar .p-inputtext,
+.app-dark .p-autocomplete .p-inputtext,
+.app-dark .p-chips .p-inputtext {
+  background: var(--inp-bg) !important;
+  color: var(--inp-text) !important;
+  border: 1px solid var(--inp-border) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+/* label text uvnitř dropdownů ap. */
+.app-dark .p-dropdown-label,
+.app-dark .p-multiselect-label {
+  color: var(--inp-text) !important;
+}
+
+/* placeholdery */
+.app-dark .p-inputtext::placeholder,
+.app-dark .p-inputtextarea::placeholder,
+.app-dark .p-dropdown-label.p-placeholder,
+.app-dark .p-multiselect-label.p-placeholder {
+  color: var(--inp-muted) !important;
+  opacity: .95;
+}
+
+/* hover */
+.app-dark .p-inputtext:hover,
+.app-dark .p-inputtextarea:hover,
+.app-dark .p-inputnumber-input:hover,
+.app-dark .p-dropdown:not(.p-disabled):hover,
+.app-dark .p-multiselect:not(.p-disabled):hover {
+  background: var(--inp-bg-hover) !important;
+  border-color: var(--p-surface-300, #24262C) !important;
+}
+
+/* focus (ring z primary, ale tmavý podklad) */
+.app-dark .p-inputtext:focus,
+.app-dark .p-inputtextarea:focus,
+.app-dark .p-inputnumber-input:focus,
+.app-dark .p-password-input:focus,
+.app-dark .p-dropdown:focus-within,
+.app-dark .p-multiselect:focus-within,
+.app-dark .p-calendar .p-inputtext:focus,
+.app-dark .p-autocomplete .p-inputtext:focus {
+  background: var(--inp-bg-hover) !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px var(--inp-focus) !important;
+}
+
+/* invalid stavy */
+.app-dark .p-inputtext.p-invalid,
+.app-dark .p-inputtextarea.p-invalid,
+.app-dark .p-dropdown.p-invalid,
+.app-dark .p-multiselect.p-invalid,
+.app-dark .p-calendar.p-invalid .p-inputtext,
+.app-dark .p-inputnumber.p-invalid .p-inputnumber-input {
+  border-color: var(--inp-invalid) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--inp-invalid) 35%, transparent) !important;
+}
+
+/* disabled */
+.app-dark .p-inputtext:disabled,
+.app-dark .p-inputtextarea:disabled,
+.app-dark .p-inputnumber-input:disabled,
+.app-dark .p-dropdown.p-disabled,
+.app-dark .p-multiselect.p-disabled {
+  background: color-mix(in srgb, var(--inp-bg) 90%, black) !important;
+  color: color-mix(in srgb, var(--inp-text) 55%, #000) !important;
+  border-color: color-mix(in srgb, var(--inp-border) 80%, #000) !important;
+  cursor: not-allowed;
+  opacity: .85;
+}
+
+/* webkit autofill (zrušit žluté) */
+.app-dark input:-webkit-autofill,
+.app-dark textarea:-webkit-autofill {
+  -webkit-text-fill-color: var(--inp-text) !important;
+  transition: background-color 10000s ease-in-out 0s;
+  box-shadow: 0 0 0px 1000px var(--inp-bg) inset !important;
+}
+
+/* Dropdown panel/option barvy, aby ladily s inputy */
+.app-dark .p-dropdown-panel,
+.app-dark .p-multiselect-panel,
+.app-dark .p-calendar .p-datepicker,
+.app-dark .p-autocomplete-panel {
+  background: var(--inp-bg) !important;
+  color: var(--inp-text) !important;
+  border: 1px solid var(--inp-border) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,.5) !important;
+}
+.app-dark .p-dropdown-item,
+.app-dark .p-multiselect-item {
+  color: var(--inp-text) !important;
+}
+.app-dark .p-dropdown-item:hover,
+.app-dark .p-multiselect-item:hover {
+  background: var(--accent-hover, rgba(168,85,247,0.18)) !important;
+}
+
+/* vybraná položka v seznamech – tmavý akcent */
+.app-dark .p-dropdown-item.p-highlight,
+.app-dark .p-multiselect-item.p-highlight {
+  background: var(--accent-active, rgba(168,85,247,0.28)) !important;
+  color: var(--p-text-color) !important;
+}
+
+
+/* ==== Inputs: tmavší podklad + vyšší kontrast textu ==== */
+:root.app-dark, .app-dark{
+  --inp-bg:        #121214;   /* tmavší než doteď */
+  --inp-bg-hover:  #16171B;   /* hover o chlup světlejší */
+  --inp-text:      #F2F3F5;   /* jasný text uvnitř polí */
+  --inp-muted:     #9AA0AE;   /* placeholdery/popisky uvnitř */
+  --inp-border:    #3A3D45;   /* border víc viditelný */
+  --inp-focus:     rgba(168,85,247,.55); /* silnější ring */
+}
+
+/* základ všech polí */
+.app-dark .p-inputtext,
+.app-dark .p-inputtextarea,
+.app-dark .p-inputnumber-input,
+.app-dark .p-password-input,
+.app-dark .p-calendar .p-inputtext,
+.app-dark .p-autocomplete .p-inputtext,
+.app-dark .p-dropdown,
+.app-dark .p-multiselect {
+  background: var(--inp-bg) !important;
+  color: var(--inp-text) !important;
+  border: 1px solid var(--inp-border) !important;
+  box-shadow: none !important;
+  outline: none !important;
+  caret-color: var(--inp-text);
+}
+
+/* label uvnitř dropdownů apod. */
+.app-dark .p-dropdown-label,
+.app-dark .p-multiselect-label { color: var(--inp-text) !important; }
+
+/* placeholdery – ať jsou vidět a nejsou průhledné */
+.app-dark .p-inputtext::placeholder,
+.app-dark .p-inputtextarea::placeholder,
+.app-dark .p-dropdown-label.p-placeholder,
+.app-dark .p-multiselect-label.p-placeholder{
+  color: var(--inp-muted) !important;
+  opacity: 1 !important;
+}
+
+/* ikony uvnitř inputu (kalendar, lupa…) */
+.app-dark .p-inputtext ~ .p-inputtext-icon,
+.app-dark .p-input-icon-left > i,
+.app-dark .p-input-icon-right > i { color: var(--inp-muted) !important; }
+
+/* hover/focus */
+.app-dark .p-inputtext:hover,
+.app-dark .p-inputtextarea:hover,
+.app-dark .p-inputnumber-input:hover,
+.app-dark .p-dropdown:not(.p-disabled):hover,
+.app-dark .p-multiselect:not(.p-disabled):hover{
+  background: var(--inp-bg-hover) !important;
+  border-color: #484C55 !important;
+}
+.app-dark .p-inputtext:focus,
+.app-dark .p-inputtextarea:focus,
+.app-dark .p-inputnumber-input:focus,
+.app-dark .p-password-input:focus,
+.app-dark .p-calendar .p-inputtext:focus,
+.app-dark .p-dropdown:focus-within,
+.app-dark .p-multiselect:focus-within{
+  background: var(--inp-bg-hover) !important;
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 2px var(--inp-focus) !important;
+}
+
+/* disabled – ať není „mléčné“, jen lehce utlumené */
+.app-dark .p-inputtext:disabled,
+.app-dark .p-inputtextarea:disabled,
+.app-dark .p-inputnumber-input:disabled,
+.app-dark .p-dropdown.p-disabled,
+.app-dark .p-multiselect.p-disabled{
+  background: #0F1013 !important;
+  color: #B9BDC6 !important;
+  border-color: #2E3036 !important;
+  opacity: .9 !important;
+  cursor: not-allowed;
+}
+
+/* autofill (zrušit žluté) */
+.app-dark input:-webkit-autofill,
+.app-dark textarea:-webkit-autofill{
+  -webkit-text-fill-color: var(--inp-text) !important;
+  box-shadow: 0 0 0 1000px var(--inp-bg) inset !important;
+  transition: background-color 9999s ease;
+}
+
+/* SelectButton boxy – tmavší základ + jasný text */
+.app-dark .p-selectbutton .p-button{
+  background: #0F1013 !important;
+  color: var(--inp-text) !important;
+  border-color: var(--inp-border) !important;
+}
+.app-dark .p-selectbutton .p-button:not(.p-highlight):hover{
+  background: #14151A !important;
+}
+
+

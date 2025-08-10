@@ -1,3 +1,9 @@
+// Force dark mode for both PrimeVue and Tailwind
+document.documentElement.classList.add('app-dark', 'dark');
+import '@/assets/styles.scss';
+import '@/assets/tailwind.css';
+import '@/assets/zdark-overrides.css';
+
 import i18n from '@/service/i18n.js';
 import { definePreset } from '@primevue/themes';
 import Aura from '@primevue/themes/aura';
@@ -10,15 +16,12 @@ import { VueQrcodeReader } from 'vue-qrcode-reader';
 import AnimateOnScroll from 'vue3-animate-onscroll';
 import App from './App.vue';
 import router from './router';
-
-import '@/assets/styles.scss';
-import '@/assets/tailwind.css';
-
 const MirakPresent = definePreset(Aura, {
     options: {
         darkModeSelector: '.app-dark'
     },
     semantic: {
+        // tvoje fialová – nechávám beze změny, případně si doladíš
         primary: {
             50: '#faf5ff',
             100: '#f3e8ff',
@@ -31,6 +34,22 @@ const MirakPresent = definePreset(Aura, {
             800: '#6b21a8',
             900: '#581c87',
             950: '#3b0764'
+        },
+
+        // KLÍČ: tmavé "surface" pro celé UI (karty, inputy, panely…)
+        surface: {
+            0: '#0c1020', // hlavní pozadí stránky
+            50: '#11162a', // základ pro karty/panely
+            100: '#161c33',
+            200: '#1c2340',
+            300: '#212a4c',
+            400: '#263158',
+            500: '#2b3864',
+            600: '#313f70',
+            700: '#38477d',
+            800: '#3f4f8a',
+            900: '#465798',
+            950: '#4d60a6'
         }
     }
 });

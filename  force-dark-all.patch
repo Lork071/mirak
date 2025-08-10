@@ -1,0 +1,95 @@
+diff --git a/frontend/src/main.js b/frontend/src/main.js
+index 3b27f6a..b9d44c1 100644
+--- a/frontend/src/main.js
++++ b/frontend/src/main.js
+@@
++// Force dark mode for both PrimeVue and Tailwind
++document.documentElement.classList.add('app-dark', 'dark');
++
+ import i18n from '@/service/i18n.js';
+ import { definePreset } from '@primevue/themes';
+ import Aura from '@primevue/themes/aura';
+@@
+ import '@/assets/styles.scss';
+ import '@/assets/tailwind.css';
++
++// Remove any unused light theme CSS imports from styles.scss before build
++// (Ensures only dark mode styles are bundled)
+diff --git a/frontend/src/layout/composables/layout.js b/frontend/src/layout/composables/layout.js
+index 2a1b2b4..f6b0124 100644
+--- a/frontend/src/layout/composables/layout.js
++++ b/frontend/src/layout/composables/layout.js
+@@
+ const layoutConfig = reactive({
+     preset: 'Aura',
+     primary: 'emerald',
+     surface: 'zinc', // Přidáváme výchozí surface pro tmavý režim
+-    darkTheme: true,
++    darkTheme: true, // permanent dark
+     menuMode: 'static'
+ });
+ 
+ // Nastavení dark mode při startu aplikace
+ function applyDarkMode() {
+-    document.documentElement.classList.add('app-dark');
+-    document.documentElement.classList.add('dark');
+-    document.body.classList.add('dark');
+-    document.body.classList.add('bg-surface-900'); // Přidáváme tmavé pozadí
++    const root = document.documentElement;
++    root.classList.add('app-dark', 'dark');
+ }
+ 
+ applyDarkMode();
+@@
+-    const toggleDarkMode = () => {
+-        if (!document.startViewTransition) {
+-            executeDarkModeToggle();
+-
+-            return;
+-        }
+-
+-        document.startViewTransition(() => executeDarkModeToggle(event));
+-    };
+-
+-    const executeDarkModeToggle = () => {
+-        layoutConfig.darkTheme = !layoutConfig.darkTheme;
+-        document.documentElement.classList.toggle('app-dark', layoutConfig.darkTheme);
+-        document.documentElement.classList.toggle('dark', layoutConfig.darkTheme);
+-        document.body.classList.toggle('dark', layoutConfig.darkTheme);
+-        document.body.classList.toggle('bg-surface-900', layoutConfig.darkTheme);
+-    };
++    // toggleDarkMode odstraněno – dark je permanentní
+@@
+-    return { layoutConfig: readonly(layoutConfig), layoutState: readonly(layoutState), onMenuToggle, isSidebarActive, isDarkTheme, getPrimary, getSurface, setActiveMenuItem, toggleDarkMode, setPrimary, setSurface, setPreset, resetMenu, setMenuMode };
++    return { layoutConfig: readonly(layoutConfig), layoutState: readonly(layoutState), onMenuToggle, isSidebarActive, isDarkTheme, getPrimary, getSurface, setActiveMenuItem, setPrimary, setSurface, setPreset, resetMenu, setMenuMode };
+diff --git a/frontend/tailwind.config.js b/frontend/tailwind.config.js
+index 8e35b7f..1cd2e99 100644
+--- a/frontend/tailwind.config.js
++++ b/frontend/tailwind.config.js
+@@
+-  darkMode: 'class',
++  darkMode: ['class', '.app-dark'],
++
++  // Optional: purge light theme classes to minimize build size
++  safelist: [
++    { pattern: /^dark:/ }, // Keep only dark variant classes
++  ],
+diff --git a/frontend/src/layout/AppConfigurator.vue b/frontend/src/layout/AppConfigurator.vue
+index 1234567..89abcde 100644
+--- a/frontend/src/layout/AppConfigurator.vue
++++ b/frontend/src/layout/AppConfigurator.vue
+@@
+-    <div class="theme-switch-section">
+-        <label for="theme-switch">Dark Mode</label>
+-        <InputSwitch id="theme-switch" v-model="isDarkTheme" @change="toggleDarkMode" />
+-    </div>
++    <!-- Dark mode switch removed – permanent dark mode -->
+diff --git a/frontend/src/layout/AppTopbar.vue b/frontend/src/layout/AppTopbar.vue
+index 7654321..fedcba9 100644
+--- a/frontend/src/layout/AppTopbar.vue
++++ b/frontend/src/layout/AppTopbar.vue
+@@
+-        <button class="layout-config-button" @click="onConfigButtonClick">
+-            <i class="pi pi-cog"></i>
+-        </button>
++        <!-- Config button removed – no theme switching -->

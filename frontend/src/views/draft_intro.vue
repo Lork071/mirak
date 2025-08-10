@@ -172,12 +172,12 @@ async function load_static_cfg() {
                                 background: linear-gradient(90deg, var(--primary-color), var(--primary-contrast-color)), linear-gradient(180deg, var(--primary-color), var(--primary-contrast-color));
                             "
                         >
-                            <div class="p-4 bg-surface-0 dark:bg-surface-900 h-full" style="border-radius: 8px">
+                            <div class="p-4 bg-surface-200 h-full" style="border-radius: 8px">
                                 <div class="flex items-center justify-center bg-primary mb-4" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="fa-solid fa-book-open" style="color: #000000"></i>
                                 </div>
-                                <h5 class="mt-6 mb-1 text-surface-900 dark:text-surface-0 text-xl font-semibold">{{ $t('intro_page_features_speach_title') }}</h5>
-                                <span class="text-surface-600 dark:text-surface-200">{{ $t('intro_page_features_speach_small_desc') }}</span>
+                                <h5 class="mt-6 mb-1 text-surface-900 text-xl font-semibold">{{ $t('intro_page_features_speach_title') }}</h5>
+                                <span class="text-muted-color">{{ $t('intro_page_features_speach_small_desc') }}</span>
                             </div>
                         </div>
                     </div>
@@ -191,12 +191,12 @@ async function load_static_cfg() {
                                 background: linear-gradient(90deg, var(--primary-color), var(--primary-contrast-color)), linear-gradient(180deg, var(--primary-color), var(--primary-contrast-color));
                             "
                         >
-                            <div class="p-4 bg-surface-0 dark:bg-surface-900 h-full" style="border-radius: 8px">
+                            <div class="p-4 bg-surface-200 h-full" style="border-radius: 8px">
                                 <div class="flex items-center justify-center bg-primary mb-4" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="fa-solid fa-music" style="color: #000000"></i>
                                 </div>
-                                <h5 class="mt-6 mb-1 text-surface-900 dark:text-surface-0 text-xl font-semibold">{{ $t('intro_page_features_worship_title') }}</h5>
-                                <span class="text-surface-600 dark:text-surface-200">{{ $t('intro_page_features_worship_text') }}</span>
+                                <h5 class="mt-6 mb-1 text-surface-900 text-xl font-semibold">{{ $t('intro_page_features_worship_title') }}</h5>
+                                <span class="text-muted-color">{{ $t('intro_page_features_worship_text') }}</span>
                             </div>
                         </div>
                     </div>
@@ -210,12 +210,12 @@ async function load_static_cfg() {
                                 background: linear-gradient(90deg, var(--primary-color), var(--primary-contrast-color)), linear-gradient(180deg, var(--primary-color), var(--primary-contrast-color));
                             "
                         >
-                            <div class="p-4 bg-surface-0 dark:bg-surface-900 h-full" style="border-radius: 8px">
-                                <div class="flex items-center justify-center bg-primary" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
+                            <div class="p-4 bg-surface-200 h-full" style="border-radius: 8px">
+                                <div class="flex items-center justify-center bg-primary mb-4" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="fa-solid fa-church" style="color: #000000"></i>
                                 </div>
-                                <div class="mt-6 mb-1 text-surface-900 dark:text-surface-0 text-xl font-semibold">{{ $t('intro_page_features_chapel_title') }}</div>
-                                <span class="text-surface-600 dark:text-surface-200">{{ $t('intro_page_features_chapel_text') }}</span>
+                                <div class="mt-6 mb-1 text-surface-900 text-xl font-semibold">{{ $t('intro_page_features_chapel_title') }}</div>
+                                <span class="text-muted-color">{{ $t('intro_page_features_chapel_text') }}</span>
                             </div>
                         </div>
                     </div>
@@ -229,13 +229,13 @@ async function load_static_cfg() {
                                 background: linear-gradient(90deg, var(--primary-color), var(--primary-contrast-color)), linear-gradient(180deg, var(--primary-color), var(--primary-contrast-color));
                             "
                         >
-                            <div class="p-4 bg-surface-0 dark:bg-surface-900 h-full relative" style="border-radius: 8px">
+                            <div class="p-4 bg-surface-200 h-full relative" style="border-radius: 8px">
                                 <Button class="absolute top-4 right-4 z-10" @click="() => router.push('/mirak-bar')" outlined>{{ $t('bars_menu') }}</Button>
                                 <div class="flex items-center justify-center bg-primary mb-4" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="fa-solid fa-martini-glass-citrus" style="color: #000000"></i>
                                 </div>
-                                <div class="mt-6 mb-1 text-surface-900 dark:text-surface-0 text-xl font-semibold">{{ $t('intro_page_features_bar_title') }}</div>
-                                <span class="text-surface-600 dark:text-surface-200">{{ $t('intro_page_features_bar_text') }}</span>
+                                <div class="mt-6 mb-1 text-surface-900 text-xl font-semibold">{{ $t('intro_page_features_bar_title') }}</div>
+                                <span class="text-muted-color">{{ $t('intro_page_features_bar_text') }}</span>
                             </div>
                         </div>
                     </div>
@@ -249,12 +249,12 @@ async function load_static_cfg() {
                                 background: linear-gradient(90deg, var(--primary-color), var(--primary-contrast-color)), linear-gradient(180deg, var(--primary-color), var(--primary-contrast-color));
                             "
                         >
-                            <div class="p-4 bg-surface-0 dark:bg-surface-900 h-full" style="border-radius: 8px">
+                            <div class="p-4 bg-surface-200 h-full" style="border-radius: 8px">
                                 <div class="flex items-center justify-center bg-primary mb-4" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="fa-solid fa-person-chalkboard" style="color: #000000"></i>
                                 </div>
-                                <div class="mt-6 mb-1 text-surface-900 dark:text-surface-0 text-xl font-semibold">{{ $t('intro_page_features_workshops_title') }}</div>
-                                <span class="text-surface-600 dark:text-surface-200">{{ $t('intro_page_features_workshops_text') }}</span>
+                                <div class="mt-6 mb-1 text-surface-900 text-xl font-semibold">{{ $t('intro_page_features_workshops_title') }}</div>
+                                <span class="text-muted-color">{{ $t('intro_page_features_workshops_text') }}</span>
                             </div>
                         </div>
                     </div>
@@ -268,12 +268,12 @@ async function load_static_cfg() {
                                 background: linear-gradient(90deg, var(--primary-color), var(--primary-contrast-color)), linear-gradient(180deg, var(--primary-color), var(--primary-contrast-color));
                             "
                         >
-                            <div class="p-4 bg-surface-0 dark:bg-surface-900 h-full" style="border-radius: 8px">
+                            <div class="p-4 bg-surface-200 h-full" style="border-radius: 8px">
                                 <div class="flex items-center justify-center bg-primary mb-4" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="fa-solid fa-shirt" style="color: #000000"></i>
                                 </div>
-                                <div class="mt-6 mb-1 text-surface-900 dark:text-surface-0 text-xl font-semibold">{{ $t('intro_page_features_merche_title') }}</div>
-                                <span class="text-surface-600 dark:text-surface-200">{{ $t('intro_page_features_merche_text') }}</span>
+                                <div class="mt-6 mb-1 text-surface-900 text-xl font-semibold">{{ $t('intro_page_features_merche_title') }}</div>
+                                <span class="text-muted-color">{{ $t('intro_page_features_merche_text') }}</span>
                             </div>
                         </div>
                     </div>
@@ -286,9 +286,9 @@ async function load_static_cfg() {
                 style="border-radius: 20px; background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, var(--primary-color) 0%, var(--primary-contrast-color) 100%)"
             >
                 <div class="flex flex-col justify-center items-center text-center px-2 py-2 md:py-0">
-                    <div class="text-gray-900 mb-2 text-3xl font-semibold">{{ $t('intro_page_info_title') }}</div>
+                    <div class="text-gray-800 mb-2 text-3xl font-semibold">{{ $t('intro_page_info_title') }}</div>
                     <span class="text-gray-600 text-2xl">{{ $t('intro_page_info_desc') }}</span>
-                    <p class="text-gray-900 sm:line-height-2 md:line-height-4 text-2xl mt-6" style="max-width: 800px">
+                    <p class="text-gray-700 sm:line-height-2 md:line-height-4 text-2xl mt-6" style="max-width: 800px">
                         {{ $t('intro_page_info_text') }}
                     </p>
                     <br />

@@ -5,7 +5,7 @@ import Aura from '@primevue/themes/aura';
 import Lara from '@primevue/themes/lara';
 import { ref } from 'vue';
 
-const { layoutConfig, setPrimary, setSurface, setPreset, isDarkTheme, setMenuMode } = useLayout();
+const { layoutConfig, setPrimary, setSurface, setPreset, setMenuMode } = useLayout();
 
 const presets = {
     Aura,
@@ -75,8 +75,8 @@ const surfaces = ref([
         palette: { 0: '#ffffff', 50: '#fbfcfc', 100: '#F7F9F8', 200: '#EFF3F2', 300: '#DADEDD', 400: '#B1B7B6', 500: '#828787', 600: '#5F7274', 700: '#415B61', 800: '#29444E', 900: '#183240', 950: '#0c1920' }
     },
     {
-        name: 'mirak2024', 
-        palette: { 50: '#006e6e', 100: '#006e6e', 200: '#006e6e', 300: '#006e6e', 400: '#00bebe', 500: '#00bebe', 600: '#00bebe', 700: '#00bebe', 800: '#00f0f0', 900: '#00f0f0', 950: '#00f0f0' } 
+        name: 'mirak2024',
+        palette: { 50: '#006e6e', 100: '#006e6e', 200: '#006e6e', 300: '#006e6e', 400: '#00bebe', 500: '#00bebe', 600: '#00bebe', 700: '#00bebe', 800: '#00f0f0', 900: '#00f0f0', 950: '#00f0f0' }
     }
 ]);
 
