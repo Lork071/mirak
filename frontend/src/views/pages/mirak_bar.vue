@@ -6,41 +6,41 @@ const menu = [
     {
         category: 'mirak_bar.category_non_alcoholic',
         items: [
-            { name: 'mirak_bar.drink_mirak', desc: 'mirak_bar.drink_mirak_desc', price: 40 },
-            { name: 'mirak_bar.drink_lemonade', desc: '', price: 30 },
-            { name: 'mirak_bar.drink_kofola', desc: '', price: 30 }
+            { name: 'mirak_bar.drink_mirak', desc: 'mirak_bar.drink_mirak_desc', price: 4 },
+            { name: 'mirak_bar.drink_lemonade', desc: '', price: 3 },
+            { name: 'mirak_bar.drink_kofola', desc: '', price: 3 }
         ]
     },
     {
         category: 'mirak_bar.category_hot',
         items: [
-            { name: 'mirak_bar.hot_chocolate', desc: 'mirak_bar.hot_chocolate_desc', price: 30 },
-            { name: 'mirak_bar.tea', desc: 'mirak_bar.tea_desc', price: 20 },
-            { name: 'mirak_bar.hot_juice', desc: 'mirak_bar.hot_juice_desc', price: 40 },
-            { name: 'mirak_bar.espresso', desc: '', price: 30 },
-            { name: 'mirak_bar.cappucino', desc: 'mirak_bar.milk_note', price: 40 },
-            { name: 'mirak_bar.latte', desc: 'mirak_bar.milk_note', price: 50 }
+            { name: 'mirak_bar.hot_chocolate', desc: 'mirak_bar.hot_chocolate_desc', price: 3 },
+            { name: 'mirak_bar.tea', desc: 'mirak_bar.tea_desc', price: 2 },
+            { name: 'mirak_bar.hot_juice', desc: 'mirak_bar.hot_juice_desc', price: 4 },
+            { name: 'mirak_bar.espresso', desc: '', price: 3 },
+            { name: 'mirak_bar.cappucino', desc: 'mirak_bar.milk_note', price: 4 },
+            { name: 'mirak_bar.latte', desc: 'mirak_bar.milk_note', price: 5 }
         ]
     },
     {
         category: 'mirak_bar.category_snacks',
         items: [
-            { name: 'mirak_bar.panini', desc: 'mirak_bar.panini_desc', price: 50, allergens: [1, 7] },
-            { name: 'mirak_bar.wrap', desc: 'mirak_bar.wrap_desc', price: 60, allergens: [1, 7] },
-            { name: 'mirak_bar.pasta_salad', desc: 'mirak_bar.pasta_salad_desc', price: 40, allergens: [1, 3, 7] },
-            { name: 'mirak_bar.nachos', desc: '', price: 40, allergens: [1] }
+            { name: 'mirak_bar.panini', desc: 'mirak_bar.panini_desc', price: 5, allergens: [1, 7] },
+            { name: 'mirak_bar.wrap', desc: 'mirak_bar.wrap_desc', price: 6, allergens: [1, 7] },
+            { name: 'mirak_bar.pasta_salad', desc: 'mirak_bar.pasta_salad_desc', price: 4, allergens: [1, 3, 7] },
+            { name: 'mirak_bar.nachos', desc: '', price: 4, allergens: [1] }
         ]
     },
     {
         category: 'mirak_bar.category_desserts',
         items: [
-            { name: 'mirak_bar.tiramisu', desc: '', price: 60, allergens: [1, 3, 7] },
-            { name: 'mirak_bar.caramel_vetrnik', desc: '', price: 60, allergens: [1, 3, 7] },
-            { name: 'mirak_bar.misa_rez', desc: '', price: 30, allergens: [1, 3, 7] },
-            { name: 'mirak_bar.apple_cake', desc: '', price: 30, allergens: [1, 3, 7, 8] },
-            { name: 'mirak_bar.cheesecake', desc: '', price: 30, allergens: [1, 3, 7] },
-            { name: 'mirak_bar.cinnamon_roll', desc: '', price: 40, allergens: [1, 3, 7] },
-            { name: 'mirak_bar.vegan_pannacotta', desc: 'mirak_bar.vegan_pannacotta_desc', price: 40, vegan: true }
+            { name: 'mirak_bar.tiramisu', desc: '', price: 6, allergens: [1, 3, 7] },
+            { name: 'mirak_bar.caramel_vetrnik', desc: '', price: 6, allergens: [1, 3, 7] },
+            { name: 'mirak_bar.misa_rez', desc: '', price: 3, allergens: [1, 3, 7] },
+            { name: 'mirak_bar.apple_cake', desc: '', price: 3, allergens: [1, 3, 7, 8] },
+            { name: 'mirak_bar.cheesecake', desc: '', price: 3, allergens: [1, 3, 7] },
+            { name: 'mirak_bar.cinnamon_roll', desc: '', price: 4, allergens: [1, 3, 7] },
+            { name: 'mirak_bar.vegan_pannacotta', desc: 'mirak_bar.vegan_pannacotta_desc', price: 4, vegan: true }
         ]
     }
 ];

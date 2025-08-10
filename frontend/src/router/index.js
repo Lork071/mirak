@@ -4,7 +4,23 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const baseURL = import.meta.env.VITE_BASE_URL || '/';
 
-const pages_without_login = ['/auth/login', '/auth/login-callback-facebook', '/auth/login-callback', '/', '/auth/register', '/ticket_food', '/draft_intro', '/ticket', '/not_found', '/auth/forgot-password', '/volunteer'];
+const pages_without_login = [
+    '/auth/login',
+    '/auth/login-callback-facebook',
+    '/auth/login-callback',
+    '/',
+    '/auth/register',
+    '/ticket_food',
+    '/draft_intro',
+    '/ticket',
+    '/not_found',
+    '/auth/forgot-password',
+    '/volunteer',
+    '/mirak-crew',
+    '/mirak-crew/success',
+    '/get-ticket',
+    '/mirak-bar'
+];
 
 const router = createRouter({
     history: createWebHistory(baseURL),
