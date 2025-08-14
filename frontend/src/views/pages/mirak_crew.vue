@@ -131,7 +131,7 @@ async function send_volunteer() {
                                             {{ slotProps.option.label }}
                                         </template>
                                     </Dropdown>
-                                    <InputMask id="basic" v-model="phone_number" mask="999 999 999" placeholder="123 456 789" style="flex: 1" />
+                                    <InputMask id="basic" v-model="phone_number" mask="999 999 999" placeholder="123 456 789" style="flex: 1" type="tel" inputmode="numeric" />
                                 </div>
                             </FloatLabel>
                         </div>

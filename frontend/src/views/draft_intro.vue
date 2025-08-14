@@ -22,7 +22,7 @@ onMounted(() => {
 });
 
 function toggleMobileMenu() {
-    isMobileMenuOpen.value = !isMobileMenu.value;
+    isMobileMenuOpen.value = !isMobileMenuOpen.value;
 }
 
 function closeMobileMenu() {
@@ -64,6 +64,19 @@ async function load_static_cfg() {
     }
     if (api.result) {
         configuration.value = api.response;
+
+        // Set all boolean false values to true
+        if (configuration.value) {
+            for (const key in configuration.value) {
+                if (configuration.value[key] === false) {
+                    configuration.value[key] = true;
+                    if (config.debug) {
+                        console.log(`Changed configuration property ${key} from false to true`);
+                    }
+                }
+            }
+        }
+        configuration.value.OnlyIntroPage = false;
     } else {
         toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t(api.response.desc), life: config.toast_lifetime });
     }
@@ -78,13 +91,13 @@ async function load_static_cfg() {
                     <path
                         id="intro-page-first-part-line-path"
                         d="M1381 -6C1203.39 77.8596 1015.64 250.235 932.605 418.844C849.564 587.452 796.611 805.438 932.605 756.06C1068.6 706.682 1159.41 526.826 1203.39 439.317C1291.5 264 1143.19 181.156 1016 429.5C910.107 636.256 915.434 847 0 847"
-                        stroke="var(--primary-color)"
+                        stroke="var(--primary-500)"
                         stroke-width="5"
                     />
                 </svg>
             </div>
             <div class="intro-page-first-part-text">{{ $t('intro-page-mirak-text') }}</div>
-            <div class="intro-page-first-part-date">2025</div>
+            <div class="intro-page-first-part-date">31. 10 - 1. 11 2025</div>
             <div v-if="!configuration.OnlyIntroPage" class="intro-page-scroll-icon">
                 <span><i class="fa-solid fa-arrow-down"></i> {{ $t('intro_page_scroll_down') }} <i class="fa-solid fa-arrow-down"></i></span>
             </div>
@@ -124,7 +137,7 @@ async function load_static_cfg() {
                             <a href="#intro-page-fqa-content" @click="closeMobileMenu">{{ $t('intro_page_menu_faq') }}</a>
                         </li>
                     </ul>
-                    <Button v-if="configuration.UseMirakAccount" @click="() => router.push('/mirak-bar')" rounded
+                    <Button v-if="configuration.IntroBar" @click="() => router.push('/mirak-bar')" rounded
                         ><b>{{ $t('bars_menu') }}</b></Button
                     >
                 </nav>
@@ -230,7 +243,7 @@ async function load_static_cfg() {
                             "
                         >
                             <div class="p-4 bg-surface-200 h-full relative" style="border-radius: 8px">
-                                <Button class="absolute top-4 right-4 z-10" @click="() => router.push('/mirak-bar')" outlined>{{ $t('bars_menu') }}</Button>
+                                <Button v-if="configuration.IntroBar" class="absolute top-4 right-4 z-10" @click="() => router.push('/mirak-bar')" outlined>{{ $t('bars_menu') }}</Button>
                                 <div class="flex items-center justify-center bg-primary mb-4" style="width: 3.5rem; height: 3.5rem; border-radius: 10px">
                                     <i class="fa-solid fa-martini-glass-citrus" style="color: #000000"></i>
                                 </div>
@@ -280,15 +293,11 @@ async function load_static_cfg() {
                 </div>
             </div>
 
-            <div
-                v-if="configuration.UseIntroVision"
-                class="col-span-12 mt-20 p-2 md:p-20"
-                style="border-radius: 20px; background: linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), radial-gradient(77.36% 256.97% at 77.36% 57.52%, var(--primary-color) 0%, var(--primary-contrast-color) 100%)"
-            >
+            <div v-if="configuration.UseIntroVision" class="col-span-12 mt-20 p-2 md:p-20" style="border-radius: 20px; background: radial-gradient(77.36% 256.97% at 77.36% 57.52%, var(--primary-700) 0%, var(--primary-500) 100%)">
                 <div class="flex flex-col justify-center items-center text-center px-2 py-2 md:py-0">
-                    <div class="text-gray-800 mb-2 text-3xl font-semibold">{{ $t('intro_page_info_title') }}</div>
-                    <span class="text-gray-600 text-2xl">{{ $t('intro_page_info_desc') }}</span>
-                    <p class="text-gray-700 sm:line-height-2 md:line-height-4 text-2xl mt-6" style="max-width: 800px">
+                    <div class="text-gray-900 mb-2 text-3xl font-semibold">{{ $t('intro_page_info_title') }}</div>
+                    <span class="text-gray-800 text-2xl">{{ $t('intro_page_info_desc') }}</span>
+                    <p class="text-gray-900 sm:line-height-2 md:line-height-4 text-2xl mt-6" style="max-width: 800px">
                         {{ $t('intro_page_info_text') }}
                     </p>
                     <br />

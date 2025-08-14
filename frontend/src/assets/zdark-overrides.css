@@ -13,22 +13,37 @@ html { color-scheme: dark; }
   color-scheme: dark;
 
   /* 🎨 Primary palette (Tailwind purple) */
---primary-50:  #ffffff;
---primary-100: #ffffff;
---primary-200: #ffffff;
---primary-300: #dfc9df;
---primary-400: #cdaacd;
---primary-500: #bb8bba; /* base */
---primary-600: #aa6ba8;
---primary-700: #91538f;
---primary-800: #724171;
---primary-900: #522f52;
---primary-950: #3a2139;
+  --primary-50:  #FEECFD; /* světlejší než aqua */
+  --primary-100: #F9B9F7; /* aqua */
+  --primary-200: #EAA4E6;
+  --primary-300: #DA8FD6;
+  --primary-400: #CB7BC6;
+  --primary-500: #BC8BBB; /* turquoise (base) */
+  --primary-600: #A876A6;
+  --primary-700: #946291;
+  --primary-800: #7F4D7B;
+  --primary-900: #6D516C;
+  --primary-950: #5B435A; /* o něco tmavší než teal pro kontrast */
 
+  --primary-color-50:   var(--primary-50);
+  --primary-color-100:   var(--primary-100);
+  --primary-color-200:   var(--primary-200);
+  --primary-color-300:   var(--primary-300);
+  --primary-color-400:   var(--primary-400);
+  --primary-color-500:   var(--primary-500);
+  --primary-color-600:   var(--primary-600);
+  --primary-color-700:   var(--primary-700);
+  --primary-color-800:   var(--primary-800);
+  --primary-color-900:   var(--primary-900);
+  --primary-color-950:   var(--primary-950);
   /* aliasy */
+  
   --primary-color:       var(--primary-500);
-  --primary-color-hover: var(--primary-400);
+  --p-primary-color:     var(--primary-500);
   --primary-color-text:  #fff;
+  --dark-color-text: #0d0d0e;
+  --p-primary-hover-color: var(--primary-900);
+  --p-primary-contrast-color: var(--dark-color-text);
 
   /* odvozené akcenty (použijeme všude pro hover/selected) */
   --accent-hover:  color-mix(in srgb, var(--primary-500) 18%, transparent);
@@ -44,6 +59,7 @@ html { color-scheme: dark; }
   --text-color:           #E6E6EA; /* hlavní */
   --text-color-secondary: #A7A9B2; /* muted */
   --text-muted-color:     var(--text-color-secondary);
+  --text-color-dark:     #272727;
 
   /* PrimeVue text tokens */
   --p-text-color:         var(--text-color);
@@ -97,7 +113,19 @@ html { color-scheme: dark; }
   /* toast */
   --toast-bg:     var(--p-surface-100);
   --toast-border: var(--p-border-color);
-  --toast-text:   var(--p-text-color);
+  --toast-text:   var(--text-color-dark);
+}
+
+.bg-primary {
+  background-color: var(--primary-color) !important;
+}
+
+.bg-primary-hover {
+  background-color: var(--p-primary-hover-color) !important;
+}
+
+.bg-primary-active {
+  background-color: var(--p-primary-active-color) !important;
 }
 
 /* 2) base text + page bg */
@@ -123,7 +151,7 @@ html, body, .p-component { color: var(--text-color) !important; }
   background: var(--surface-card) !important;
   color: var(--text-color) !important;
   border-color: var(--surface-border) !important;
-  box-shadow: 0 1px 0 rgba(255,255,255,.02), 0 8px 24px rgba(0,0,0,.45);
+
 }
 
 /* Fieldset – jasnější legend a obsah */
@@ -264,17 +292,56 @@ html, body, .p-component { color: var(--text-color) !important; }
 .app-dark .p-multiselect-item.p-highlight:hover,
 .app-dark .p-listbox .p-listbox-item.p-highlight:hover { background: var(--accent-hover) !important; }
 
-/* 7) Buttons */
-.app-dark .p-button:hover:not(.p-disabled),
-.app-dark .p-button:active:not(.p-disabled),
-.app-dark .p-button:focus-visible:not(.p-disabled) {
-  background: var(--accent-hover) !important;
-  border-color: var(--  -500) !important;
-  color: var(--primary-color-text) !important;
+
+/* ===== BUTTONS — solid = primary-500, hover = primary-900, text černý ===== */
+
+
+/* SOLID (všechna plná tlačítka, i rounded) */
+.app-dark .p-button:not(.p-button-outlined):not(.p-button-text) {
+  background: var(--primary-500) !important;
+  border-color: var(--primary-500) !important;
+  color: var(--dark-color-text) !important;
 }
-.app-dark .p-button.p-button-primary { background: var(--primary-500) !important; border-color: var(--primary-500) !important; }
-.app-dark .p-button.p-button-primary:hover { background: var(--accent-hover) !important; }
-.app-dark .p-button.p-button-outlined:hover { background: var(--accent-hover) !important; border-color: var(--primary-500) !important; }
+
+/* Hover/active/focus jen pro ne-disabled */
+.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):hover,
+.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):active,
+.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):focus-visible {
+  background: var(--primary-900) !important;
+  border-color: var(--primary-900) !important;
+  color: var(--dark-color-text) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-900) 35%, transparent) !important;
+}
+
+/* Label uvnitř (pro jistotu) */
+.app-dark .p-button .p-button-label {
+  color: var(--dark-color-text) !important;
+}
+
+/* OUTLINED */
+.app-dark .p-button.p-button-outlined {
+  background: transparent !important;
+  color: var(--primary-500) !important;
+  border-color: var(--primary-500) !important;
+}
+.app-dark .p-button.p-button-outlined:not(.p-disabled):hover {
+  background: color-mix(in srgb, var(--primary-900) 18%, transparent) !important;
+  color: var(--dark-color-text) !important;
+  border-color: var(--primary-900) !important;
+}
+
+/* TEXT / LINK */
+.app-dark .p-button.p-button-text,
+.app-dark .p-button.p-button-link {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--primary-500) !important;
+}
+.app-dark .p-button.p-button-text:not(.p-disabled):hover,
+.app-dark .p-button.p-button-link:not(.p-disabled):hover {
+  background: color-mix(in srgb, var(--primary-900) 18%, transparent) !important;
+  color: var(--dark-color-text) !important;
+}
 
 /* 8) Tabs, Menu, Paginator */
 .app-dark .p-tabview .p-tabview-nav li:not(.p-highlight):hover a,
@@ -310,12 +377,9 @@ html, body, .p-component { color: var(--text-color) !important; }
 .p-toast { background: transparent !important; }
 .app-dark .p-toast .p-toast-message {
   position: relative;
-  margin: 0 !important;
   color: var(--toast-text) !important;
-  border: 1px solid var(--toast-border) !important;
   background:
-    linear-gradient(var(--toast-accent-bg, transparent), var(--toast-accent-bg, transparent)) padding-box,
-    var(--toast-bg) border-box !important;
+    linear-gradient(var(--toast-accent-bg, transparent), var(--toast-accent-bg, transparent)) padding-box;
   box-shadow: 0 8px 24px rgba(0,0,0,.35) !important;
   border-radius: .75rem;
   overflow: hidden;
@@ -333,10 +397,10 @@ html, body, .p-component { color: var(--text-color) !important; }
 .app-dark .p-toast .p-toast-message .p-toast-detail { color: var(--toast-text) !important; }
 
 /* severity akcenty */
-.app-dark .p-toast-message-info    { --toast-accent:#60A5FA; --toast-accent-bg: color-mix(in srgb, #60A5FA 12%, transparent); }
-.app-dark .p-toast-message-success { --toast-accent:#34D399; --toast-accent-bg: color-mix(in srgb, #34D399 12%, transparent); }
-.app-dark .p-toast-message-warn    { --toast-accent:#FBBF24; --toast-accent-bg: color-mix(in srgb, #FBBF24 12%, transparent); }
-.app-dark .p-toast-message-error   { --toast-accent:#F87171; --toast-accent-bg: color-mix(in srgb, #F87171 12%, transparent); }
+.app-dark .p-toast-message-info    { --toast-accent:#60A5FA; --toast-accent-bg: color-mix(in srgb, #60A5FA 60%, transparent); }
+.app-dark .p-toast-message-success { --toast-accent:#34D399; --toast-accent-bg: color-mix(in srgb, #34D399 60%, transparent); }
+.app-dark .p-toast-message-warn    { --toast-accent:#FBBF24; --toast-accent-bg: color-mix(in srgb, #FBBF24 60%, transparent); }
+.app-dark .p-toast-message-error   { --toast-accent:#F87171; --toast-accent-bg: color-mix(in srgb, #F87171 60%, transparent); }
 
 
 /* ===== Accordion: card look, bez borderů/zaoblení/změny bg a bez fialového focusu ===== */

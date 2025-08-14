@@ -24,7 +24,7 @@ class static_config_controler{
 
         $result["response"] = $this->master_handler["database_handler"]->read_static_config($this->master_handler["config_handler"]->database_name_static, 
         array('OnlyIntroPage', 'UseIntroVideo', 'UseIntroFeatures', 'UseIntroVision','UseVenue','UseTickets', 
-        'UseContentVolunteer','UseContact', 'UseFaq', 'UseMirakAccount','isLive', 'LiveLink'));
+        'UseContentVolunteer','UseContact', 'UseFaq', 'UseMirakAccount','IntroBar','isLive', 'LiveLink'));
 
         foreach ($result["response"] as $key => $value) {
             if ($value === "true") {
