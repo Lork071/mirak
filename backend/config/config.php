@@ -106,8 +106,8 @@ class config{
     /*************************************
      * Price
      ************************************/
-    public $price_ticket_meal = 300;
-    public $price_ticket_no_meal = 200;
+    public $price_ticket_meal = 350;
+    public $price_ticket_no_meal = 250;
     public $price_ticket_only_friday = 100;
     public $price_ticket_no_pii = 200;
     public $price_one_night = 50;

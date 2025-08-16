@@ -52,6 +52,13 @@ const locale = ref({
     clear: 'Vymazat'
 });
 
+function setEmail(val) {
+    formVal.value.email = val;
+}
+function setEmailVerified(val) {
+    isEmailInValid.value = val;
+}
+
 const toggle = (event, field) => {
     if (popovers.value[field]) {
         popovers.value[field].toggle(event);
@@ -128,18 +135,6 @@ onMounted(() => {
     CountryService.getCountries().then((data) => (CountryselectValues.value = data));
 });
 
-async function verify_otp() {
-    const api = await api_post(config.endpoint_login, { method: 'verify_otp', parameters: { email: formVal.value.email, otp: otp_data.value } });
-    if (config.debug) {
-        console.log('API [verify_otp]: ');
-        console.log(api);
-    }
-    if (api.result) {
-        email_verified();
-    } else {
-        toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t(api.response), life: config.toast_lifetime });
-    }
-}
 async function load_info() {
     const api = await api_post(config.endpoint_ticket, { method: 'get_info' });
     if (config.debug) {
@@ -164,31 +159,6 @@ async function load_info() {
     } else {
         toast.add({ severity: 'error', summary: i18n.global.t('error'), detail: i18n.global.t('error_comm_database'), life: config.toast_lifetime });
     }
-}
-
-async function verify_email() {
-    VerifyBtnLoading.value = true;
-    const api = await api_post(config.endpoint_login, { method: 'email_verify', parameters: { email: formVal.value.email, lang: i18n.global.t('lang_code') } });
-    if (config.debug) {
-        console.log('API [email_verify]: ');
-        console.log(api);
-    }
-    if (api.result) {
-        email_verified();
-    } else {
-        VerifyBtnLoading.value = false;
-        showOtp.value = true;
-        isEmailInValid.value = true;
-    }
-}
-
-function email_verified() {
-    VerifyBtnLoading.value = false;
-    isEmailInValid.value = false;
-    EmailVerified.value = true;
-    showOtp.value = false;
-    showVerify.value = false;
-    toast.add({ severity: 'success', summary: i18n.global.t('successful'), detail: i18n.global.t('verify_email_success'), life: config.toast_lifetime });
 }
 
 function accommodation_switch() {
@@ -365,7 +335,7 @@ async function get_ticket() {
 const toggle1 = (event) => {
     if (!isFormValid.value) {
         op.value.toggle(event);
-        get_ticket();
+        //get_ticket();
     } else {
         get_ticket();
     }
@@ -421,29 +391,7 @@ function gender_change() {
                 </div>
             </div>
             <div class="card flex flex-col gap-4 mt-4">
-                <div class="formgrid grid">
-                    <div class="field col-12 md:col-6">
-                        <FloatLabel variant="on" class="w-full">
-                            <label for="email2">*{{ $t('sign_in_email') }}</label>
-                            <InputText v-model="formVal.email" :invalid="isEmailInValid" type="text" />
-                        </FloatLabel>
-                    </div>
-                    <div v-if="showVerify">
-                        <div v-if="showOtp" class="flex flex-col items-center mt-4">
-                            <div class="mt-4 mb-4">{{ $t('verify_email_text_email_send') }}</div>
-                            <InputOtp class="mt-2 mb-2" v-model="otp_data" size="small" :length="6" @update:modelValue="handleOtpChange" />
-                            <div class="mt-4 mb-4">{{ $t('verify_email_resend_otp_text') }}</div>
-                            <div class="my-right">
-                                <Button @click="verify_email" :loading="VerifyBtnLoading" text>{{ $t('verify_email_resend_otp_button') }}</Button>
-                            </div>
-                        </div>
-                        <div v-if="!showOtp" class="my-right">
-                            <div class="mt-4" style="width: 150px">
-                                <Button :loading="VerifyBtnLoading" @click="verify_email">{{ $t('verify') }}</Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <EmailVerify @email="setEmail" @verified="setEmailVerified" />
             </div>
             <div v-if="EmailVerified">
                 <div class="flex mt-8">
@@ -552,7 +500,7 @@ function gender_change() {
                         <ToggleSwitch v-model="formVal.want_accommodation" @change="accommodation_switch" :disabled="formVal.gender == 'male' || formVal.gender == 'female' ? false : true" /><label style="margin-left: 10px">{{
                             $t('accommodation_switch')
                         }}</label>
-                        <p v-if="formVal.gender == 'male' || formVal.gender == 'female' ? false : true" class="pl-4 text-primary-500">({{ $t('acommodation_switch_gender_select') }})</p>
+                        <p v-if="formVal.gender == 'male' || formVal.gender == 'female' ? false : true" class="pl-4 primary-500">({{ $t('acommodation_switch_gender_select') }})</p>
                     </div>
                     <div id="ticket_accommodation" v-if="formVal.want_accommodation" class="flex mt-8">
                         <div class="card flex flex-col gap-4 w-full">
@@ -810,6 +758,6 @@ function gender_change() {
     text-align: center;
     max-width: 90%;
     font-size: 12px;
-    color: #d85d5d;
+    color: var(--primary-500);
 }
 </style>

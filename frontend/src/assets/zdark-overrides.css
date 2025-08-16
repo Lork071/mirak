@@ -50,10 +50,18 @@ html { color-scheme: dark; }
   --accent-active: color-mix(in srgb, var(--primary-500) 28%, transparent);
 
   /* Neutral charcoal surfaces (žádný modrý nádech) */
-  --surface-ground:  #0E0E10; /* page */
+  --surface-ground:  #0a0a0a; /* page */
   --surface-section: #0d0d0e; /* inputs / panely */
   --surface-card:    #1A1B1F; /* karty / kontejnery */
-  --surface-border:  #5f5f5f;
+  --surface-border:  #383838;
+
+  /* datepicker */
+  --p-datepicker-dropdown-background:var(--inp-bg);
+  --p-datepicker-dropdown-color:var(--inp-text);
+  --p-datepicker-panel-background:var(--surface-section);
+  --p-datepicker-header-background:var(--surface-section);
+  --p-datepicker-today-background:var(--primary-500);
+  --p-datepicker-date-hover-background:var(--primary-100);
 
   /* Texty */
   --text-color:           #E6E6EA; /* hlavní */
@@ -93,6 +101,7 @@ html { color-scheme: dark; }
   --surface-900: var(--p-surface-900);
   --surface-950: var(--p-surface-950);
 
+  --p-popover-background: var(--surface-card);
   /* border & focus */
   --p-border-color: var(--surface-border);
   --p-focus-ring:   0 0 0 2px color-mix(in srgb, var(--primary-500) 35%, transparent);
@@ -120,8 +129,20 @@ html { color-scheme: dark; }
   background-color: var(--primary-color) !important;
 }
 
-.bg-primary-hover {
+.bg-primary-hover:not([disabled]):not(:disabled):not(.p-disabled) {
   background-color: var(--p-primary-hover-color) !important;
+}
+
+/* Explicit override for disabled elements with bg-primary-hover class - increased specificity */
+html .app-dark .bg-primary-hover:disabled,
+html .app-dark .bg-primary-hover[disabled],
+html .app-dark .bg-primary-hover.p-disabled,
+html .app-dark button:disabled.bg-primary-hover,
+html .app-dark button[disabled].bg-primary-hover,
+html .app-dark button.p-disabled.bg-primary-hover {
+  background-color: var(--primary-100) !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
 }
 
 .bg-primary-active {
@@ -165,6 +186,34 @@ html, body, .p-component { color: var(--text-color) !important; }
 .app-dark .text-surface-900 { color: var(--text-color) !important; }
 .app-dark .border-gray-200,
 .app-dark .border-surface-200 { border-color: var(--surface-border) !important; }
+
+.app-dark .primary-100 {
+  color: var(--primary-100) !important;
+}
+.app-dark .primary-200 {
+  color: var(--primary-200) !important;
+}
+.app-dark .primary-300 {
+  color: var(--primary-300) !important;
+}
+.app-dark .primary-400 {
+  color: var(--primary-400) !important;
+}
+.app-dark .primary-500 {
+  color: var(--primary-500) !important;
+}
+.app-dark .primary-600 {
+  color: var(--primary-600) !important;
+}
+.app-dark .primary-700 {
+  color: var(--primary-700) !important;
+}
+.app-dark .primary-800 {
+  color: var(--primary-800) !important;
+}
+.app-dark .primary-900 {
+  color: var(--primary-900) !important;
+}
 
 /* Tailwind text-gray-* přemapované pro dark */
 .app-dark .text-gray-50  { color: #F5F6F8 !important; }
@@ -295,7 +344,6 @@ html, body, .p-component { color: var(--text-color) !important; }
 
 /* ===== BUTTONS — solid = primary-500, hover = primary-900, text černý ===== */
 
-
 /* SOLID (všechna plná tlačítka, i rounded) */
 .app-dark .p-button:not(.p-button-outlined):not(.p-button-text) {
   background: var(--primary-500) !important;
@@ -303,19 +351,61 @@ html, body, .p-component { color: var(--text-color) !important; }
   color: var(--dark-color-text) !important;
 }
 
+html .app-dark .p-button:disabled,
+html .app-dark .p-button[disabled],
+html .app-dark .p-button.p-disabled {
+  background: var(--primary-100) !important;
+  border-color: var(--primary-100) !important;
+  color: var(--dark-color-text) !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important; /* This prevents any hover effects completely */
+}
+
+html .app-dark .p-button:disabled:hover,
+html .app-dark .p-button[disabled]:hover,
+html .app-dark .p-button.p-disabled:hover {
+  background: var(--primary-100) !important;
+  border-color: var(--primary-100) !important;
+  color: var(--dark-color-text) !important;
+  box-shadow: none !important;
+}
+
 /* Hover/active/focus jen pro ne-disabled */
-.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):hover,
-.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):active,
-.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):focus-visible {
+.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):not(:disabled):hover,
+.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):not(:disabled):active,
+.app-dark .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-disabled):not(:disabled):focus-visible {
   background: var(--primary-900) !important;
   border-color: var(--primary-900) !important;
   color: var(--dark-color-text) !important;
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-900) 35%, transparent) !important;
 }
 
+/* Explicit override to prevent any hover effect on disabled buttons - with higher specificity */
+html .app-dark .p-button:disabled:hover,
+html .app-dark .p-button[disabled]:hover,
+html .app-dark .p-button.p-disabled:hover,
+html .app-dark button:disabled:hover,
+html .app-dark button[disabled]:hover,
+html .app-dark button.p-disabled:hover,
+html .app-dark .p-button:disabled.bg-primary-hover:hover,
+html .app-dark .p-button[disabled].bg-primary-hover:hover,
+html .app-dark .p-button.p-disabled.bg-primary-hover:hover {
+  background: var(--primary-100) !important;
+  border-color: var(--primary-100) !important;
+  color: var(--dark-color-text) !important;
+  box-shadow: none !important;
+  opacity: 0.6 !important;
+  pointer-events: none !important; /* This prevents any hover effects completely */
+}
+
 /* Label uvnitř (pro jistotu) */
 .app-dark .p-button .p-button-label {
   color: var(--dark-color-text) !important;
+}
+
+.app-dark .p-button-secondary {
+ color: var(--text-color) !important;
 }
 
 /* OUTLINED */
@@ -325,10 +415,11 @@ html, body, .p-component { color: var(--text-color) !important; }
   border-color: var(--primary-500) !important;
 }
 .app-dark .p-button.p-button-outlined:not(.p-disabled):hover {
-  background: color-mix(in srgb, var(--primary-900) 18%, transparent) !important;
+  background: var(--primary-100)  !important;
   color: var(--dark-color-text) !important;
-  border-color: var(--primary-900) !important;
+  border-color: var(--primary-100) !important;
 }
+
 
 /* TEXT / LINK */
 .app-dark .p-button.p-button-text,
@@ -341,6 +432,10 @@ html, body, .p-component { color: var(--text-color) !important; }
 .app-dark .p-button.p-button-link:not(.p-disabled):hover {
   background: color-mix(in srgb, var(--primary-900) 18%, transparent) !important;
   color: var(--dark-color-text) !important;
+}
+button.p-button.p-component.p-button-secondary.p-button-text.p-button-sm.p-button-fluid.p-datepicker-clear-button,
+button.p-button.p-component.p-button-secondary.p-button-text.p-button-sm.p-button-fluid.p-datepicker-today-button{
+  background-color: var(--primary-500) !important;
 }
 
 /* 8) Tabs, Menu, Paginator */
@@ -458,6 +553,7 @@ html, body, .p-component { color: var(--text-color) !important; }
 :root.app-dark, .app-dark {
   --p-select-background: var(--inp-bg);
   --p-select-option-background: var(--surface-card);
+  --p-select-overlay-background:  var(--inp-bg);
 }
 
 /* PrimeVue Select (nové i starší názvy tříd) */
@@ -467,7 +563,7 @@ html, body, .p-component { color: var(--text-color) !important; }
 .app-dark .p-select-option,
 .app-dark .p-select-label,
 .app-dark .p-select-trigger {
-  background: var(---inp-bg) !important;
+  background: var(--inp-bg) !important;
   color: var(--text-color) !important;
   border-color: var(--surface-border) !important;
 }
@@ -584,6 +680,39 @@ html, body, .p-component { color: var(--text-color) !important; }
   background-color: color-mix(in srgb, var(--_msg-accent) 20%, transparent) !important; /* 60 % průhledné */
   border: 1px solid var(--_msg-accent) !important;
   color: var(--text-color) !important;
+  box-shadow: none !important;
+}
+
+/* ===== FINAL OVERRIDES FOR DISABLED BUTTONS ===== */
+/* This is a very specific rule with high specificity to ensure disabled buttons never get hover effects */
+html body .app-dark .p-button:disabled,
+html body .app-dark .p-button[disabled], 
+html body .app-dark .p-button.p-disabled,
+html body .app-dark button:disabled, 
+html body .app-dark button[disabled],
+html body .app-dark button.p-disabled {
+  background-color: var(--primary-100) !important;
+  border-color: var(--primary-100) !important;
+  color: var(--dark-color-text) !important;
+  opacity: 0.6 !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
+/* Prevent any hover effects on all disabled buttons */
+html body .app-dark .p-button:disabled.bg-primary-hover,
+html body .app-dark .p-button[disabled].bg-primary-hover, 
+html body .app-dark .p-button.p-disabled.bg-primary-hover,
+html body .app-dark button:disabled.bg-primary-hover, 
+html body .app-dark button[disabled].bg-primary-hover,
+html body .app-dark button.p-disabled.bg-primary-hover {
+  background-color: var(--primary-100) !important;
+  border-color: var(--primary-100) !important;
+  color: var(--dark-color-text) !important;
+  opacity: 0.6 !important;
+  pointer-events: none !important;
+  cursor: not-allowed !important;
   box-shadow: none !important;
 }
 
